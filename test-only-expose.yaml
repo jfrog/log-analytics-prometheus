@@ -1,0 +1,77 @@
+# expose services for testing purposes only. Do not use for production
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xray
+  name: xray-metrics-service-external
+spec:
+  type: LoadBalancer
+  ports:
+  - name: metrics
+    port: 24231
+    protocol: TCP
+  selector:
+    app : xray
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: artifactory-ha-primary
+  name: artifactory-ha-primary-metrics-service-external
+spec:
+  type: LoadBalancer
+  ports:
+  - name: metrics
+    port: 24231
+    protocol: TCP
+  selector:
+    role : unified-artifactory-ha-primary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: artifactory-ha-member
+  name: artifactory-ha-member-metrics-service-external
+spec:
+  type: LoadBalancer
+  ports:
+  - name: metrics
+    port: 24231
+    protocol: TCP
+  selector:
+    role : unified-artifactory-ha-member
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    prometheus: prometheus-jfrog
+  name: prometheus-jfrog-service-external
+spec:
+  type: LoadBalancer
+  ports:
+  - name: web
+    port: 9090
+    protocol: TCP
+  selector:
+    prometheus: prometheus-jfrog
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jfrog-prometheus-operator-grafana
+  name: jfrog-prometheus-operator-grafana-service-external
+spec:
+  type: LoadBalancer
+  ports:
+  - name: service
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/instance: jfrog-prometheus
+    app.kubernetes.io/name: grafana

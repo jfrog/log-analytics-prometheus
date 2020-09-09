@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: xray
+  name: xray-metrics
+spec:
+  ports:
+  - name: metrics
+    port: 24231
+    protocol: TCP
+  selector:
+    app: xray
