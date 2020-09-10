@@ -47,6 +47,13 @@
     @type none
   </parse>
 </source>
+<filter jfrog.xray.server.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
 <source>
   @type tail
   @id xray_persist_tail
@@ -57,6 +64,13 @@
     @type none
   </parse>
 </source>
+<filter jfrog.xray.persist.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
 <source>
   @type tail
   @id xray_indexer_tail
@@ -67,6 +81,13 @@
     @type none
   </parse>
 </source>
+<filter jfrog.xray.indexer.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
 <source>
   @type tail
   @id xray_analysis_tail
@@ -77,6 +98,13 @@
     @type none
   </parse>
 </source>
+<filter jfrog.xray.analysis.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
 <source>
   @type tail
   @id xray_router_tail
@@ -87,6 +115,13 @@
     @type none
   </parse>
 </source>
+<filter jfrog.xray.router.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
 <source>
   @type tail
   @id xray_router_traefik_tail
@@ -95,7 +130,7 @@
   tag jfrog.xray.router.traefik
   <parse>
       @type regexp
-      expression ^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] -(?<message>.+)$
+      expression ^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] - (?<message>.+)$
       time_key timestamp
       time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
@@ -120,20 +155,11 @@
   tag jfrog.xray.xray.request
   <parse>
     @type regexp
-    expression ^(?<timestamp>[^ ]*)\|(?<trace_id>[^ ]*)\|(?<remote_address>.+)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>.*)$
+    expression ^^(?<timestamp>[^ ]*)\|(?<trace_id>[^ ]*)\|(?<remote_address>.+)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>.*)$
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
 </source>
-# STRIP COLOR CODES FROM SERVICE LOGS
-<filter jfrog.xray.**.service>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
-  </record>
-</filter>
-# FIELD EXTRACT SERVICE LOG
 <filter jfrog.xray.**.service>
   @type parser
   key_name message
@@ -164,6 +190,7 @@
     remote_address ${remote_address}
     request_url ${request_url}
     return_status ${return_status}
+    method ${request_method}
   </labels>
 </metric>
 </filter>

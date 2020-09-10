@@ -97,7 +97,8 @@ kubectl apply -f test-only-expose.yaml
 ```
 ## Grafana Dashboard
 An example dashboard is included in the [grafana directory](grafana).
-![datasource](images/dashboard.png)
+![dashboard-1](images/dashboard-1.png)
+![dashboard-2](images/dashboard-2.png)
 
 ## Metrics Collected
 The following metrics are collected and can be queried using PromQL.

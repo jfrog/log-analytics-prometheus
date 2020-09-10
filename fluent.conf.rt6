@@ -99,6 +99,7 @@
   </record>
 </filter>
 
+#JFROG CALL HOME
 <source>
   @type exec
   tag jfrog.callhome
@@ -139,6 +140,7 @@
     flush_interval 5s
   </buffer>
 </match>
+#END CALL HOME
 
 <filter jfrog.rt.artifactory.request>
   @type prometheus
@@ -153,9 +155,10 @@
       return_status ${return_status}
       repo ${repo}
       artifact ${artifact}
-      dockerRepo ${dockerRepo}
       dockerImage ${dockerImage}
+      dockerRepo ${dockerRepo}
       remote_address ${remote_address}
+      method ${request_method}
     </labels>
   </metric>
 </filter>
