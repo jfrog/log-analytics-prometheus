@@ -47,13 +47,6 @@
     @type none
   </parse>
 </source>
-<filter jfrog.xray.server.service>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
-  </record>
-</filter>
 <source>
   @type tail
   @id xray_persist_tail
@@ -64,13 +57,6 @@
     @type none
   </parse>
 </source>
-<filter jfrog.xray.persist.service>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
-  </record>
-</filter>
 <source>
   @type tail
   @id xray_indexer_tail
@@ -81,13 +67,6 @@
     @type none
   </parse>
 </source>
-<filter jfrog.xray.indexer.service>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
-  </record>
-</filter>
 <source>
   @type tail
   @id xray_analysis_tail
@@ -98,13 +77,6 @@
     @type none
   </parse>
 </source>
-<filter jfrog.xray.analysis.service>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
-  </record>
-</filter>
 <source>
   @type tail
   @id xray_router_tail
@@ -115,13 +87,6 @@
     @type none
   </parse>
 </source>
-<filter jfrog.xray.router.service>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
-  </record>
-</filter>
 <source>
   @type tail
   @id xray_router_traefik_tail
@@ -160,6 +125,15 @@
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
 </source>
+# STRIP COLOR CODES FROM SERVICE LOGS
+<filter jfrog.xray.**.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
+# FIELD EXTRACT SERVICE LOG
 <filter jfrog.xray.**.service>
   @type parser
   key_name message

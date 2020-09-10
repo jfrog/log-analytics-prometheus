@@ -107,6 +107,26 @@
       time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
 </source>
+# Strip out color codes then field extract the service fields
+<filter jfrog.rt.**.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
+<filter jfrog.rt.**.service>
+  @type parser
+  key_name message
+  <parse>
+      @type multiline
+      format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+      format1 /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] -(?<message>.*)$/
+      time_key timestamp
+      time_format %Y-%m-%dT%H:%M:%S.%LZ
+  </parse>
+</filter>
+# End Service Fields Extraction
 <source>
   @type tail
   @id router_traefik_tail
