@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: xray
+    app: xray-external
   name: xray-metrics-service-external
 spec:
   type: LoadBalancer
@@ -18,7 +18,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: artifactory-ha-primary
+    app: artifactory-ha-primary-external
   name: artifactory-ha-primary-metrics-service-external
 spec:
   type: LoadBalancer
@@ -33,7 +33,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: artifactory-ha-member
+    app: artifactory-ha-member-external
   name: artifactory-ha-member-metrics-service-external
 spec:
   type: LoadBalancer
