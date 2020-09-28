@@ -16,6 +16,25 @@ The [Prometheus Operator](https://coreos.com/operators/prometheus/docs/latest/) 
 helm install jfrog-prometheus stable/prometheus-operator
 ```
 
+
+## Environment Configuration
+
+The environment variable JF_PRODUCT_DATA_INTERNAL must be defined to the correct location.
+
+Helm based installs will already have this defined based upon the underlying docker images.
+
+For non-k8s based installations below is a reference to the Docker image locations per product. Note these locations may be different based upon the installation location chosen.
+
+````text
+Artifactory: 
+export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/artifactory/
+````
+
+````text
+Xray:
+export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/xray/
+````
+
 ## FluentD Configuration
 The following steps describe how to configure FluentD to gather metrics for Prometheus. Refer to the main [README](../../README.md) for more details.
 1. Install the [FluentD Prometheus Plugin](https://github.com/fluent/fluent-plugin-prometheus).
