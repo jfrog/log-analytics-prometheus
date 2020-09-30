@@ -40,71 +40,51 @@
 <source>
   @type tail
   @id access_service_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/access-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/access-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/access-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/access-service.log.pos"
   tag jfrog.rt.access.service
   <parse>
-      @type multiline
-      format_firstline /\d{4}-\d{1,2}-\d{1,2}/
-      format1 /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] - (?<message>.+)$/
-      time_key timestamp
-      time_format %Y-%m-%dT%H:%M:%S.%LZ
+    @type none
   </parse>
 </source>
 <source>
   @type tail
   @id artifactory_service_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/artifactory-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/artifactory-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-service.log.pos"
   tag jfrog.rt.artifactory.service
   <parse>
-      @type multiline
-      format_firstline /\d{4}-\d{1,2}-\d{1,2}/
-      format1 /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] - (?<message>.+)$/
-      time_key timestamp
-      time_format %Y-%m-%dT%H:%M:%S.%LZ
+    @type none
   </parse>
 </source>
 <source>
   @type tail
   @id frontend_service_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/frontend-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/frontend-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/frontend-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/frontend-service.log.pos"
   tag jfrog.rt.frontend.service
   <parse>
-      @type multiline
-      format_firstline /\d{4}-\d{1,2}-\d{1,2}/
-      format1 /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] - (?<message>.+)$/
-      time_key timestamp
-      time_format %Y-%m-%dT%H:%M:%S.%LZ
+    @type none
   </parse>
 </source>
 <source>
   @type tail
   @id metadata_service_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/metadata-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/metadata-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/metadata-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/metadata-service.log.pos"
   tag jfrog.rt.metadata.service
   <parse>
-      @type multiline
-      format_firstline /\d{4}-\d{1,2}-\d{1,2}/
-      format1 /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] - (?<message>.+)$/
-      time_key timestamp
-      time_format %Y-%m-%dT%H:%M:%S.%LZ
+    @type none
   </parse>
 </source>
 <source>
   @type tail
   @id router_service_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/router-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/router-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-service.log.pos"
   tag jfrog.rt.router.service
   <parse>
-      @type multiline
-      format_firstline /\d{4}-\d{1,2}-\d{1,2}/
-      format1 /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] - (?<message>.+)$/
-      time_key timestamp
-      time_format %Y-%m-%dT%H:%M:%S.%LZ
+    @type none
   </parse>
 </source>
 # Strip out color codes then field extract the service fields
@@ -130,8 +110,8 @@
 <source>
   @type tail
   @id router_traefik_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/router-traefik.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/router-traefik.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-traefik.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-traefik.log.pos"
   tag jfrog.rt.router.traefik
   <parse>
       @type multiline
@@ -145,8 +125,8 @@
 <source>
   @type tail
   @id access_request_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/access-request.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/access-request.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/access-request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/access-request.log.pos"
   tag jfrog.rt.access.request
   <parse>
     @type regexp
@@ -158,8 +138,8 @@
 <source>
   @type tail
   @id artifactory_request_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/artifactory-request.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/artifactory-request.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-request.log.pos"
   tag jfrog.rt.artifactory.request
   <parse>
     @type regexp
@@ -185,8 +165,8 @@
 <source>
   @type tail
   @id frontend_request_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/frontend-request.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/frontend-request.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/frontend-request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/frontend-request.log.pos"
   tag jfrog.rt.frontend.request
   <parse>
     @type regexp
@@ -205,8 +185,8 @@
 <source>
   @type tail
   @id metadata_request_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/metadata-request.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/metadata-request.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/metadata-request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/metadata-request.log.pos"
   tag jfrog.rt.metadata.request
   <parse>
     @type regexp
@@ -225,8 +205,8 @@
 <source>
   @type tail
   @id router_request_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/router-request.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/router-request.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-request.log.pos"
   tag jfrog.rt.router.request
   <parse>
     @type json
@@ -237,8 +217,8 @@
 <source>
   @type tail
   @id artifactory_access_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/artifactory-access.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/artifactory-access.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-access.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-access.log.pos"
   tag jfrog.rt.artifactory.access
   <parse>
     @type regexp
@@ -257,12 +237,12 @@
 <source>
   @type tail
   @id access_security_audit_tail
-  path "#{ENV['JFROG_HOME']}/artifactory/var/log/access-security-audit.log"
-  pos_file "#{ENV['JFROG_HOME']}/artifactory/var/log/access-security-audit.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/access-security-audit.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/access-security-audit.log.pos"
   tag jfrog.rt.access.audit
   <parse>
     @type regexp
-    expression /^(?<timestamp>[^ ]*)\|(?<token_id>[^ ]*)\|(?<user_ip>[^ ]*)\|(?<user>[^ ]*)\|(?<logged_principal>[^ ]*)\|(?<entity_name>[^ ]*)\|(?<event_type>[^ ]*)\|(?<event>[^ ]*)\|(?<data_changed>[^.]*)$/
+    expression /^(?<timestamp>[^ ]*)\|(?<token_id>[^ ]*)\|(?<user_ip>[^ ]*)\|(?<user>[^ ]*)\|(?<logged_principal>[^ ]*)\|(?<entity_name>[^ ]*)\|(?<event_type>[^ ]*)\|(?<event>[^ ]*)\|(?<data_changed>.*)/
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
@@ -281,7 +261,7 @@
 <source>
   @type exec
   tag jfrog.callhome
-  command "#{ENV['JFROG_HOME']}/artifactory/fluentd-1.11.0-linux-x86_64/lib/ruby/bin/gem list --local | grep fluent | sed 's/ (/:/g' | sed 's/)//g'  | sed ':a;N;$!ba;s/\n/\t/g'"
+  command "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/fluentd-1.11.0-linux-x86_64/lib/ruby/bin/gem list --local | grep fluent | sed 's/ (/:/g' | sed 's/)//g'  | sed ':a;N;$!ba;s/\n/\t/g'"
   run_interval 1d
   <parse>
     @type ltsv

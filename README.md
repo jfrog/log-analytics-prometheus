@@ -3,6 +3,7 @@ The following describes how to configure Prometheus and Grafana to gather metric
 
 | version | artifactory | xray  | distribution | mission_control | pipelines |
 |---------|-------------|-------|--------------|-----------------|-----------|
+| 0.6.0   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.5.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
 | 0.4.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
 | 0.3.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
@@ -12,7 +13,7 @@ The following describes how to configure Prometheus and Grafana to gather metric
 ## Installing Prometheus and Grafana on K8s
 The Prometheus Community [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart allows the creation of Prometheus instances and includes Grafana. Install via Helm 3:
 
-Add the Helm Repos:
+Add the Helm Repositories:
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
@@ -33,6 +34,24 @@ These additional charts are installed:
 - stable/kube-state-metrics
 - stable/prometheus-node-exporter
 - grafana/grafana
+
+## Environment Configuration
+
+The environment variable JF_PRODUCT_DATA_INTERNAL must be defined to the correct location.
+
+Helm based installs will already have this defined based upon the underlying docker images.
+
+For non-k8s based installations below is a reference to the Docker image locations per product. Note these locations may be different based upon the installation location chosen.
+
+````text
+Artifactory: 
+export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/artifactory/
+````
+
+````text
+Xray:
+export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/xray/
+````
 
 ## FluentD Configuration
 The following steps describe how to configure FluentD to gather metrics for Prometheus. Refer to the main [README](../../README.md) for more details.
@@ -107,7 +126,12 @@ For testing purposes, you may want to expose Prometheus, Grafana and the FluentD
 kubectl apply -f test-only-expose.yaml
 ```
 ## Grafana Dashboard
-An example dashboard is included in the [grafana directory](grafana).
+Example dashboards are included in the [grafana directory](grafana). These include:
+
+- Artifactory Dashboard
+- Xray Dashboard
+- Artifactory & Xray Drill Downs Dashboard (This dashboard supports the drill down features in the Artifactory and Xray dashboards.)
+
 ![dashboard-1](images/dashboard-1.png)
 ![dashboard-2](images/dashboard-2.png)
 

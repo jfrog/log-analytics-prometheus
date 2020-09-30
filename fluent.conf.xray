@@ -40,8 +40,8 @@
 <source>
   @type tail
   @id xray_server_tail
-  path "#{ENV['JFROG_HOME']}/xray/var/log/xray-server-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/xray/var/log/xray-server-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-service.log.pos"
   tag jfrog.xray.server.service
   <parse>
     @type none
@@ -50,8 +50,8 @@
 <source>
   @type tail
   @id xray_persist_tail
-  path "#{ENV['JFROG_HOME']}/xray/var/log/xray-persist-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/xray/var/log/xray-persist-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-persist-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-persist-service.log.pos"
   tag jfrog.xray.persist.service
   <parse>
     @type none
@@ -60,8 +60,8 @@
 <source>
   @type tail
   @id xray_indexer_tail
-  path "#{ENV['JFROG_HOME']}/xray/var/log/xray-indexer-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/xray/var/log/xray-indexer-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-indexer-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-indexer-service.log.pos"
   tag jfrog.xray.indexer.service
   <parse>
     @type none
@@ -70,8 +70,8 @@
 <source>
   @type tail
   @id xray_analysis_tail
-  path "#{ENV['JFROG_HOME']}/xray/var/log/xray-analysis-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/xray/var/log/xray-analysis-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-analysis-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-analysis-service.log.pos"
   tag jfrog.xray.analysis.service
   <parse>
     @type none
@@ -80,8 +80,8 @@
 <source>
   @type tail
   @id xray_router_tail
-  path "#{ENV['JFROG_HOME']}/xray/var/log/router-service.log"
-  pos_file "#{ENV['JFROG_HOME']}/xray/var/log/router-service.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-service.log.pos"
   tag jfrog.xray.router.service
   <parse>
     @type none
@@ -90,8 +90,8 @@
 <source>
   @type tail
   @id xray_router_traefik_tail
-  path "#{ENV['JFROG_HOME']}/xray/var/log/router-traefik.log"
-  pos_file "#{ENV['JFROG_HOME']}/xray/var/log/router-traefik.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-traefik.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-traefik.log.pos"
   tag jfrog.xray.router.traefik
   <parse>
       @type regexp
@@ -103,8 +103,8 @@
 <source>
   @type tail
   @id xray_router_request_tail
-  path  "#{ENV['JFROG_HOME']}/xray/var/log/router-request.log"
-  pos_file "#{ENV['JFROG_HOME']}/xray/var/log/router-request.log.pos"
+  path  "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-request.log.pos"
   tag jfrog.xray.router.request
   <parse>
     @type json
@@ -115,8 +115,8 @@
 <source>
   @type tail
   @id xray_request_tail
-  path  "#{ENV['JFROG_HOME']}/xray/var/log/xray-request.log"
-  pos_file  "#{ENV['JFROG_HOME']}/xray/var/log/xray-request.log.pos"
+  path  "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-request.log"
+  pos_file  "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-request.log.pos"
   tag jfrog.xray.xray.request
   <parse>
     @type regexp
