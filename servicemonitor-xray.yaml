@@ -4,6 +4,8 @@ metadata:
   name: servicemonitor-xray
   labels:
     metrics: jfrog
+    app: kube-prometheus-stack-prometheus
+    release: jfrog-prometheus
 spec:
   selector:
     matchLabels:
