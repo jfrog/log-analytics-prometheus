@@ -1,13 +1,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: servicemonitor-artifactory-ha-primary
+  name: servicemonitor-artifactory-ha-member
   labels:
     metrics: jfrog
+    app: kube-prometheus-stack-prometheus
+    release: jfrog-prometheus
 spec:
   selector:
     matchLabels:
-      app: artifactory-ha-primary
+      app: artifactory-ha-member
   endpoints:
   - port: metrics
     interval: 15s

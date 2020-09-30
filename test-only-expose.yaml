@@ -56,15 +56,17 @@ spec:
   - name: web
     port: 9090
     protocol: TCP
+    targetPort: 9090
   selector:
-    prometheus: prometheus-jfrog
+    app: prometheus
+    prometheus: jfrog-prometheus-kube-prom-prometheus
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: jfrog-prometheus-operator-grafana
-  name: jfrog-prometheus-operator-grafana-service-external
+    app: grafana-jfrog
+  name: grafana-jfrog-service-external
 spec:
   type: LoadBalancer
   ports:
