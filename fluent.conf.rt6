@@ -75,6 +75,13 @@
     dockerImage ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
   </record>
 </filter>
+<filter jfrog.rt.artifactory.access>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    ip ${(record["ip"].strip)[0..-2]}
+  </record>
+</filter>
 
 <source>
   @type tail
