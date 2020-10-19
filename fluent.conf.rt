@@ -222,19 +222,11 @@
   tag jfrog.rt.artifactory.access
   <parse>
     @type regexp
-    expression /^(?<timestamp>[^ ]*) \[(?<trace_id>[^\]]*)\] \[(?<action_response>[^\]]*)\] (?<repo_path>.*) for client : (?<username>.+)/(?<ip>.+)$/
+    expression /^(?<timestamp>[^ ]*) \[(?<trace_id>[^\]]*)\] \[(?<action_response>[^\]]*)\] (?<repo_path>.*) for client : (?<username>.+)/(?<ip>.+).$/
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
 </source>
-<filter jfrog.rt.artifactory.access>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    user ${!record["username"].strip().start_with?("token") ? (record["username"].strip()) : ("")}
-    ip ${(record["ip"].strip)[0..-2]}
-  </record>
-</filter>
 <source>
   @type tail
   @id access_security_audit_tail
