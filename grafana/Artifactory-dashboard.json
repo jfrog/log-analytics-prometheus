@@ -154,7 +154,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests\\\\/latest.*\",message=~\".*docker\\\\.io.*\"}[1h]))",
+          "expr": "avg(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests.*\",message=~\".*docker\\\\.io.*\"}[1h]))",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -425,7 +425,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests\\\\/latest.*\",message=~\".*docker\\\\.io.*\"}[1m]))",
+          "expr": "sum(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests.*\",message=~\".*docker\\\\.io.*\"}[1m]))",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -444,7 +444,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Dockerhub Pull Requests Total",
+      "title": "Dockerhub Pull Requests",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1987,5 +1987,5 @@
   "timezone": "",
   "title": "Artifactory",
   "uid": "siDGzFmMk",
-  "version": 51
+  "version": 55
 }

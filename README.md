@@ -3,6 +3,7 @@ The following describes how to configure Prometheus and Grafana to gather metric
 
 | version | artifactory | xray  | distribution | mission_control | pipelines |
 |---------|-------------|-------|--------------|-----------------|-----------|
+| 0.7.2   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.7.1   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.6.1   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.6.0   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
