@@ -222,19 +222,11 @@
   tag jfrog.rt.artifactory.access
   <parse>
     @type regexp
-    expression /^(?<timestamp>[^ ]*) \[(?<trace_id>[^\]]*)\] \[(?<action_response>[^\]]*)\] (?<repo_path>.*) for client : (?<username>.+)/(?<ip>.+)$/
+    expression /^(?<timestamp>[^ ]*) \[(?<trace_id>[^\]]*)\] \[(?<action_response>[^\]]*)\] (?<repo_path>.*) for client : (?<username>.+)/(?<ip>.+).$/
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
 </source>
-<filter jfrog.rt.artifactory.access>
-  @type record_transformer
-  enable_ruby true
-  <record>
-    user ${!record["username"].strip().start_with?("token") ? (record["username"].strip()) : ("")}
-    ip ${(record["ip"].strip)[0..-2]}
-  </record>
-</filter>
 <source>
   @type tail
   @id access_security_audit_tail
@@ -370,6 +362,16 @@
       log_level ${log_level}
     </labels>
   </metric>
+
+  <metric>
+      name jfrog_rt_service_message
+      type counter
+      desc artifactory service message
+      <labels>
+        host ${hostname}
+        message ${message}
+      </labels>
+    </metric>
 </filter>
 
 <filter jfrog.rt.artifactory.access>
@@ -381,7 +383,8 @@
   desc artifactory access
   <labels>
     host ${hostname}
-    user ${user}
+    username ${username}
+    repo_path ${repo_path}
     action_response ${action_response}
     ip ${ip}
   </labels>
