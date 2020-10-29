@@ -1,6 +1,9 @@
 # JFrog Log Analytics Changelog
 All changes to the log analytics integration will be documented in this file.
 
+## [0.7.1] - Oct 28, 2020
+* Updated fluentd config, added new chart widgets and an alert to monitor [dockerhub rate limiting](https://jfrog.com/blog/get-around-docker-download-limits-jfrog-artifactory/).
+
 ## [0.7.0] - Oct 20, 2020
 * Fixing issue with ip_address in access logs having space and . at the end
 

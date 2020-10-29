@@ -362,6 +362,16 @@
       log_level ${log_level}
     </labels>
   </metric>
+
+  <metric>
+      name jfrog_rt_service_message
+      type counter
+      desc artifactory service message
+      <labels>
+        host ${hostname}
+        message ${message}
+      </labels>
+    </metric>
 </filter>
 
 <filter jfrog.rt.artifactory.access>
@@ -373,7 +383,8 @@
   desc artifactory access
   <labels>
     host ${hostname}
-    user ${user}
+    username ${username}
+    repo_path ${repo_path}
     action_response ${action_response}
     ip ${ip}
   </labels>

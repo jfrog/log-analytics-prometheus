@@ -1,8 +1,9 @@
 # Artifactory and Xray Logging Analytics with FluentD, Prometheus and Grafana
-The following describes how to configure Prometheus and Grafana to gather metrics from Artifactory and Xray through the use of FluentD. The setup and configuration of Prometheus and Grafana uses Kubernetes and makes use of the Prometheus Operator.
+The following describes how to configure Prometheus and Grafana to gather metrics from Artifactory and Xray through the use of FluentD. The setup and configuration of Prometheus and Grafana uses Kubernetes and makes use of the Prometheus Community helm chart.
 
 | version | artifactory | xray  | distribution | mission_control | pipelines |
 |---------|-------------|-------|--------------|-----------------|-----------|
+| 0.7.1   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.6.1   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.6.0   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.5.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
@@ -55,7 +56,7 @@ export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/xray/
 ````
 
 ## FluentD Configuration
-The following steps describe how to configure FluentD to gather metrics for Prometheus. Refer to the main [README](../../README.md) for more details.
+The following steps describe how to configure FluentD to gather metrics for Prometheus.
 1. Install the [FluentD Prometheus Plugin](https://github.com/fluent/fluent-plugin-prometheus).
 2. Use the appropriate FluentD configuration file and copy it to /etc/td-agent/td-agent.conf.
     * fluent.conf.rt - Artifactory version 7 server
@@ -138,16 +139,17 @@ Example dashboards are included in the [grafana directory](grafana). These inclu
 
 ## Metrics Collected
 The following metrics are collected and can be queried using PromQL.
-| Metric                 | Product     | Type    | Labels                                                                                    | Description                                       |
-|------------------------|-------------|---------|-------------------------------------------------------------------------------------------|---------------------------------------------------|
-| jfrog_rt_data_download | Artifactory | gauge   | host, remote_address, repo, response_content_length, data_download                        | Data download in bytes.                           |
-| jfrog_rt_data_upload   | Artifactory | gauge   | host, remote_address, repo, request_content_length, data_download                         | Data upload in bytes.                             |
-| jfrog_rt_req           | Artifactory | counter | host, remote_address, repo, artifact, request_url, return_status, dockerRepo, dockerImage | Requests to Artifactory.                          |
-| jfrog_rt_log_level     | Artifactory | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
-| jfrog_rt_access        | Artifactory | counter | host, username, action_response                                                           | Artifactory user access and response counter.     |
-| jfrog_rt_access_audit  | Artifactory | counter | host, user, event_type, event                                                             | Artifactory user event counter.                   |
-| jfrog_xray_req         | Xray        | counter | host, remote_address, request_url, return_status                                          | Requests to Xray.                                 |
-| jfrog_xray_log_level   | Xray        | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
+| Metric                   | Product     | Type    | Labels                                                                                    | Description                                       |
+|--------------------------|-------------|---------|-------------------------------------------------------------------------------------------|---------------------------------------------------|
+| jfrog_rt_data_download   | Artifactory | gauge   | host, remote_address, repo, response_content_length, data_download                        | Data download in bytes.                           |
+| jfrog_rt_data_upload     | Artifactory | gauge   | host, remote_address, repo, request_content_length, data_download                         | Data upload in bytes.                             |
+| jfrog_rt_req             | Artifactory | counter | host, remote_address, repo, artifact, request_url, return_status, dockerRepo, dockerImage | Requests to Artifactory.                          |
+| jfrog_rt_log_level       | Artifactory | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
+| jfrog_rt_service_message | Artifactory | counter | host, message                                                                             | Service message and counts.                       |
+| jfrog_rt_access          | Artifactory | counter | host, username, action_response                                                           | Artifactory user access and response counter.     |
+| jfrog_rt_access_audit    | Artifactory | counter | host, user, event_type, event                                                             | Artifactory user event counter.                   |
+| jfrog_xray_req           | Xray        | counter | host, remote_address, request_url, return_status                                          | Requests to Xray.                                 |
+| jfrog_xray_log_level     | Xray        | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
 
 
 ## Fluentd HA Setup

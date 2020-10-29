@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "bargauge",
-      "name": "Bar gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.1.5"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -52,17 +16,737 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
+  "id": 25,
   "links": [],
   "panels": [
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 0
+      },
+      "id": 52,
+      "panels": [],
+      "title": "Docker",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "description": "Shows the ratio of Dockerhub cache hits versus downloads.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 64,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "7.2.1",
+      "targets": [
+        {
+          "expr": "1-(sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))/sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m])))",
+          "interval": "",
+          "legendFormat": "cache hit ratio",
+          "refId": "C"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Dockerhub Cache Hit Ratio",
+      "type": "gauge"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Shows Dockerhub pull requests over rolling 1H average.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 66,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.2.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "avg(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests\\\\/latest.*\",message=~\".*docker\\\\.io.*\"}[1h]))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Dockerhub Pull Requests Rolling 1H Average",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:2099",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:2100",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Shows Dockerhub cache hits and downloads.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "hiddenSeries": false,
+      "id": 62,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.2.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "cache hit",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m]))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "download",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Dockerhub Cache Hits and Downloads",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:597",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:598",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0.55
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "name": "Dockerhub Pull Requests Alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Shows Dockerhub pull requests over the time period.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "hiddenSeries": false,
+      "id": 54,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.2.1",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests\\\\/latest.*\",message=~\".*docker\\\\.io.*\"}[1m]))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 0.55
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Dockerhub Pull Requests Total",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:2099",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:2100",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "datasource": "Prometheus",
+      "description": "Shows the top users making docker pull requests.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "decimals": 0,
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "title": "Filter",
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "id": 58,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "7.2.1",
+      "targets": [
+        {
+          "expr": "topk(10, sum by (username) (increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ username }}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Top 10 Users Performing Docker Pull Requests",
+      "type": "bargauge"
+    },
+    {
+      "datasource": "Prometheus",
+      "description": "Shows the top users making docker pull requests.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "decimals": 0,
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "title": "Filter",
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 60,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "7.2.1",
+      "targets": [
+        {
+          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{ ip }}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Top 10 IPs Performing Docker Pull Requests",
+      "type": "bargauge"
+    },
+    {
+      "datasource": "Prometheus",
+      "description": "Shows the top images that have been requested.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "decimals": 0,
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "title": "Filter",
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
+      "id": 44,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "7.2.1",
+      "targets": [
+        {
+          "expr": "topk( 10, sum by (dockerImage) (increase(jfrog_rt_req{dockerImage!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{dockerImage}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Accessed Images",
+      "type": "bargauge"
+    },
+    {
+      "datasource": "Prometheus",
+      "description": "Shows the top docker repos that have been requested.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "decimals": 0,
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "title": "Filter",
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=8&orgId=1&var-dockerRepo=${__series.name}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
+      "id": 46,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "7.2.1",
+      "targets": [
+        {
+          "expr": "topk( 10, sum by (dockerRepo) (increase(jfrog_rt_req{dockerRepo!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{dockerRepo}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Accessed Docker Repos",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 33
       },
       "id": 38,
       "panels": [],
@@ -74,7 +758,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows HTTP 5XX errors.",
       "fieldConfig": {
         "defaults": {
@@ -89,7 +773,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 34
       },
       "hiddenSeries": false,
       "id": 10,
@@ -105,8 +789,11 @@
       "lines": true,
       "linewidth": 1,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -170,7 +857,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows HTTP response codes over time.",
       "fieldConfig": {
         "defaults": {
@@ -190,7 +877,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 34
       },
       "hiddenSeries": false,
       "id": 42,
@@ -207,8 +894,11 @@
       "lines": true,
       "linewidth": 1,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -272,7 +962,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows Artifactory log errors.",
       "fieldConfig": {
         "defaults": {
@@ -287,7 +977,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 42
       },
       "hiddenSeries": false,
       "id": 6,
@@ -303,8 +993,11 @@
       "lines": true,
       "linewidth": 1,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -368,7 +1061,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the download data transfers from this Artifactory.",
       "fieldConfig": {
         "defaults": {
@@ -383,7 +1076,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 42
       },
       "hiddenSeries": false,
       "id": 2,
@@ -400,8 +1093,11 @@
       "lines": true,
       "linewidth": 1,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -467,7 +1163,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the upload data transfers from this Artifactory.",
       "fieldConfig": {
         "defaults": {
@@ -482,7 +1178,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 50
       },
       "hiddenSeries": false,
       "id": 4,
@@ -498,8 +1194,11 @@
       "lines": true,
       "linewidth": 1,
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -559,11 +1258,7 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the top repositories by requests.",
       "fieldConfig": {
         "defaults": {
@@ -588,38 +1283,26 @@
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 50
       },
-      "hiddenSeries": false,
       "id": 14,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": false
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
       },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pluginVersion": "7.1.5",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk( 10, sum by (repo) (increase(jfrog_rt_req{repo!=\"\",return_status=\"200\"}[$__range]) > 0))",
@@ -629,55 +1312,13 @@
           "refId": "A"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "Accessed Repos",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1710",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1711",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "bargauge"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the top artifacts that have been requested.",
       "fieldConfig": {
         "defaults": {
@@ -705,38 +1346,26 @@
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 13,
+        "h": 9,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 58
       },
-      "hiddenSeries": false,
       "id": 16,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": false
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
       },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pluginVersion": "7.1.5",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk( 10, sum by (artifact) (increase(jfrog_rt_req{artifact!=\"\",return_status=\"200\"}[$__range]) > 0))",
@@ -747,287 +1376,13 @@
           "refId": "A"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "Accessed Artifacts",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1630",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1631",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "bargauge"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "Shows the top docker repos that have been requested.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": null
-          },
-          "decimals": 0,
-          "displayName": "${__series.name}",
-          "links": [
-            {
-              "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=8&orgId=1&var-dockerRepo=${__series.name}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 12,
-        "y": 25
-      },
-      "hiddenSeries": false,
-      "id": 46,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pluginVersion": "7.1.5",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk( 10, sum by (dockerRepo) (increase(jfrog_rt_req{dockerRepo!=\"\",return_status=\"200\"}[$__range]) > 0))",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{dockerRepo}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Accessed Docker Repos",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1630",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1631",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "Shows the top images that have been requested.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": null
-          },
-          "decimals": 0,
-          "displayName": "${__series.name}",
-          "links": [
-            {
-              "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 38
-      },
-      "hiddenSeries": false,
-      "id": 44,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "percentage": false,
-      "pluginVersion": "7.1.5",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk( 10, sum by (dockerImage) (increase(jfrog_rt_req{dockerImage!=\"\",return_status=\"200\"}[$__range]) > 0))",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{dockerImage}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Accessed Images",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:1630",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:1631",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Top active repositories by data transfers uploads.",
       "fieldConfig": {
         "defaults": {
@@ -1051,7 +1406,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 38
+        "y": 58
       },
       "id": 48,
       "options": {
@@ -1066,7 +1421,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_upload{repo!=\"\"}[$__range])) > 0)",
@@ -1088,7 +1443,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Top active repositories by data transfers downloads.",
       "fieldConfig": {
         "defaults": {
@@ -1112,7 +1467,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 47
+        "y": 67
       },
       "id": 36,
       "options": {
@@ -1127,7 +1482,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_download{repo!=\"\"}[$__range])) > 0)",
@@ -1151,7 +1506,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the top uploading IPs.",
       "fieldConfig": {
         "defaults": {
@@ -1175,7 +1530,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 47
+        "y": 67
       },
       "id": 20,
       "links": [],
@@ -1191,7 +1546,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_upload[$__range])) > 0)",
@@ -1209,7 +1564,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the top downloading remote IPs.",
       "fieldConfig": {
         "defaults": {
@@ -1232,8 +1587,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 55
+        "x": 12,
+        "y": 75
       },
       "id": 18,
       "links": [],
@@ -1249,7 +1604,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_download[$__range])) > 0)",
@@ -1267,12 +1622,12 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 63
+        "y": 83
       },
       "id": 40,
       "panels": [],
@@ -1280,7 +1635,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the top users by actions.",
       "fieldConfig": {
         "defaults": {
@@ -1303,7 +1658,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 64
+        "y": 84
       },
       "id": 34,
       "options": {
@@ -1318,7 +1673,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_audit{user!=\"UNKNOWN\", user!=\"_system_\",user!=\"\"}[$__range])) )",
@@ -1334,7 +1689,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows accepted deploys by user.",
       "fieldConfig": {
         "defaults": {
@@ -1357,7 +1712,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 64
+        "y": 84
       },
       "id": 26,
       "options": {
@@ -1372,7 +1727,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (user) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
@@ -1388,7 +1743,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the denied login attempts.",
       "fieldConfig": {
         "defaults": {
@@ -1411,7 +1766,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 72
+        "y": 92
       },
       "id": 50,
       "options": {
@@ -1426,7 +1781,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
@@ -1442,7 +1797,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows denied actions by user.",
       "fieldConfig": {
         "defaults": {
@@ -1465,7 +1820,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 72
+        "y": 92
       },
       "id": 28,
       "options": {
@@ -1480,7 +1835,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (user) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
@@ -1496,7 +1851,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows the denied login attempts.",
       "fieldConfig": {
         "defaults": {
@@ -1519,7 +1874,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 80
+        "y": 100
       },
       "id": 32,
       "options": {
@@ -1534,7 +1889,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (user,ip) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
@@ -1550,7 +1905,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "description": "Shows denied actions by IP address.",
       "fieldConfig": {
         "defaults": {
@@ -1573,7 +1928,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 80
+        "y": 100
       },
       "id": 30,
       "options": {
@@ -1588,7 +1943,7 @@
         },
         "showUnfilled": false
       },
-      "pluginVersion": "7.1.5",
+      "pluginVersion": "7.2.1",
       "targets": [
         {
           "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
@@ -1604,6 +1959,7 @@
       "type": "bargauge"
     }
   ],
+  "refresh": false,
   "schemaVersion": 26,
   "style": "dark",
   "tags": [],
@@ -1611,7 +1967,7 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -1631,5 +1987,5 @@
   "timezone": "",
   "title": "Artifactory",
   "uid": "siDGzFmMk",
-  "version": 28
+  "version": 51
 }
