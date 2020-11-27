@@ -378,7 +378,7 @@
 @type prometheus
 
 <metric>
-  name jfrog_rt_access
+  name jfrog_rt_access_total
   type counter
   desc artifactory access
   <labels>

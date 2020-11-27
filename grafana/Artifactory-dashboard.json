@@ -79,7 +79,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "1-(sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))/sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m])))",
+          "expr": "1-(sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))/sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m])))",
           "interval": "",
           "legendFormat": "cache hit ratio",
           "refId": "C"
@@ -268,7 +268,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))",
+          "expr": "sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -276,7 +276,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m]))",
+          "expr": "sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "download",
@@ -534,7 +534,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (username) (increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (username) (increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -598,7 +598,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1730,7 +1730,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}",
@@ -1784,7 +1784,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{ip}}",
@@ -1838,7 +1838,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}",
@@ -1892,7 +1892,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user,ip) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (user,ip) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}-{{ip}}",
@@ -1946,7 +1946,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access_total{action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{ip}}",
