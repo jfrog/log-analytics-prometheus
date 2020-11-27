@@ -1107,7 +1107,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(jfrog_rt_data_download[1m]))",
+          "expr": "sum(rate(jfrog_rt_data_download_total[1m]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1485,7 +1485,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_download{repo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_download_total{repo!=\"\"}[$__range])) > 0)",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1493,7 +1493,7 @@
           "refId": "A"
         },
         {
-          "expr": "topk(10, sum by (dockerRepo) (increase(jfrog_rt_data_download{dockerRepo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (dockerRepo) (increase(jfrog_rt_data_download_total{dockerRepo!=\"\"}[$__range])) > 0)",
           "interval": "",
           "legendFormat": "{{dockerRepo}}",
           "refId": "B"
@@ -1607,7 +1607,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_download[$__range])) > 0)",
+          "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_download_total[$__range])) > 0)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
