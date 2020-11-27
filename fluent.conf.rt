@@ -315,7 +315,7 @@
   </metric>
 
   <metric>
-    name jfrog_rt_data_upload
+    name jfrog_rt_data_upload_total
     type counter
     desc artifactory data upload
     key data_upload
