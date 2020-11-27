@@ -144,7 +144,7 @@ The following metrics are collected and can be queried using PromQL.
 |------------------------------|-------------|---------|-------------------------------------------------------------------------------------------|---------------------------------------------------|
 | jfrog_rt_data_download_total | Artifactory | counter | host, remote_address, repo, response_content_length, data_download                        | Data download in bytes.                           |
 | jfrog_rt_data_upload_total   | Artifactory | counter | host, remote_address, repo, request_content_length, data_download                         | Data upload in bytes.                             |
-| jfrog_rt_req                 | Artifactory | counter | host, remote_address, repo, artifact, request_url, return_status, dockerRepo, dockerImage | Requests to Artifactory.                          |
+| jfrog_rt_req_total           | Artifactory | counter | host, remote_address, repo, artifact, request_url, return_status, dockerRepo, dockerImage | Requests to Artifactory.                          |
 | jfrog_rt_log_level_total     | Artifactory | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
 | jfrog_rt_service_message     | Artifactory | counter | host, message                                                                             | Service message and counts.                       |
 | jfrog_rt_access_total        | Artifactory | counter | host, username, action_response                                                           | Artifactory user access and response counter.     |

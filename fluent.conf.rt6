@@ -146,7 +146,7 @@
   @type prometheus
 
   <metric>
-    name jfrog_rt_req
+    name jfrog_rt_req_total
     type counter
     desc artifactory requests
     <labels>

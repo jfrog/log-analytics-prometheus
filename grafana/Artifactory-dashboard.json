@@ -662,7 +662,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerImage) (increase(jfrog_rt_req{dockerImage!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (dockerImage) (increase(jfrog_rt_req_total{dockerImage!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -726,7 +726,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerRepo) (increase(jfrog_rt_req{dockerRepo!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (dockerRepo) (increase(jfrog_rt_req_total{dockerRepo!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -803,7 +803,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "increase(jfrog_rt_req{return_status=~\"5.*\"}[$__range])",
+          "expr": "increase(jfrog_rt_req_total{return_status=~\"5.*\"}[$__range])",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -908,7 +908,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (return_status) (increase(jfrog_rt_req[$__range]))",
+          "expr": "sum by (return_status) (increase(jfrog_rt_req_total[$__range]))",
           "interval": "",
           "legendFormat": "{{return_status}}",
           "refId": "A"
@@ -1305,7 +1305,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (repo) (increase(jfrog_rt_req{repo!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (repo) (increase(jfrog_rt_req_total{repo!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{repo}}",
@@ -1368,7 +1368,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (artifact) (increase(jfrog_rt_req{artifact!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (artifact) (increase(jfrog_rt_req_total{artifact!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
