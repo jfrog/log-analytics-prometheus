@@ -496,7 +496,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-docker_image=${__series.name}"
             }
           ],
           "mappings": [],
@@ -560,7 +560,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-docker_image=${__series.name}"
             }
           ],
           "mappings": [],
@@ -624,7 +624,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-docker_image=${__series.name}"
             }
           ],
           "mappings": [],
@@ -662,11 +662,11 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerImage) (increase(jfrog_rt_req_total{dockerImage!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (docker_image) (increase(jfrog_rt_req_total{docker_image!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{dockerImage}}",
+          "legendFormat": "{{docker_image}}",
           "refId": "A"
         }
       ],

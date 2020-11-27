@@ -72,7 +72,7 @@
     repo ${!record["request_url"].strip().start_with?("/api") ? (record["request_url"].strip().split('/')[1]) : ("")}
     artifact ${!record["request_url"].strip().start_with?("/api") ? (val = record["request_url"].strip().split('/'); val[val.length()-1]) : ("")}
     docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
-    dockerImage ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
+    docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
   </record>
 </filter>
 
@@ -155,7 +155,7 @@
       return_status ${return_status}
       repo ${repo}
       artifact ${artifact}
-      dockerImage ${dockerImage}
+      docker_image ${docker_image}
       docker_repo ${docker_repo}
       remote_address ${remote_address}
       method ${request_method}

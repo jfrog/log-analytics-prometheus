@@ -123,11 +123,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerImage) (increase(jfrog_rt_req_total{dockerImage=\"$dockerImage\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (docker_image) (increase(jfrog_rt_req_total{docker_image=\"$docker_image\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{dockerImage}}",
+          "legendFormat": "{{docker_image}}",
           "refId": "A"
         }
       ],
@@ -810,14 +810,14 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_PROMETHEUS}",
-        "definition": "label_values(jfrog_rt_req_total,dockerImage)",
+        "definition": "label_values(jfrog_rt_req_total,docker_image)",
         "hide": 0,
         "includeAll": false,
         "label": "Docker Image",
         "multi": false,
-        "name": "dockerImage",
+        "name": "docker_image",
         "options": [],
-        "query": "label_values(jfrog_rt_req_total,dockerImage)",
+        "query": "label_values(jfrog_rt_req_total,docker_image)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
