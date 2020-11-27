@@ -233,11 +233,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerRepo) (increase(jfrog_rt_req_total{dockerRepo=\"$dockerRepo\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (docker_repo) (increase(jfrog_rt_req_total{docker_repo=\"$docker_repo\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{dockerRepo}}",
+          "legendFormat": "{{docker_repo}}",
           "refId": "A"
         }
       ],
@@ -788,14 +788,14 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_PROMETHEUS}",
-        "definition": "label_values(jfrog_rt_req_total,dockerRepo)",
+        "definition": "label_values(jfrog_rt_req_total,docker_repo)",
         "hide": 0,
         "includeAll": false,
         "label": "Docker Repo",
         "multi": false,
-        "name": "dockerRepo",
+        "name": "docker_repo",
         "options": [],
-        "query": "label_values(jfrog_rt_req_total,dockerRepo)",
+        "query": "label_values(jfrog_rt_req_total,docker_repo)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

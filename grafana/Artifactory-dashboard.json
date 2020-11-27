@@ -688,7 +688,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=8&orgId=1&var-dockerRepo=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=8&orgId=1&var-docker_repo=${__series.name}"
             }
           ],
           "mappings": [],
@@ -726,11 +726,11 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerRepo) (increase(jfrog_rt_req_total{dockerRepo!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (docker_repo) (increase(jfrog_rt_req_total{docker_repo!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{dockerRepo}}",
+          "legendFormat": "{{docker_repo}}",
           "refId": "A"
         }
       ],
@@ -1431,9 +1431,9 @@
           "refId": "A"
         },
         {
-          "expr": "topk(10, sum by (dockerRepo) (increase(jfrog_rt_data_upload_total{dockerRepo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (docker_repo) (increase(jfrog_rt_data_upload_total{docker_repo!=\"\"}[$__range])) > 0)",
           "interval": "",
-          "legendFormat": "{{dockerRepo}}",
+          "legendFormat": "{{docker_repo}}",
           "refId": "B"
         }
       ],
@@ -1493,9 +1493,9 @@
           "refId": "A"
         },
         {
-          "expr": "topk(10, sum by (dockerRepo) (increase(jfrog_rt_data_download_total{dockerRepo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (docker_repo) (increase(jfrog_rt_data_download_total{docker_repo!=\"\"}[$__range])) > 0)",
           "interval": "",
-          "legendFormat": "{{dockerRepo}}",
+          "legendFormat": "{{docker_repo}}",
           "refId": "B"
         }
       ],
