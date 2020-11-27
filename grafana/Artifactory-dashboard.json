@@ -1676,7 +1676,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_audit{user!=\"UNKNOWN\", user!=\"_system_\",user!=\"\"}[$__range])) )",
+          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_audit_total{user!=\"UNKNOWN\", user!=\"_system_\",user!=\"\"}[$__range])) )",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}",
