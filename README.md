@@ -140,17 +140,17 @@ Example dashboards are included in the [grafana directory](grafana). These inclu
 
 ## Metrics Collected
 The following metrics are collected and can be queried using PromQL.
-| Metric                       | Product     | Type    | Labels                                                                                    | Description                                       |
-|------------------------------|-------------|---------|-------------------------------------------------------------------------------------------|---------------------------------------------------|
-| jfrog_rt_data_download_total | Artifactory | counter | host, remote_address, repo, response_content_length, data_download                        | Data download in bytes.                           |
-| jfrog_rt_data_upload_total   | Artifactory | counter | host, remote_address, repo, request_content_length, data_download                         | Data upload in bytes.                             |
-| jfrog_rt_req_total           | Artifactory | counter | host, remote_address, repo, artifact, request_url, return_status, dockerRepo, dockerImage | Requests to Artifactory.                          |
-| jfrog_rt_log_level_total     | Artifactory | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
-| jfrog_rt_service_message     | Artifactory | counter | host, message                                                                             | Service message and counts.                       |
-| jfrog_rt_access_total        | Artifactory | counter | host, username, action_response                                                           | Artifactory user access and response counter.     |
-| jfrog_rt_access_audit_total  | Artifactory | counter | host, user, event_type, event                                                             | Artifactory user event counter.                   |
-| jfrog_xray_req               | Xray        | counter | host, remote_address, request_url, return_status                                          | Requests to Xray.                                 |
-| jfrog_xray_log_level         | Xray        | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
+| Metric                         | Product     | Type    | Labels                                                                                    | Description                                       |
+|--------------------------------|-------------|---------|-------------------------------------------------------------------------------------------|---------------------------------------------------|
+| jfrog_rt_data_download_total   | Artifactory | counter | host, remote_address, repo, response_content_length, data_download                        | Data download in bytes.                           |
+| jfrog_rt_data_upload_total     | Artifactory | counter | host, remote_address, repo, request_content_length, data_download                         | Data upload in bytes.                             |
+| jfrog_rt_req_total             | Artifactory | counter | host, remote_address, repo, artifact, request_url, return_status, dockerRepo, dockerImage | Requests to Artifactory.                          |
+| jfrog_rt_log_level_total       | Artifactory | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
+| jfrog_rt_service_message_total | Artifactory | counter | host, message                                                                             | Service message and counts.                       |
+| jfrog_rt_access_total          | Artifactory | counter | host, username, action_response                                                           | Artifactory user access and response counter.     |
+| jfrog_rt_access_audit_total    | Artifactory | counter | host, user, event_type, event                                                             | Artifactory user event counter.                   |
+| jfrog_xray_req                 | Xray        | counter | host, remote_address, request_url, return_status                                          | Requests to Xray.                                 |
+| jfrog_xray_log_level           | Xray        | counter | host, log_level                                                                           | Logging level counter (ERROR, WARN, INFO, DEBUG). |
 
 
 ## Fluentd HA Setup

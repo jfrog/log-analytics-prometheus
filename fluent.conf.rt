@@ -364,7 +364,7 @@
   </metric>
 
   <metric>
-      name jfrog_rt_service_message
+      name jfrog_rt_service_message_total
       type counter
       desc artifactory service message
       <labels>
