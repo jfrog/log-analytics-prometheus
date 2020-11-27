@@ -1007,7 +1007,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "increase(jfrog_rt_log_level{log_level=\"ERROR\"}[$__range])",
+          "expr": "increase(jfrog_rt_log_level_total{log_level=\"ERROR\"}[$__range])",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
