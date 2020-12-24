@@ -3,6 +3,7 @@ The following describes how to configure Prometheus and Grafana to gather metric
 
 | version | artifactory | xray  | distribution | mission_control | pipelines |
 |---------|-------------|-------|--------------|-----------------|-----------|
+| 0.8.0   | 7.11.5      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.7.2   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.7.1   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.6.1   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
@@ -19,24 +20,47 @@ The Prometheus Community [kube-prometheus-stack](https://github.com/prometheus-c
 Add the Helm Repositories:
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo update
 ```
 
 Install the chart via Helm 3:
 ```
-helm install jfrog-prometheus prometheus-community/kube-prometheus-stack
+helm install jfrog-prometheus prometheus-community/kube-prometheus-stack --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
 ```
 
 Install the chart via Helm 2:
 ```
-helm install --name jfrog-prometheus prometheus-community/kube-prometheus-stack
+helm install --name jfrog-prometheus prometheus-community/kube-prometheus-stack --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
 ```
 
 These additional charts are installed:
 - stable/kube-state-metrics
 - stable/prometheus-node-exporter
 - grafana/grafana
+
+## Artifactory Metrics + Fluentd Helm Install
+
+Install Artifactory or Artifactory-ha using the artifactory-values.yaml or artifactory-ha-values.yaml file.
+
+You can apply them to your helm install of Artifactory such as below:
+
+Artifactory
+```text
+helm upgrade --install artifactory-ha  jfrog/artifactory-ha \
+       --set artifactory.masterKey=$MASTER_KEY \
+       --set artifactory.joinKey=$JOIN_KEY \
+       -f artifactory-values.yaml
+```
+
+Artifactory-HA
+```text
+helm upgrade --install artifactory-ha  jfrog/artifactory-ha \
+       --set artifactory.masterKey=$MASTER_KEY \
+       --set artifactory.joinKey=$JOIN_KEY \
+       -f artifactory-ha-values.yaml
+```
+
+This will complete all the necessary configuration and expose a new service monitor `servicemonitor-artifactory` to expose metrics to Prometheus.
 
 ## Environment Configuration
 
