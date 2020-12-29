@@ -29,7 +29,7 @@ artifactory:
 ## Allows to add additional kubernetes resources
 ## Use --- as a separator between multiple resources
 ## For an example, refer - https://github.com/jfrog/log-analytics-prometheus
-additionalResource: |
+additionalResources: |
   apiVersion: v1
   kind: Service
   metadata:
