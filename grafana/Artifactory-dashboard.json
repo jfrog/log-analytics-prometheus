@@ -79,7 +79,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "1-(sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))/sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m])))",
+          "expr": "1-(sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))/sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m])))",
           "interval": "",
           "legendFormat": "cache hit ratio",
           "refId": "C"
@@ -154,7 +154,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests.*\",message=~\".*docker\\\\.io.*\"}[1h]))",
+          "expr": "avg(increase(jfrog_rt_service_message_total{message=~\".*downloading.*\",message=~\".*manifests.*\",message=~\".*docker\\\\.io.*\"}[1h]))",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -268,7 +268,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))",
+          "expr": "sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\",repo_path=~\".*-cache.*\", action_response=\"ACCEPTED DEPLOY\"}[1m]))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -276,7 +276,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m]))",
+          "expr": "sum(increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DOWNLOAD\"}[1m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "download",
@@ -425,7 +425,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(increase(jfrog_rt_service_message{message=~\".*downloading.*\",message=~\".*manifests.*\",message=~\".*docker\\\\.io.*\"}[1m]))",
+          "expr": "sum(increase(jfrog_rt_service_message_total{message=~\".*downloading.*\",message=~\".*manifests.*\",message=~\".*docker\\\\.io.*\"}[1m]))",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -496,7 +496,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-docker_image=${__series.name}"
             }
           ],
           "mappings": [],
@@ -534,7 +534,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (username) (increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (username) (increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -560,7 +560,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-docker_image=${__series.name}"
             }
           ],
           "mappings": [],
@@ -598,7 +598,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access_total{repo_path=~\".*list\\\\.manifest.*\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -624,7 +624,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-dockerImage=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=10&orgId=1&var-docker_image=${__series.name}"
             }
           ],
           "mappings": [],
@@ -662,11 +662,11 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerImage) (increase(jfrog_rt_req{dockerImage!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (docker_image) (increase(jfrog_rt_req_total{docker_image!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{dockerImage}}",
+          "legendFormat": "{{docker_image}}",
           "refId": "A"
         }
       ],
@@ -688,7 +688,7 @@
           "links": [
             {
               "title": "Filter",
-              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=8&orgId=1&var-dockerRepo=${__series.name}"
+              "url": "/d/zU2MF1FGk/artifactory-drill-downs?viewPanel=8&orgId=1&var-docker_repo=${__series.name}"
             }
           ],
           "mappings": [],
@@ -726,11 +726,11 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (dockerRepo) (increase(jfrog_rt_req{dockerRepo!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (docker_repo) (increase(jfrog_rt_req_total{docker_repo!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{dockerRepo}}",
+          "legendFormat": "{{docker_repo}}",
           "refId": "A"
         }
       ],
@@ -803,7 +803,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "increase(jfrog_rt_req{return_status=~\"5.*\"}[$__range])",
+          "expr": "increase(jfrog_rt_req_total{return_status=~\"5.*\"}[$__range])",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -908,7 +908,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (return_status) (increase(jfrog_rt_req[$__range]))",
+          "expr": "sum by (return_status) (increase(jfrog_rt_req_total[$__range]))",
           "interval": "",
           "legendFormat": "{{return_status}}",
           "refId": "A"
@@ -1007,7 +1007,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "increase(jfrog_rt_log_level{log_level=\"ERROR\"}[$__range])",
+          "expr": "increase(jfrog_rt_log_level_total{log_level=\"ERROR\"}[$__range])",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1107,7 +1107,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(jfrog_rt_data_download[1m]))",
+          "expr": "sum(rate(jfrog_rt_data_download_total[1m]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1208,7 +1208,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(jfrog_rt_data_upload[1m]))",
+          "expr": "sum(rate(jfrog_rt_data_upload_total[1m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "B"
@@ -1305,7 +1305,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (repo) (increase(jfrog_rt_req{repo!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (repo) (increase(jfrog_rt_req_total{repo!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{repo}}",
@@ -1368,7 +1368,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk( 10, sum by (artifact) (increase(jfrog_rt_req{artifact!=\"\",return_status=\"200\"}[$__range]) > 0))",
+          "expr": "topk( 10, sum by (artifact) (increase(jfrog_rt_req_total{artifact!=\"\",return_status=\"200\"}[$__range]) > 0))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1424,16 +1424,16 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_upload{repo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_upload_total{repo!=\"\"}[$__range])) > 0)",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{repo}}",
           "refId": "A"
         },
         {
-          "expr": "topk(10, sum by (dockerRepo) (increase(jfrog_rt_data_upload{dockerRepo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (docker_repo) (increase(jfrog_rt_data_upload_total{docker_repo!=\"\"}[$__range])) > 0)",
           "interval": "",
-          "legendFormat": "{{dockerRepo}}",
+          "legendFormat": "{{docker_repo}}",
           "refId": "B"
         }
       ],
@@ -1485,7 +1485,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_download{repo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (repo) (increase(jfrog_rt_data_download_total{repo!=\"\"}[$__range])) > 0)",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1493,9 +1493,9 @@
           "refId": "A"
         },
         {
-          "expr": "topk(10, sum by (dockerRepo) (increase(jfrog_rt_data_download{dockerRepo!=\"\"}[$__range])) > 0)",
+          "expr": "topk(10, sum by (docker_repo) (increase(jfrog_rt_data_download_total{docker_repo!=\"\"}[$__range])) > 0)",
           "interval": "",
-          "legendFormat": "{{dockerRepo}}",
+          "legendFormat": "{{docker_repo}}",
           "refId": "B"
         }
       ],
@@ -1549,7 +1549,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_upload[$__range])) > 0)",
+          "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_upload_total[$__range])) > 0)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1607,7 +1607,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_download[$__range])) > 0)",
+          "expr": "topk(10, sum by (remote_address) (increase(jfrog_rt_data_download_total[$__range])) > 0)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1676,7 +1676,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_audit{user!=\"UNKNOWN\", user!=\"_system_\",user!=\"\"}[$__range])) )",
+          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_audit_total{user!=\"UNKNOWN\", user!=\"_system_\",user!=\"\"}[$__range])) )",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}",
@@ -1730,7 +1730,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"ACCEPTED DEPLOY\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}",
@@ -1784,7 +1784,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{ip}}",
@@ -1838,7 +1838,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (user) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}",
@@ -1892,7 +1892,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (user,ip) (increase(jfrog_rt_access{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (user,ip) (increase(jfrog_rt_access_total{user!=\"UNKNOWN\", user!=\"_system_\", action_response=\"DENIED LOGIN\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{user}}-{{ip}}",
@@ -1946,7 +1946,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access{action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
+          "expr": "topk(10, sum by (ip) (increase(jfrog_rt_access_total{action_response=\"DENIED\"}[$__range]) > 0 ) ) ",
           "format": "time_series",
           "interval": "",
           "legendFormat": "{{ip}}",

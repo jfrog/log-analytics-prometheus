@@ -71,8 +71,8 @@
   <record>
     repo ${!record["request_url"].strip().start_with?("/api") ? (record["request_url"].strip().split('/')[1]) : ("")}
     artifact ${!record["request_url"].strip().start_with?("/api") ? (val = record["request_url"].strip().split('/'); val[val.length()-1]) : ("")}
-    dockerRepo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
-    dockerImage ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
+    docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
+    docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
   </record>
 </filter>
 
@@ -146,7 +146,7 @@
   @type prometheus
 
   <metric>
-    name jfrog_rt_req
+    name jfrog_rt_req_total
     type counter
     desc artifactory requests
     <labels>
@@ -155,8 +155,8 @@
       return_status ${return_status}
       repo ${repo}
       artifact ${artifact}
-      dockerImage ${dockerImage}
-      dockerRepo ${dockerRepo}
+      docker_image ${docker_image}
+      docker_repo ${docker_repo}
       remote_address ${remote_address}
       method ${request_method}
     </labels>
@@ -166,7 +166,7 @@
 <filter jfrog.rt.artifactory.service>
 @type prometheus
   <metric>
-    name jfrog_rt_log_level
+    name jfrog_rt_log_level_total
     type counter
     desc artifactory log_levels
     <labels>
@@ -180,7 +180,7 @@
 @type prometheus
 
 <metric>
-  name jfrog_rt_access
+  name jfrog_rt_access_total
   type counter
   desc artifactory access
   <labels>
