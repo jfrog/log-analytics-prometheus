@@ -1,6 +1,14 @@
 # JFrog Log Analytics Changelog
 All changes to the log analytics integration will be documented in this file.
 
+## [0.9.0] - Dec 31, 2020
+* Repo layout fixes
+* Support for Helm
+* Readme updates
+
+## [0.8.0] - Nov 30, 2020
+* Bug fixes
+
 ## [0.7.2] - Oct 29, 2020
 * Updated docker chart queries to monitor [dockerhub rate limiting](https://jfrog.com/blog/get-around-docker-download-limits-jfrog-artifactory/).
 
