@@ -74,6 +74,6 @@ additionalResources: |
       matchLabels:
         app: {{ template "artifactory.name" . }}
         component: metrics
-      endpoints:
+    endpoints:
         - port: metrics
           interval: 15s
