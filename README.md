@@ -4,7 +4,7 @@ The setup and configuration of Prometheus and Grafana uses Helm for Kubernetes a
 
 | version | artifactory | xray  | distribution | mission_control | pipelines |
 |---------|-------------|-------|--------------|-----------------|-----------|
-| 0.9.0   | 7.12.5      | 3.15.1| N/A          |                 |           |
+| 0.9.0   | 7.12.5      | 3.15.1| N/A          | N/A             | N/A       |
 | 0.8.0   | 7.11.5      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.7.2   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.7.1   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
