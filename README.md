@@ -1,8 +1,10 @@
-# Artifactory and Xray Logging Analytics with FluentD, Prometheus and Grafana
-The following describes how to configure Prometheus and Grafana to gather metrics from Artifactory and Xray through the use of FluentD. The setup and configuration of Prometheus and Grafana uses Kubernetes and makes use of the Prometheus Community helm chart.
+# Prometheus + Grafana Log Metrics
+The following describes how to configure Prometheus and Grafana to gather metrics from Artifactory and Xray through the use of FluentD. 
+The setup and configuration of Prometheus and Grafana uses Helm for Kubernetes and makes use of the Prometheus community operator helm chart.
 
 | version | artifactory | xray  | distribution | mission_control | pipelines |
 |---------|-------------|-------|--------------|-----------------|-----------|
+| 0.9.0   | 7.12.5      | 3.15.1| N/A          |                 |           |
 | 0.8.0   | 7.11.5      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.7.2   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
 | 0.7.1   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
@@ -14,8 +16,10 @@ The following describes how to configure Prometheus and Grafana to gather metric
 | 0.2.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
 | 0.1.1   | 7.6.3       | 3.6.2 | N/A          | N/A             | N/A       |
 
-## Installing Prometheus and Grafana on K8s
-The Prometheus Community [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart allows the creation of Prometheus instances and includes Grafana. Install via Helm 3:
+## Installing Prometheus and Grafana on Kubernetes
+The Prometheus Community [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart allows the creation of Prometheus instances and includes Grafana. 
+
+Install via Helm 3:
 
 Add the Helm Repositories:
 ```
@@ -33,88 +37,51 @@ Install the chart via Helm 2:
 helm install --name jfrog-prometheus prometheus-community/kube-prometheus-stack --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
 ```
 
-These additional charts are installed:
-- stable/kube-state-metrics
-- stable/prometheus-node-exporter
-- grafana/grafana
+## Artifactory + Metrics via Helm ⎈
 
-## Artifactory Metrics + Fluentd Helm Install
+For Artifactory Pro/Pro-x use the `artifactory-values.yaml` file.
 
-Install Artifactory or Artifactory-ha using the artifactory-values.yaml or artifactory-ha-values.yaml file.
+For Enterprise/Ent+ use the `artifactory-ha-values.yaml` file.
 
-You can apply them to your helm install of Artifactory such as below:
+You can apply them to your helm install examples below:
 
-Artifactory
+Artifactory ⎈:
 ```text
 helm upgrade --install artifactory-ha  jfrog/artifactory-ha \
-       --set artifactory.masterKey=$MASTER_KEY \
-       --set artifactory.joinKey=$JOIN_KEY \
-       -f artifactory-values.yaml
+       --set artifactory.masterKey=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF \
+       --set artifactory.joinKey=EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE \
+       -f helm/artifactory-values.yaml
 ```
 
-Artifactory-HA
+Artifactory-HA ⎈:
 ```text
 helm upgrade --install artifactory-ha  jfrog/artifactory-ha \
-       --set artifactory.masterKey=$MASTER_KEY \
-       --set artifactory.joinKey=$JOIN_KEY \
-       -f artifactory-ha-values.yaml
+       --set artifactory.masterKey=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF \
+       --set artifactory.joinKey=EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE \
+       -f helm/artifactory-ha-values.yaml
 ```
 
-This will complete all the necessary configuration and expose a new service monitor `servicemonitor-artifactory` to expose metrics to Prometheus.
+Note the above examples are only references you will need additional parameters to configure TLS, binary blob storage, or other common Artifactory features.
 
-## Environment Configuration
+This will complete the necessary configuration for Artifactory and expose a new service monitor `servicemonitor-artifactory` to expose metrics to Prometheus.
 
-The environment variable JF_PRODUCT_DATA_INTERNAL must be defined to the correct location.
+## Xray + Metrics via Helm ⎈
 
-Helm based installs will already have this defined based upon the underlying docker images.
+To install Xray with Prometheus metrics being exposed use our file `helm/xray-values.yaml` to expose a metrics and new service monitor to Prometheus.
 
-For non-k8s based installations below is a reference to the Docker image locations per product. Note these locations may be different based upon the installation location chosen.
-
-````text
-Artifactory: 
-export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/artifactory/
-````
-
-````text
-Xray:
-export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/xray/
-````
-
-## FluentD Configuration
-The following steps describe how to configure FluentD to gather metrics for Prometheus.
-1. Install the [FluentD Prometheus Plugin](https://github.com/fluent/fluent-plugin-prometheus).
-2. Use the appropriate FluentD configuration file and copy it to /etc/td-agent/td-agent.conf.
-    * fluent.conf.rt - Artifactory version 7 server
-    * fluent.conf.rt6 - Artifactory version 6 server
-    * fluent.conf.xray - Xray server (3.x+)
-3. Restart td-agent.
-4. In order to expose the /metrics interface for Prometheus to scrape, apply the appropriate *-metrics-service.yaml.
-
+Xray ⎈:
+```text
+helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://my-artifactory-nginx-url \
+       --set xray.masterKey=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF \
+       --set xray.joinKey=EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE \
+       -f helm/xray-values.yaml
 ```
-eg.
-kubectl apply -f artifactory-ha-member-metrics-service.yaml
-```
-5. The /metrics interface is now available at http://<service>:24231/metrics
-![metrics](images/metrics.png)
 
-## Configuring Prometheus to Gather Metrics from Artifactory and Xray on K8s
-The following steps create ServiceMonitor(s) to gather metrics. The [ServiceMonitor](https://coreos.com/operators/prometheus/docs/latest/user-guides/running-exporters.html) resource tells Prometheus where the metrics service. This metrics service provides the metrics data for the Prometheus "scrapes".
 
-1. Create the appropriate ServiceMonitor for your JFrog servers to gather metrics.
-```
-kubectl apply -f servicemonitor-*.yaml
+## Securing the Metrics Interface
 
-eg.
-kubectl apply -f servicemonitor-artifactory-ha-member.yaml
-```
-2. Go to the web UI of the Prometheus instance create in Step 1 and verify the Targets list shows the new ServiceMonitor.
-![targets](images/targets.png)
-__
-3. Finally, go to Grafana to add your Prometheus instance as a datasource.
-![datasource](images/datasource.png)
+For production use in scenarios where Artifactory or Xray are not deployed to the same cluster/network as your Prometheus + Grafana, the metrics interfaces provided by the [FluentD Prometheus Plugin](https://github.com/fluent/fluent-plugin-prometheus) should be secured using TLS. This is done by adding _transport tls_ section to the input plugin _@type prometheus_ [within the provided configuration files](https://github.com/jfrog/log-analytics/blob/master/prometheus-fluentd-grafana/fluent.conf.rt.prometheus#L4).
 
-## Important: Securing the Metrics Interface
-For production use, the metrics interfaces provided by the [FluentD Prometheus Plugin](https://github.com/fluent/fluent-plugin-prometheus) should be secured using TLS. This is done by adding _transport tls_ section to the input plugin _@type prometheus_ [within the provided configuration files](https://github.com/jfrog/log-analytics/blob/master/prometheus-fluentd-grafana/fluent.conf.rt.prometheus#L4).
 
 ```
 <source>
@@ -147,11 +114,6 @@ For client verification (Prometheus or ServiceMonitor as the client), you can al
 ```
 For documentation on how to set up Prometheus for TLS using NGINX see [here](https://prometheus.io/docs/guides/tls-encryption/).
 
-## Exposing Prometheus, Grafana and FluentD Metrics Interface for Testing
-For testing purposes, you may want to expose Prometheus, Grafana and the FluentD Metrics interface. A test-only-expose.yaml provides an example of how to do this:
-```
-kubectl apply -f test-only-expose.yaml
-```
 ## Grafana Dashboard
 Example dashboards are included in the [grafana directory](grafana). These include:
 
@@ -164,6 +126,7 @@ Example dashboards are included in the [grafana directory](grafana). These inclu
 
 ## Metrics Collected
 The following metrics are collected and can be queried using PromQL.
+
 | Metric                         | Product     | Type    | Labels                                                                                      | Description                                       |
 |--------------------------------|-------------|---------|---------------------------------------------------------------------------------------------|---------------------------------------------------|
 | jfrog_rt_data_download_total   | Artifactory | counter | host, remote_address, repo, response_content_length, data_download                          | Data download in bytes.                           |
@@ -176,6 +139,69 @@ The following metrics are collected and can be queried using PromQL.
 | jfrog_xray_req                 | Xray        | counter | host, remote_address, request_url, return_status                                            | Requests to Xray.                                 |
 | jfrog_xray_log_level           | Xray        | counter | host, log_level                                                                             | Logging level counter (ERROR, WARN, INFO, DEBUG). |
 
+
+# Manual Configuration
+
+Manual configuration has been deprecated for Helm ⎈.
+
+Sections below are maintained for reference purposes.
+
+## Environment Configuration
+
+The environment variable JF_PRODUCT_DATA_INTERNAL must be defined to the correct location.
+
+Helm based installs will already have this defined based upon the underlying docker images.
+
+For non-k8s based installations below is a reference to the Docker image locations per product. Note these locations may be different based upon the installation location chosen.
+
+````text
+Artifactory: 
+export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/artifactory/
+````
+
+````text
+Xray:
+export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/xray/
+````
+
+## FluentD Configuration
+The following steps describe how to configure FluentD to gather metrics for Prometheus.
+1. Install the [FluentD Prometheus Plugin](https://github.com/fluent/fluent-plugin-prometheus).
+2. Use the appropriate FluentD configuration file and copy it to /etc/td-agent/td-agent.conf.
+    * fluent.conf.rt - Artifactory version 7 server
+    * fluent.conf.rt6 - Artifactory version 6 server
+    * fluent.conf.xray - Xray server (3.x+)
+3. Restart td-agent.
+4. In order to expose the /metrics interface for Prometheus to scrape, apply the appropriate *-metrics-service.yaml.
+
+```
+eg.
+kubectl apply -f k8s/artifactory-ha-member-metrics-service.yaml
+```
+5. The /metrics interface is now available at http://<service>:24231/metrics
+![metrics](images/metrics.png)
+
+## Configuring Prometheus to Gather Metrics from Artifactory and Xray on K8s
+The following steps create ServiceMonitor(s) to gather metrics. The [ServiceMonitor](https://coreos.com/operators/prometheus/docs/latest/user-guides/running-exporters.html) resource tells Prometheus where the metrics service. This metrics service provides the metrics data for the Prometheus "scrapes".
+
+1. Create the appropriate ServiceMonitor for your JFrog servers to gather metrics.
+```
+kubectl apply -f k8s/servicemonitor-*.yaml
+
+eg.
+kubectl apply -f k8s/servicemonitor-artifactory-ha-member.yaml
+```
+2. Go to the web UI of the Prometheus instance create in Step 1 and verify the Targets list shows the new ServiceMonitor.
+![targets](images/targets.png)
+__
+3. Finally, go to Grafana to add your Prometheus instance as a datasource.
+![datasource](images/datasource.png)
+
+## Exposing Prometheus, Grafana and FluentD Metrics Interface for Testing
+For testing purposes, you may want to expose Prometheus, Grafana and the FluentD Metrics interface. A test-only-expose.yaml provides an example of how to do this:
+```
+kubectl apply -f k8s/test-only-expose.yaml
+```
 
 ## Fluentd HA Setup
 Due to the nature of Prometheus pulling metrics a traditional fluentd ha setup with aggregator server is not supported. Artifactory & Xray HA setup is supported by installation of fluentd per node.

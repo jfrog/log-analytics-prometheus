@@ -1,0 +1,91 @@
+unifiedUpgradeAllowed: true
+databaseUpgradeReady: true
+xray:
+  jfrogUrl: http://artifactory-artifactory.rt:8082
+replicaCount: 1
+postgresql:
+  postgresqlPassword: xray
+rabbitmq-ha:
+  enabled: false
+rabbitmq:
+  enabled: true
+  auth:
+    username: guest
+    password: guest
+common:
+  customInitContainersBegin: |
+    - name: "prepare-fluentd-conf-on-persistent-volume"
+      image: "{{ .Values.initContainerImage }}"
+      imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+      command:
+        - 'sh'
+        - '-c'
+        - >
+          mkdir -p {{ .Values.xray.persistence.mountPath }}/etc/fluentd/;
+          wget https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/master/fluent.conf.xray -O {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
+      volumeMounts:
+        - mountPath: "{{ .Values.xray.persistence.mountPath }}"
+          name: data-volume
+  customSidecarContainers: |
+    - name: "xray-fluentd-sidecar"
+      image: "docker.io/bitnami/fluentd"
+      imagePullPolicy: "IfNotPresent"
+      volumeMounts:
+        - mountPath: "{{ .Values.xray.persistence.mountPath }}"
+          name: data-volume
+      env:
+        - name: JF_PRODUCT_DATA_INTERNAL
+          value: {{ .Values.xray.persistence.mountPath }}
+        - name: FLUENTD_CONF
+          value: ../../../../{{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
+## Allows to add additional kubernetes resources
+## Use --- as a separator between multiple resources
+## For an example, refer - https://github.com/jfrog/log-analytics-prometheus
+additionalResources: |
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: {{ template "xray.fullname" . }}-metrics
+    annotations:
+      prometheus.io/path: "/metrics"
+      prometheus.io/scheme: "http"
+      prometheus.io/port: "24231"
+      prometheus.io/scrape: "true"
+    labels:
+      app: {{ template "xray.name" . }}
+      chart: {{ template "xray.chart" . }}
+      component: metrics
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+      {{- with .Values.xray.labels }}
+  {{ toYaml . | indent 4 }}
+      {{- end }}
+  spec:
+    type: ClusterIP
+    ports:
+    - name: metrics
+      port: 24231
+      protocol: TCP
+    selector:
+      app: {{ template "xray.name" . }}
+      component: "{{ .Values.xray.name }}"
+      release: {{ .Release.Name }}
+  ---
+  apiVersion: monitoring.coreos.com/v1
+  kind: ServiceMonitor
+  metadata:
+    name: servicemonitor-{{ template "xray.name" . }}
+    labels:
+      metrics: jfrog
+      app: {{ template "xray.name" . }}
+      chart: {{ template "xray.chart" . }}
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+  spec:
+    selector:
+      matchLabels:
+        app: {{ template "xray.name" . }}
+        component: metrics
+    endpoints:
+      - port: metrics
+        interval: 15s
