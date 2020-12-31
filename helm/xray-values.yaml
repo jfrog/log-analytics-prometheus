@@ -22,7 +22,7 @@ common:
         - '-c'
         - >
           mkdir -p {{ .Values.xray.persistence.mountPath }}/etc/fluentd/;
-          wget https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/master/fluent.conf.xray -O {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
+          wget https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/master/helm/fluent.conf.xray -O {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
       volumeMounts:
         - mountPath: "{{ .Values.xray.persistence.mountPath }}"
           name: data-volume
