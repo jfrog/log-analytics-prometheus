@@ -33,15 +33,15 @@ additionalResources: |
   apiVersion: v1
   kind: Service
   metadata:
-    name: {{ template "artifactory.fullname" . }}-metrics
+    name: {{ template "artifactory-ha.fullname" . }}-metrics
     annotations:
       prometheus.io/path: "/metrics"
       prometheus.io/scheme: "http"
       prometheus.io/port: "24231"
       prometheus.io/scrape: "true"
     labels:
-      app: {{ template "artifactory.name" . }}
-      chart: {{ template "artifactory.chart" . }}
+      app: {{ template "artifactory-ha.name" . }}
+      chart: {{ template "artifactory-ha.chart" . }}
       component: metrics
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
@@ -55,24 +55,24 @@ additionalResources: |
       port: 24231
       protocol: TCP
     selector:
-      app: {{ template "artifactory.name" . }}
+      app: {{ template "artifactory-ha.name" . }}
       component: "{{ .Values.artifactory.name }}"
       release: {{ .Release.Name }}
   ---
   apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
   metadata:
-    name: servicemonitor-{{ template "artifactory.name" . }}
+    name: servicemonitor-{{ template "artifactory-ha.name" . }}
     labels:
       metrics: jfrog
-      app: {{ template "artifactory.name" . }}
-      chart: {{ template "artifactory.chart" . }}
+      app: {{ template "artifactory-ha.name" . }}
+      chart: {{ template "artifactory-ha.chart" . }}
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
   spec:
     selector:
       matchLabels:
-        app: {{ template "artifactory.name" . }}
+        app: {{ template "artifactory-ha.name" . }}
         component: metrics
     endpoints:
         - port: metrics
