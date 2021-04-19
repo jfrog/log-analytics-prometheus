@@ -15,7 +15,7 @@ artifactory:
           name: artifactory-volume
   customSidecarContainers: |
     - name: "artifactory-fluentd-sidecar"
-      image: "docker.io/bitnami/fluentd"
+      image: "releases-docker.jfrog.io/reg2/fluentd-1.12.0"
       imagePullPolicy: "IfNotPresent"
       volumeMounts:
         - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
