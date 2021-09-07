@@ -9,7 +9,7 @@ artifactory:
         - '-c'
         - >
           mkdir -p {{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/;
-          wget https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/harrisonm-regex-fixes/fluent.conf.rt -O {{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
+          wget https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/master/fluent.conf.rt -O {{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
       volumeMounts:
         - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
           name: volume
