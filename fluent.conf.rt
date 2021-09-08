@@ -130,7 +130,7 @@
   tag jfrog.rt.access.request
   <parse>
     @type regexp
-    expression ^(?<timestamp>[^ ]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$
+    expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
@@ -143,7 +143,7 @@
   tag jfrog.rt.artifactory.request
   <parse>
     @type regexp
-    expression ^(?<timestamp>[^ ]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$
+    expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
     types response_content_length:integer, request_content_length:integer, return_status_code:integer
@@ -170,7 +170,7 @@
   tag jfrog.rt.frontend.request
   <parse>
     @type regexp
-    expression ^(?<timestamp>[^ ]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$
+    expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
@@ -190,7 +190,7 @@
   tag jfrog.rt.metadata.request
   <parse>
     @type regexp
-    expression ^(?<timestamp>[^ ]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$
+    expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
@@ -222,7 +222,7 @@
   tag jfrog.rt.artifactory.access
   <parse>
     @type regexp
-    expression /^(?<timestamp>[^ ]*) \[(?<trace_id>[^\]]*)\] \[(?<action_response>[^\]]*)\] (?<repo_path>.*) for client : (?<username>.+)/(?<ip>.+).$/
+    expression /^(?<timestamp>[^ ]*) \[(?<trace_id>[^\]]*)\] \[(?<action_response>[^\]]*)\] (?<repo_path>.*) for client : (?<username>.+)/(?<ip>.+)\.$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
@@ -235,7 +235,7 @@
   tag jfrog.rt.access.audit
   <parse>
     @type regexp
-    expression /^(?<timestamp>[^ ]*)\|(?<token_id>[^ ]*)\|(?<user_ip>[^ ]*)\|(?<user>[^ ]*)\|(?<logged_principal>[^ ]*)\|(?<entity_name>[^ ]*)\|(?<event_type>[^ ]*)\|(?<event>[^ ]*)\|(?<data_changed>.*)/
+    expression /^(?<timestamp>[^\|]*)\|(?<token_id>[^\|]*)\|(?<user_ip>[^\|]*)\|(?<user>[^\|]*)\|(?<logged_principal>[^\|]*)\|(?<entity_name>[^\|]*)\|(?<event_type>[^\|]*)\|(?<event>[^\|]*)\|(?<data_changed>.*)$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
