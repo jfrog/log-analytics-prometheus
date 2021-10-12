@@ -75,7 +75,7 @@
     docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
     docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
     data_download ${record["request_method"].strip().include?("GET") ? record["size"] : 0}
-    data_upload ${record["request_method"].strip().include?("POST") ? record["size"] : 0}
+    data_upload ${record["request_method"].strip().include?("POST") || record["request_method"].strip().include?("PUT") ? record["size"] : 0}
   </record>
 </filter>
 
