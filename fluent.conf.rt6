@@ -40,8 +40,8 @@
 <source>
   @type tail
   @id artifactory_service_tail
-  path "#{ENV['ARTIFACTORY_HOME']}/logs/artifactory.log"
-  pos_file "#{ENV['ARTIFACTORY_HOME']}/logs/artifactory.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/logs/artifactory.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/logs/artifactory.log.pos"
   tag jfrog.rt.artifactory.service
   <parse>
       @type multiline
@@ -55,14 +55,15 @@
 <source>
   @type tail
   @id artifactory_request_tail
-  path "#{ENV['ARTIFACTORY_HOME']}/logs/request.log"
-  pos_file "#{ENV['ARTIFACTORY_HOME']}/logs/request.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/logs/request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/logs/request.log.pos"
   tag jfrog.rt.artifactory.request
   <parse>
     @type regexp
-    expression ^(?<timestamp>[^ ]*)\|(?<trace_id>[^\|]*)\|(?<type>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<request_user_agent>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_duration>.+)$
+    expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<request_type>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<request_user_agent>[^\|]*)\|(?<return_status>[^\|]*)\|(?<size>.+)$/m
     time_key timestamp
     time_format %Y%m%d%H%M%S
+    types size:integer
   </parse>
 </source>
 <filter jfrog.rt.artifactory.request>
@@ -73,14 +74,16 @@
     artifact ${!record["request_url"].strip().start_with?("/api") ? (val = record["request_url"].strip().split('/'); val[val.length()-1]) : ("")}
     docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
     docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
+    data_download ${record["request_method"].strip().include?("GET") ? record["size"] : 0}
+    data_upload ${record["request_method"].strip().include?("POST") || record["request_method"].strip().include?("PUT") ? record["size"] : 0}
   </record>
 </filter>
 
 <source>
   @type tail
   @id artifactory_access_tail
-  path "#{ENV['ARTIFACTORY_HOME']}/logs/access.log"
-  pos_file "#{ENV['ARTIFACTORY_HOME']}/logs/access.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/logs/access.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/logs/access.log.pos"
   tag jfrog.rt.artifactory.access
   <parse>
     @type regexp
@@ -103,7 +106,7 @@
 <source>
   @type exec
   tag jfrog.callhome
-  command "#{ENV['ARTIFACTORY_HOME']}/fluentd-1.11.0-linux-x86_64/lib/ruby/bin/gem list --local | grep fluent | sed 's/ (/:/g' | sed 's/)//g'  | sed ':a;N;$!ba;s/\n/\t/g'"
+  command "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/fluentd-1.11.0-linux-x86_64/lib/ruby/bin/gem list --local | grep fluent | sed 's/ (/:/g' | sed 's/)//g'  | sed ':a;N;$!ba;s/\n/\t/g'"
   run_interval 1d
   <parse>
     @type ltsv
@@ -146,19 +149,58 @@
   @type prometheus
 
   <metric>
+    name jfrog_rt_data_download_total
+    type counter
+    desc artifactory data download
+    key data_download
+    <labels>
+      host ${hostname}
+      remote_address ${remote_address}
+      artifact ${artifact}
+      repo ${repo}
+      docker_image ${docker_image}
+      docker_repo ${docker_repo}
+      request_url ${request_url}
+      size ${size}
+      data_download ${data_download}
+      method ${request_method}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrog_rt_data_upload_total
+    type counter
+    desc artifactory data upload
+    key data_upload
+    <labels>
+      host ${hostname}
+      remote_address ${remote_address}
+      artifact ${artifact}
+      repo ${repo}
+      docker_image ${docker_image}
+      docker_repo ${docker_repo}
+      request_url ${request_url}
+      size ${size}
+      data_upload ${data_upload}
+      method ${request_method}
+    </labels>
+  </metric>
+
+  <metric>
     name jfrog_rt_req_total
     type counter
     desc artifactory requests
     <labels>
       host ${hostname}
-      request_url ${request_url}
+      remote_address ${remote_address}
       return_status ${return_status}
       repo ${repo}
       artifact ${artifact}
       docker_image ${docker_image}
       docker_repo ${docker_repo}
-      remote_address ${remote_address}
+      request_url ${request_url}
       method ${request_method}
+      size ${size}
     </labels>
   </metric>
 </filter>
