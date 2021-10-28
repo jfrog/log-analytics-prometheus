@@ -2,7 +2,7 @@
 All changes to the log analytics integration will be documented in this file.
 
 ## [0.9.1] - Oct 28, 2021
-* Fix fluentbit regular expression
+* Fix fluentd regular expression
 
 ## [0.9.0] - Dec 31, 2020
 * Repo layout fixes
