@@ -2,7 +2,7 @@
 The following describes how to configure Prometheus and Grafana to gather metrics from Artifactory and Xray through the use of FluentD. 
 The setup and configuration of Prometheus and Grafana uses Helm for Kubernetes and makes use of the Prometheus community operator helm chart.
 
-In order to use this with Artifactory 7, please see: [artifactory 6](https://github.com/jfrog/log-analytics-prometheus/tree/master).
+In order to use this with Artifactory 7, please see: [artifactory 7](https://github.com/jfrog/log-analytics-prometheus/tree/master).
 
 | version | artifactory | xray  | distribution | mission_control | pipelines |
 |---------|-------------|-------|--------------|-----------------|-----------|
