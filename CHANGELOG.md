@@ -1,6 +1,9 @@
 # JFrog Log Analytics Changelog
 All changes to the log analytics integration will be documented in this file.
 
+## [0.10.0] - Feb 14, 2022
+* Added call home configuration for the artifactory fluent configuration.
+
 ## [0.9.0] - Dec 31, 2020
 * Repo layout fixes
 * Support for Helm

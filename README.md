@@ -168,12 +168,14 @@ export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/xray/
 ## FluentD Configuration
 The following steps describe how to configure FluentD to gather metrics for Prometheus.
 1. Install the [FluentD Prometheus Plugin](https://github.com/fluent/fluent-plugin-prometheus).
-2. Use the appropriate FluentD configuration file and copy it to /etc/td-agent/td-agent.conf.
+2. Use the appropriate FluentD configuration file.
     * fluent.conf.rt - Artifactory version 7 server
     * fluent.conf.rt6 - Artifactory version 6 server
     * fluent.conf.xray - Xray server (3.x+)
-3. Restart td-agent.
-4. In order to expose the /metrics interface for Prometheus to scrape, apply the appropriate *-metrics-service.yaml.
+3. Replace `<TOKEN>` with your personal bearer token both times it occurs in the configuration file.*
+4. Copy the configuration file to /etc/td-agent/td-agent.conf
+5. Restart td-agent.
+6. In order to expose the /metrics interface for Prometheus to scrape, apply the appropriate *-metrics-service.yaml.
 
 ```
 eg.
@@ -181,6 +183,9 @@ kubectl apply -f k8s/artifactory-ha-member-metrics-service.yaml
 ```
 5. The /metrics interface is now available at http://<service>:24231/metrics
 ![metrics](images/metrics.png)
+   
+_*_ For information on authentication with a bearer token with artifactory, please visit [Bearer Token Authentication](https://www.jfrog.com/confluence/display/JFROG/Access+Tokens#AccessTokens)
+
 
 ## Configuring Prometheus to Gather Metrics from Artifactory and Xray on K8s
 The following steps create ServiceMonitor(s) to gather metrics. The [ServiceMonitor](https://coreos.com/operators/prometheus/docs/latest/user-guides/running-exporters.html) resource tells Prometheus where the metrics service. This metrics service provides the metrics data for the Prometheus "scrapes".

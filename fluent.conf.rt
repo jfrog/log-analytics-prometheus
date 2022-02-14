@@ -254,19 +254,10 @@
 <source>
   @type exec
   tag jfrog.callhome
-  command "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/fluentd-1.11.0-linux-x86_64/lib/ruby/bin/gem list --local | grep fluent | sed 's/ (/:/g' | sed 's/)//g'  | sed ':a;N;$!ba;s/\n/\t/g'"
+  command "curl --request GET 'http://localhost:8081/artifactory/api/system/version' -H 'Authorization: Bearer <TOKEN>'"
   run_interval 1d
   <parse>
-    @type ltsv
-  </parse>
-</source>
-<source>
-  @type exec
-  tag jfrog.callhome
-  command /opt/td-agent/embedded/bin/gem list --local | grep fluent | sed 's/ (/:/g' | sed 's/)//g'  | sed ':a;N;$!ba;s/\n/\t/g'
-  run_interval 1d
-  <parse>
-    @type ltsv
+    @type json
   </parse>
 </source>
 <filter jfrog.callhome>
@@ -275,8 +266,8 @@
   keep_keys 'productId,features'
   enable_ruby true
   <record>
-    productId 'jfrogLogAnalytics/v0.1.0'
-    features ${return(record.map { |k,v| { "featureId" => (k + ':' + v).to_sym} })}
+    productId 'jfrogLogAnalyticsPrometheus/0.10.0'
+    features ${return([{"featureId" => "ArtifactoryVersion/" + record["version"]}])}
   </record>
 </filter>
 <match jfrog.callhome>
@@ -284,6 +275,7 @@
   endpoint http://localhost:8081/artifactory/api/system/usage
   open_timeout 5
   content_type application/json
+  headers {"Authorization":"Bearer <TOKEN>"}
   <format>
     @type json
   </format>
