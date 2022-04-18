@@ -147,6 +147,7 @@
     expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
+    time_format_fallbacks %Y-%m-%dT%H:%M:%SZ
     types response_content_length:integer, request_content_length:integer, return_status_code:integer
   </parse>
 </source>
