@@ -150,6 +150,7 @@
     time_format_fallbacks %Y-%m-%dT%H:%M:%SZ
     types response_content_length:integer, request_content_length:integer, return_status_code:integer
   </parse>
+  emit_invalid_record_to_error false
 </source>
 <filter jfrog.rt.artifactory.request>
   @type record_transformer
