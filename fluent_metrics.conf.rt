@@ -1,0 +1,207 @@
+<source>
+  @type prometheus
+</source>
+
+<source>
+  @type tail
+  @id artifactory_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/artifactory-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/artifactory-metrics.log.pos"
+  tag jfrog.rt.metrics
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id observability_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/observability-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/observability-metrics.log.pos"
+  tag jfrog.rt.metrics
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
+</source>
+
+<filter jfrog.rt.metrics>
+  @type parser
+  key_name message
+  <parse>
+    @type regexp
+    expression ^(?<key>[\w]+)\ (?<value>[[+-]?\d(\.\d+)?[Ee][+-]?\d+]+)\ (?<timestamp>[\d]+)$
+    time_type string
+    time_key timestamp
+    time_format %s
+  </parse>
+  emit_invalid_record_to_error false
+</filter>
+
+<filter jfrog.rt.metrics>
+  @type record_transformer
+  enable_ruby true
+  renew_record false
+  <record>
+    ${record["key"]} ${if record["value"]["."] then record["value"].to_f else record["value"].to_i end}
+  </record>
+</filter>
+
+<filter jfrog.rt.metrics>
+  @type prometheus
+
+  <metric>
+    name jfrt_runtime_heap_freememory_bytes
+    desc Heap Free Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_freememory_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_maxmemory_bytes
+    desc Heap Max Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_maxmemory_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_totalmemory_bytes
+    desc Heap Total Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_totalmemory_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_processors_total
+    desc Total Heap Processors
+    type gauge
+    key jfrt_runtime_heap_processors_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_active_total
+    desc Active DB Connections
+    type gauge
+    key jfrt_db_connections_active_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_idle_total
+    desc Idle DB Connections
+    type gauge
+    key jfrt_db_connections_idle_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_max_active_total
+    desc Max Active DB Connections
+    type gauge
+    key jfrt_db_connections_max_active_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_min_idle_total
+    desc Min Idle DB Connections
+    type gauge
+    key jfrt_db_connections_min_idle_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_storage_current_total_size_bytes
+    desc Artifactory Storage in Bytes
+    type gauge
+    key jfrt_storage_current_total_size_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_used_bytes
+    desc Application Disk Used in Bytes
+    type gauge
+    key app_disk_used_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_free_bytes
+    desc Application Disk Free in Bytes
+    type gauge
+    key app_disk_free_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_used_bytes
+    desc System Memory Used in Bytes
+    type gauge
+    key sys_memory_used_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_free_bytes
+    desc System Memory Free in Bytes
+    type gauge
+    key sys_memory_free_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_cpu_ratio
+    desc System CPU Ratio
+    type gauge
+    key sys_cpu_ratio
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+
+</filter>
+
+<match jfrog.rt.metrics>
+  @type stdout
+</match>
+
