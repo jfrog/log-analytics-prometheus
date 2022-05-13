@@ -5,8 +5,8 @@
 <source>
   @type tail
   @id artifactory_metrics_tail
-  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/artifactory-metrics.log"
-  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/artifactory-metrics.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log.pos"
   tag jfrog.rt.metrics
   read_from_head true
   refresh_interval 10
@@ -20,8 +20,8 @@
 <source>
   @type tail
   @id observability_metrics_tail
-  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/observability-metrics.log"
-  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/artifactory/var/log/observability-metrics.log.pos"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log.pos"
   tag jfrog.rt.metrics
   read_from_head true
   refresh_interval 10
