@@ -1,3 +1,9 @@
+global:
+  jfrog:
+    observability:
+      branch: prometheus_revamp
+  prometheus: 
+    loki_url: http:\/\/10.96.105.82
 unifiedUpgradeAllowed: true
 databaseUpgradeReady: true
 xray:
@@ -13,23 +19,20 @@ rabbitmq:
     username: guest
     password: guest
 common:
-  customInitContainersBegin: |
-    - name: "prepare-fluentd-conf-on-persistent-volume"
-      image: "{{ .Values.initContainerImage }}"
-      imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+  customSidecarContainers: |
+    - name: "xray-fluentd-sidecar"
+      image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"
+      imagePullPolicy: "IfNotPresent"
       command:
         - 'sh'
         - '-c'
         - >
-          mkdir -p {{ .Values.xray.persistence.mountPath }}/etc/fluentd/;
-          wget https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/master/fluent.conf.xray -O {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
-      volumeMounts:
-        - mountPath: "{{ .Values.xray.persistence.mountPath }}"
-          name: data-volume
-  customSidecarContainers: |
-    - name: "xray-fluentd-sidecar"
-      image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.13.2"
-      imagePullPolicy: "IfNotPresent"
+          gem install fluent-plugin-prometheus --no-doc;
+          curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent.conf.xray -o fluent.conf.xray;
+          cp fluent.conf.xray fluent.tmp.conf;
+          sed -i -e 's/LOKI_URL/{{ .Values.global.prometheus.loki_url }}/g' fluent.tmp.conf;
+          mv fluent.tmp.conf fluentd.conf;
+          fluentd -v -c fluentd.conf;
       volumeMounts:
         - mountPath: "{{ .Values.xray.persistence.mountPath }}"
           name: data-volume
