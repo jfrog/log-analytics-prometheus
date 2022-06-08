@@ -189,7 +189,7 @@
   flush_interval 1s
   flush_at_shutdown true
   buffer_chunk_limit 1m
-  extra_labels {"job":"logs", "host":${hostname}, "agent":"fluentd"}
+  extra_labels {"job":"logs", "host":"${hostname}", "agent":"fluentd"}
   <label>
       filename
   </label>
