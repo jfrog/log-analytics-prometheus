@@ -78,6 +78,8 @@ artifactory:
           - port: metrics
             interval: 15s
 xray:
+  openMetrics:
+    enabled: true
   enabled: true
   common:
     customSidecarContainers: |
