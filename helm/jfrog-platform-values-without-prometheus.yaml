@@ -1,0 +1,17 @@
+installerInfo: '{ "productId": "Helm_prometheus_jfrog_platform/{{ .Chart.Version }}", "features": [ { "featureId": "ArtifactoryVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}" }, { "featureId": "{{ if .Values.postgresql.enabled }}postgresql{{ else }}{{ .Values.database.type }}{{ end }}/0.0.0" }, { "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}" },  { "featureId": "Channel/Helm_prometheus_jfrog_platform" } ] }'
+artifactory:
+  artifactory:
+    openMetrics:
+      enabled: true
+xray:
+  enabled: true
+insight:
+  enabled: false
+distribution:
+  enabled: false
+pipelines:
+  enabled: false
+rabbitmq:
+  enabled: true
+redis:
+  enabled: false
