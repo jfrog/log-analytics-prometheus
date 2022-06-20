@@ -60,7 +60,6 @@ additionalResources: |
     selector:
       app: {{ template "artifactory.name" . }}
       component: "{{ .Values.artifactory.name }}"
-      release: {{ .Release.Name }}
   ---
   apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
