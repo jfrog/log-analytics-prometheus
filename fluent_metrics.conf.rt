@@ -1,3 +1,4 @@
+# METRICS SEGMENT - BEGIN
 <source>
   @type prometheus
 </source>
@@ -200,6 +201,10 @@
 
 </filter>
 
+# METRICS SEGMENT - END
+
+# LOG SEGMENT - BEGIN
+
 <source>
   @type tail
   @id access_service_tail
@@ -321,8 +326,8 @@
   enable_ruby true
   <record>
     user ${!record["username"].strip().start_with?("token") ? (record["username"].strip()) : ("")}
-    repo ${record["request_url"].strip().start_with?("/api/download") ? (record["request_url"].strip().split('/')[3]) : ("")}
-    artifact ${record["request_url"].strip().start_with?("/api/download") ? (val = record["request_url"].strip().split('/'); val[val.length()-1]) : ("")}
+    repo ${record["request_url"].include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].split('/')[3]) : ("")}
+    artifact ${record["request_url"].include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].split('/')[5]) : ("")}
     docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
     docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
     data_download ${record["response_content_length"] == -1 ? 0 : record["response_content_length"]}
@@ -408,6 +413,8 @@
   </parse>
 </source>
 
+# LOG SEGMENT - END
+
 # WHAT LOG IT WAS INTO THE JSON
 <filter jfrog.**>
   @type record_transformer
@@ -417,7 +424,7 @@
   </record>
 </filter>
 
-<match jfrog.metrics.rt>
+<match jfrog.metrics.**>
   @type stdout
 </match>
 
@@ -428,7 +435,7 @@
   flush_at_shutdown true
   buffer_chunk_limit 1m
   line_format json
-  extra_labels {"job":"jfrtlogs", "host":"artifactory", "agent":"fluentd"}
+  extra_labels {"agent":"fluentd", "job":"jfrtlogs", "service":"artifactory"}
   <label>
       filename
   </label>
