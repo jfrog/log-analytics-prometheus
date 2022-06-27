@@ -42,7 +42,7 @@ additionalResources: |
     labels:
       app: {{ template "artifactory.name" . }}
       chart: {{ template "artifactory.chart" . }}
-      component: metrics
+      component: {{ template "artifactory.name" . }}
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
       {{- with .Values.artifactory.labels }}
@@ -56,7 +56,7 @@ additionalResources: |
       protocol: TCP
     selector:
       app: {{ template "artifactory.name" . }}
-      component: "{{ .Values.artifactory.name }}"
+      component: {{ template "artifactory.name" . }}
   ---
   apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
@@ -72,7 +72,7 @@ additionalResources: |
     selector:
       matchLabels:
         app: {{ template "artifactory.name" . }}
-        component: metrics
+        component: {{ template "artifactory.name" . }}
     endpoints:
         - port: metrics
           interval: 15s

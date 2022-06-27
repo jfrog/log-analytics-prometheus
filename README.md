@@ -4,19 +4,10 @@ The setup and configuration of Prometheus and Grafana uses Helm for Kubernetes a
 
 In order to use this with Artifactory 6, please see: [artifactory 6](https://github.com/jfrog/log-analytics-prometheus/tree/artifactory-6).
 
-| version | artifactory | xray  | distribution | mission_control | pipelines |
-|---------|-------------|-------|--------------|-----------------|-----------|
-| 0.9.0   | 7.12.5      | 3.15.1| N/A          | N/A             | N/A       |
-| 0.8.0   | 7.11.5      | 3.8.6 | N/A          | N/A             | N/A       |
-| 0.7.2   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
-| 0.7.1   | 7.10.2      | 3.8.6 | N/A          | N/A             | N/A       |
-| 0.6.1   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
-| 0.6.0   | 7.7.8       | 3.8.6 | N/A          | N/A             | N/A       |
-| 0.5.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
-| 0.4.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
-| 0.3.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
-| 0.2.0   | 7.7.3       | 3.8.0 | N/A          | N/A             | N/A       |
-| 0.1.1   | 7.6.3       | 3.6.2 | N/A          | N/A             | N/A       |
+| version | artifactory | xray | distribution | mission_control | pipelines |
+|---------|-------------|------|--------------|-----------------|-----------|
+| 0.1.0   | 7.x         | 3.x  | N/A          | N/A             | N/A       |
+
 
 ## Installing Prometheus and Grafana on Kubernetes
 The Prometheus Community [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart allows the creation of Prometheus instances and includes Grafana. 

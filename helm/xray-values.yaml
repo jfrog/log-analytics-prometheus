@@ -54,7 +54,7 @@ additionalResources: |
     labels:
       app: {{ template "xray.name" . }}
       chart: {{ template "xray.chart" . }}
-      component: metrics
+      component: {{ template "xray.name" . }}
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
       {{- with .Values.xray.labels }}
@@ -68,7 +68,7 @@ additionalResources: |
       protocol: TCP
     selector:
       app: {{ template "xray.name" . }}
-      component: "{{ .Values.xray.name }}"
+      component: {{ template "xray.name" . }}
   ---
   apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
@@ -84,7 +84,7 @@ additionalResources: |
     selector:
       matchLabels:
         app: {{ template "xray.name" . }}
-        component: metrics
+        component: {{ template "xray.name" . }}
     endpoints:
       - port: metrics
         interval: 15s
