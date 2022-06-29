@@ -3,7 +3,8 @@ global:
     observability:
       branch: prometheus_revamp
   prometheus: 
-    loki_url: http:\/\/10.96.105.82
+    loki_url: http:\/\/loki.jfrog-plg:3100
+    release_name: prometheus
 unifiedUpgradeAllowed: true
 databaseUpgradeReady: true
 xray:
@@ -56,10 +57,10 @@ additionalResources: |
       prometheus.io/scrape: "true"
     labels:
       app: {{ template "xray.name" . }}
+      component: {{ template "xray.name" . }}
       chart: {{ template "xray.chart" . }}
-      component: metrics
       heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
+      release: {{ .Values.global.prometheus.release_name }}
       {{- with .Values.xray.labels }}
   {{ toYaml . | indent 4 }}
       {{- end }}
@@ -71,8 +72,7 @@ additionalResources: |
       protocol: TCP
     selector:
       app: {{ template "xray.name" . }}
-      component: "{{ .Values.xray.name }}"
-      release: {{ .Release.Name }}
+      component: {{ template "xray.name" . }}
   ---
   apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
@@ -83,12 +83,12 @@ additionalResources: |
       app: {{ template "xray.name" . }}
       chart: {{ template "xray.chart" . }}
       heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
+      release: {{ .Values.global.prometheus.release_name }}
   spec:
     selector:
       matchLabels:
         app: {{ template "xray.name" . }}
-        component: metrics
+        component: {{ template "xray.name" . }}
     endpoints:
       - port: metrics
         interval: 15s

@@ -3,7 +3,8 @@ global:
     observability:
       branch: prometheus_revamp
   prometheus:
-    loki_url: http:\/\/10.12.47.37
+    loki_url: http:\/\/loki.jfrog-plg:3100
+    release_name: prometheus
 installerInfo: '{ "productId": "Helm_prometheus_jfrog_platform/{{ .Chart.Version }}", "features": [ { "featureId": "ArtifactoryVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}" }, { "featureId": "{{ if .Values.postgresql.enabled }}postgresql{{ else }}{{ .Values.database.type }}{{ end }}/0.0.0" }, { "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}" },  { "featureId": "Channel/Helm_prometheus_jfrog_platform" } ] }'
 artifactory:
   artifactory:
@@ -41,10 +42,10 @@ artifactory:
         prometheus.io/scrape: "true"
       labels:
         app: {{ template "artifactory.name" . }}
+        component: {{ template "artifactory.name" . }}
         chart: {{ template "artifactory.chart" . }}
-        component: metrics
         heritage: {{ .Release.Service }}
-        release: {{ .Release.Name }}
+        release: {{ .Values.global.prometheus.release_name }}
         {{- with .Values.artifactory.labels }}
     {{ toYaml . | indent 4 }}
         {{- end }}
@@ -56,7 +57,7 @@ artifactory:
         protocol: TCP
       selector:
         app: {{ template "artifactory.name" . }}
-        component: "{{ .Values.artifactory.name }}"
+        component: {{ template "artifactory.name" . }}
     ---
     apiVersion: monitoring.coreos.com/v1
     kind: ServiceMonitor
@@ -67,12 +68,12 @@ artifactory:
         app: {{ template "artifactory.name" . }}
         chart: {{ template "artifactory.chart" . }}
         heritage: {{ .Release.Service }}
-        release: {{ .Release.Name }}
+        release: {{ .Values.global.prometheus.release_name }}
     spec:
       selector:
         matchLabels:
           app: {{ template "artifactory.name" . }}
-          component: metrics
+          component: {{ template "artifactory.name" . }}
       endpoints:
           - port: metrics
             interval: 15s
@@ -103,53 +104,53 @@ xray:
             value: {{ .Values.xray.persistence.mountPath }}
           - name: FLUENTD_CONF
             value: ../../../../{{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
-additionalResources: |
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: {{ template "xray.fullname" . }}-metrics
-    annotations:
-      prometheus.io/path: "/metrics"
-      prometheus.io/scheme: "http"
-      prometheus.io/port: "24231"
-      prometheus.io/scrape: "true"
-    labels:
-      app: {{ template "xray.name" . }}
-      chart: {{ template "xray.chart" . }}
-      component: metrics
-      heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
-      {{- with .Values.xray.labels }}
-  {{ toYaml . | indent 4 }}
-      {{- end }}
-  spec:
-    type: ClusterIP
-    ports:
-    - name: metrics
-      port: 24231
-      protocol: TCP
-    selector:
-      app: {{ template "xray.name" . }}
-      component: "{{ .Values.xray.name }}"
-  ---
-  apiVersion: monitoring.coreos.com/v1
-  kind: ServiceMonitor
-  metadata:
-    name: servicemonitor-{{ template "xray.name" . }}
-    labels:
-      metrics: jfrog
-      app: {{ template "xray.name" . }}
-      chart: {{ template "xray.chart" . }}
-      heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
-  spec:
-    selector:
-      matchLabels:
+  additionalResources: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ template "xray.fullname" . }}-metrics
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/scheme: "http"
+        prometheus.io/port: "24231"
+        prometheus.io/scrape: "true"
+      labels:
         app: {{ template "xray.name" . }}
-        component: metrics
-    endpoints:
-      - port: metrics
-        interval: 15s
+        component: {{ template "xray.name" . }}
+        chart: {{ template "xray.chart" . }}
+        heritage: {{ .Release.Service }}
+        release: {{ .Values.global.prometheus.release_name }}
+        {{- with .Values.xray.labels }}
+    {{ toYaml . | indent 4 }}
+        {{- end }}
+    spec:
+      type: ClusterIP
+      ports:
+      - name: metrics
+        port: 24231
+        protocol: TCP
+      selector:
+        app: {{ template "xray.name" . }}
+        component: "{{ .Values.xray.name }}"
+    ---
+    apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      name: servicemonitor-{{ template "xray.name" . }}
+      labels:
+        metrics: jfrog
+        app: {{ template "xray.name" . }}
+        chart: {{ template "xray.chart" . }}
+        heritage: {{ .Release.Service }}
+        release: {{ .Values.global.prometheus.release_name }}
+    spec:
+      selector:
+        matchLabels:
+          app: {{ template "xray.name" . }}
+          component: {{ template "xray.name" . }}
+      endpoints:
+        - port: metrics
+          interval: 15s
 insight:
   enabled: false
 distribution:

@@ -1,41 +1,209 @@
-## Prometheus Input Plugin Configuration
-
-# input plugin that exports metrics
+# METRICS SEGMENT - BEGIN - RECHECK ON XRAY METRICS, THIS IS DUPLICATE ON ARTIFACTORY METRICS
 <source>
   @type prometheus
 </source>
 
 <source>
-@type monitor_agent
+  @type tail
+  @id artifactory_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log.pos"
+  tag jfrog.metrics.rt
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id observability_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log.pos"
+  tag jfrog.metrics.rt
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
 </source>
 
-<source>
-@type forward
-</source>
+<filter jfrog.metrics.rt>
+  @type parser
+  key_name message
+  <parse>
+    @type regexp
+    expression ^(?<key>[\w]+)\ (?<value>[[+-]?\d(\.\d+)?[Ee][+-]?\d+]+)\ (?<timestamp>[\d]+)$
+    time_type string
+    time_key timestamp
+    time_format %s
+  </parse>
+  emit_invalid_record_to_error false
+</filter>
 
-# input plugin that collects metrics from MonitorAgent
-<source>
-@type prometheus_monitor
-<labels>
-  host ${hostname}
-</labels>
-</source>
+<filter jfrog.metrics.rt>
+  @type record_transformer
+  enable_ruby true
+  renew_record false
+  <record>
+    ${record["key"]} ${if record["value"]["."] then record["value"].to_f else record["value"].to_i end}
+  </record>
+</filter>
 
-# input plugin that collects metrics for output plugin
-<source>
-@type prometheus_output_monitor
-<labels>
-  host ${hostname}
-</labels>
-</source>
+<filter jfrog.metrics.rt>
+  @type prometheus
 
-# input plugin that collects metrics for in_tail plugin
-<source>
-@type prometheus_tail_monitor
-<labels>
-  host ${hostname}
-</labels>
-</source>
+  <metric>
+    name jfrt_runtime_heap_freememory_bytes
+    desc Heap Free Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_freememory_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_maxmemory_bytes
+    desc Heap Max Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_maxmemory_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_totalmemory_bytes
+    desc Heap Total Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_totalmemory_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_processors_total
+    desc Total Heap Processors
+    type gauge
+    key jfrt_runtime_heap_processors_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_active_total
+    desc Active DB Connections
+    type gauge
+    key jfrt_db_connections_active_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_idle_total
+    desc Idle DB Connections
+    type gauge
+    key jfrt_db_connections_idle_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_max_active_total
+    desc Max Active DB Connections
+    type gauge
+    key jfrt_db_connections_max_active_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_min_idle_total
+    desc Min Idle DB Connections
+    type gauge
+    key jfrt_db_connections_min_idle_total
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_storage_current_total_size_bytes
+    desc Artifactory Storage in Bytes
+    type gauge
+    key jfrt_storage_current_total_size_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_used_bytes
+    desc Application Disk Used in Bytes
+    type gauge
+    key app_disk_used_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_free_bytes
+    desc Application Disk Free in Bytes
+    type gauge
+    key app_disk_free_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_used_bytes
+    desc System Memory Used in Bytes
+    type gauge
+    key sys_memory_used_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_free_bytes
+    desc System Memory Free in Bytes
+    type gauge
+    key sys_memory_free_bytes
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_cpu_ratio
+    desc System CPU Ratio
+    type gauge
+    key sys_cpu_ratio
+    <labels>
+      host ${hostname}
+    </labels>
+  </metric>
+
+</filter>
+
+# METRICS SEGMENT - END - RECHECK ON XRAY METRICS, THIS IS DUPLICATE ON ARTIFACTORY METRICS
+
+# LOG SEGMENT - BEGIN
 
 <source>
   @type tail
@@ -153,35 +321,7 @@
   </record>
 </filter>
 
-<filter jfrog.xray.xray.request>
-@type prometheus
-
-<metric>
-  name jfrog_xray_req
-  type counter
-  desc xray requests
-  <labels>
-    host ${hostname}
-    remote_address ${remote_address}
-    request_url ${request_url}
-    return_status ${return_status}
-    method ${request_method}
-  </labels>
-</metric>
-</filter>
-
-<filter jfrog.xray.**.service>
-@type prometheus
-<metric>
-  name jfrog_xray_log_level
-  type counter
-  desc xray log_levels
-  <labels>
-    host ${hostname}
-    log_level ${log_level}
-  </labels>
-</metric>
-</filter>
+# LOG SEGMENT - END
 
 <match jfrog.metrics.rt>
   @type stdout
@@ -193,7 +333,8 @@
   flush_interval 1s
   flush_at_shutdown true
   buffer_chunk_limit 1m
-  extra_labels {"job":"jfxrlogs", "host":"xray", "agent":"fluentd"}
+  line_format json
+  extra_labels {"agent":"fluentd", "job":"jfxrlogs", "service":"xray"}
   <label>
       filename
   </label>

@@ -3,7 +3,8 @@ global:
     observability:
       branch: prometheus_revamp
   prometheus: 
-    loki_url: http:\/\/10.96.105.82
+    loki_url: http:\/\/loki.jfrog-plg:3100
+    release_name: prometheus
 installerInfo: '{ "productId": "Helm_prometheus_artifactory/{{ .Chart.Version }}", "features": [ { "featureId": "ArtifactoryVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}" }, { "featureId": "{{ if .Values.postgresql.enabled }}postgresql{{ else }}{{ .Values.database.type }}{{ end }}/0.0.0" }, { "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}" },  { "featureId": "Channel/Helm_prometheus_artifactory" } ] }'
 artifactory:
   openMetrics:
@@ -44,10 +45,10 @@ additionalResources: |
       prometheus.io/scrape: "true"
     labels:
       app: {{ template "artifactory.name" . }}
+      component: {{ template "artifactory.name" . }}
       chart: {{ template "artifactory.chart" . }}
-      component: metrics
       heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
+      release: {{ .Values.global.prometheus.release_name }}
       {{- with .Values.artifactory.labels }}
   {{ toYaml . | indent 4 }}
       {{- end }}
@@ -59,7 +60,7 @@ additionalResources: |
       protocol: TCP
     selector:
       app: {{ template "artifactory.name" . }}
-      component: "{{ .Values.artifactory.name }}"
+      component: {{ template "artifactory.name" . }}
   ---
   apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
@@ -70,12 +71,12 @@ additionalResources: |
       app: {{ template "artifactory.name" . }}
       chart: {{ template "artifactory.chart" . }}
       heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
+      release: {{ .Values.global.prometheus.release_name }}
   spec:
     selector:
       matchLabels:
         app: {{ template "artifactory.name" . }}
-        component: metrics
+        component: {{ template "artifactory.name" . }}
     endpoints:
         - port: metrics
           interval: 15s
