@@ -67,7 +67,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -80,7 +79,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -93,7 +91,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -106,7 +103,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -119,7 +115,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -132,7 +127,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -145,7 +139,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -158,7 +151,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -171,7 +163,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -184,7 +175,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -197,7 +187,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -210,7 +199,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -223,7 +211,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>
@@ -236,7 +223,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfrtlogs
       service artifactory
     </labels>
   </metric>

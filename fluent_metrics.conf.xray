@@ -67,7 +67,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -80,7 +79,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -93,7 +91,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -106,7 +103,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -119,7 +115,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -132,7 +127,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -145,7 +139,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -158,7 +151,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -171,7 +163,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -184,7 +175,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -197,7 +187,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
@@ -210,7 +199,6 @@
     <labels>
       agent fluentd
       host ${hostname}
-      job jfxrlogs
       service xray
     </labels>
   </metric>
