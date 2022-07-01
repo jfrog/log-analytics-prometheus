@@ -1,4 +1,4 @@
-# METRICS SEGMENT - BEGIN - RECHECK ON XRAY METRICS, THIS IS DUPLICATE ON ARTIFACTORY METRICS
+# METRICS SEGMENT - BEGIN
 <source>
   @type prometheus
 </source>
@@ -6,9 +6,9 @@
 <source>
   @type tail
   @id artifactory_metrics_tail
-  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log"
-  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log.pos"
-  tag jfrog.metrics.rt
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log.pos"
+  tag jfrog.metrics.xr
   read_from_head true
   refresh_interval 10
   follow_inodes true
@@ -23,7 +23,7 @@
   @id observability_metrics_tail
   path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log"
   pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log.pos"
-  tag jfrog.metrics.rt
+  tag jfrog.metrics.xr
   read_from_head true
   refresh_interval 10
   follow_inodes true
@@ -34,7 +34,7 @@
   </parse>
 </source>
 
-<filter jfrog.metrics.rt>
+<filter jfrog.metrics.xr>
   @type parser
   key_name message
   <parse>
@@ -47,7 +47,7 @@
   emit_invalid_record_to_error false
 </filter>
 
-<filter jfrog.metrics.rt>
+<filter jfrog.metrics.xr>
   @type record_transformer
   enable_ruby true
   renew_record false
@@ -56,116 +56,19 @@
   </record>
 </filter>
 
-<filter jfrog.metrics.rt>
+<filter jfrog.metrics.xr>
   @type prometheus
 
   <metric>
-    name jfrt_runtime_heap_freememory_bytes
-    desc Heap Free Memory in Bytes
+    name sys_cpu_ratio
+    desc System CPU Ratio
     type gauge
-    key jfrt_runtime_heap_freememory_bytes
+    key sys_cpu_ratio
     <labels>
+      agent fluentd
       host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_runtime_heap_maxmemory_bytes
-    desc Heap Max Memory in Bytes
-    type gauge
-    key jfrt_runtime_heap_maxmemory_bytes
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_runtime_heap_totalmemory_bytes
-    desc Heap Total Memory in Bytes
-    type gauge
-    key jfrt_runtime_heap_totalmemory_bytes
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_runtime_heap_processors_total
-    desc Total Heap Processors
-    type gauge
-    key jfrt_runtime_heap_processors_total
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_db_connections_active_total
-    desc Active DB Connections
-    type gauge
-    key jfrt_db_connections_active_total
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_db_connections_idle_total
-    desc Idle DB Connections
-    type gauge
-    key jfrt_db_connections_idle_total
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_db_connections_max_active_total
-    desc Max Active DB Connections
-    type gauge
-    key jfrt_db_connections_max_active_total
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_db_connections_min_idle_total
-    desc Min Idle DB Connections
-    type gauge
-    key jfrt_db_connections_min_idle_total
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrt_storage_current_total_size_bytes
-    desc Artifactory Storage in Bytes
-    type gauge
-    key jfrt_storage_current_total_size_bytes
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name app_disk_used_bytes
-    desc Application Disk Used in Bytes
-    type gauge
-    key app_disk_used_bytes
-    <labels>
-      host ${hostname}
-    </labels>
-  </metric>
-
-  <metric>
-    name app_disk_free_bytes
-    desc Application Disk Free in Bytes
-    type gauge
-    key app_disk_free_bytes
-    <labels>
-      host ${hostname}
+      job jfxrlogs
+      service xray
     </labels>
   </metric>
 
@@ -175,7 +78,10 @@
     type gauge
     key sys_memory_used_bytes
     <labels>
+      agent fluentd
       host ${hostname}
+      job jfxrlogs
+      service xray
     </labels>
   </metric>
 
@@ -185,23 +91,133 @@
     type gauge
     key sys_memory_free_bytes
     <labels>
+      agent fluentd
       host ${hostname}
+      job jfxrlogs
+      service xray
     </labels>
   </metric>
 
   <metric>
-    name sys_cpu_ratio
-    desc System CPU Ratio
+    name app_disk_free_bytes
+    desc Application Disk Free in Bytes
     type gauge
-    key sys_cpu_ratio
+    key app_disk_free_bytes
     <labels>
+      agent fluentd
       host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_used_bytes
+    desc Application Disk Used in Bytes
+    type gauge
+    key app_disk_used_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name go_memstats_heap_objects_total
+    desc GO Memory Statistics Total Heap Objects
+    type gauge
+    key go_memstats_heap_objects_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name go_memstats_heap_allocated_bytes
+    desc GO Memory Statistics Heap Allocated in Bytes
+    type gauge
+    key go_memstats_heap_allocated_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name go_memstats_heap_in_use_bytes
+    desc GO Memory Statistics Heap Used in Bytes
+    type gauge
+    key go_memstats_heap_in_use_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name db_connection_pool_in_use_total
+    desc Total DB Connections in Use
+    type gauge
+    key db_connection_pool_in_use_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_min_idle_total
+    desc Min DB Connections Idle
+    type gauge
+    key jfrt_db_connections_min_idle_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name db_connection_pool_idle_total
+    desc Total DB Connections Idle
+    type gauge
+    key db_connection_pool_idle_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name db_connection_pool_max_open_total
+    desc Max DB Connections Active
+    type gauge
+    key db_connection_pool_max_open_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      job jfxrlogs
+      service xray
     </labels>
   </metric>
 
 </filter>
 
-# METRICS SEGMENT - END - RECHECK ON XRAY METRICS, THIS IS DUPLICATE ON ARTIFACTORY METRICS
+# METRICS SEGMENT - END
 
 # LOG SEGMENT - BEGIN
 
@@ -323,7 +339,7 @@
 
 # LOG SEGMENT - END
 
-<match jfrog.metrics.rt>
+<match jfrog.metrics.xr>
   @type stdout
 </match>
 
