@@ -6,7 +6,7 @@
 <source>
   @type tail
   @id artifactory_metrics_tail
-  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log.log"
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log"
   pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log.pos"
   tag jfrog.metrics.xr
   read_from_head true
