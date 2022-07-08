@@ -156,10 +156,10 @@
   </metric>
 
   <metric>
-    name db_connection_pool_in_use_total
-    desc Total DB Connections in Use
+    name go_memstats_heap_reserved_bytes
+    desc GO Memory Statistics Heap Reserved in Bytes
     type gauge
-    key db_connection_pool_in_use_total
+    key go_memstats_heap_reserved_bytes
     <labels>
       agent fluentd
       host ${hostname}
@@ -168,10 +168,10 @@
   </metric>
 
   <metric>
-    name jfrt_db_connections_min_idle_total
-    desc Min DB Connections Idle
+    name db_connection_pool_in_use_total
+    desc Total DB Connections in Use
     type gauge
-    key jfrt_db_connections_min_idle_total
+    key db_connection_pool_in_use_total
     <labels>
       agent fluentd
       host ${hostname}

@@ -10,6 +10,7 @@ artifactory:
   artifactory:
     openMetrics:
       enabled: true
+    replicaCount: 1
     customSidecarContainers: |
         - name: "artifactory-fluentd-sidecar"
           image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"
@@ -78,10 +79,12 @@ artifactory:
           - port: metrics
             interval: 15s
 xray:
-  openMetrics:
-    enabled: true
   enabled: true
+  metrics:
+    enabled: true
+  replicaCount: 1
   common:
+    preStartCommand: "export JF_OBSERVABILITY_METRICS_ENABLED=true"
     customSidecarContainers: |
       - name: "xray-fluentd-sidecar"
         image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"

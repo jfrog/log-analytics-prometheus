@@ -20,6 +20,7 @@ rabbitmq:
     username: guest
     password: guest
 common:
+  preStartCommand: "export JF_OBSERVABILITY_METRICS_ENABLED=true"
   customSidecarContainers: |
     - name: "xray-fluentd-sidecar"
       image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"
