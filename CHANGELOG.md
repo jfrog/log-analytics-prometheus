@@ -1,6 +1,11 @@
 # JFrog Log Analytics Changelog
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.0] - Jul 15, 2022
+* Prometheus Solution Redesigned
+* Addition of Loki Component for Log Data Ingestion
+* Enhanced Prometheus for Metrics Data Ingestion
+
 ## [0.10.0] - Feb 14, 2022
 * Added call home configuration for the artifactory fluent configuration.
 
