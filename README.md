@@ -1,5 +1,14 @@
+# Prometheus Deprecation Announcement - Applies to all implementations
+
+After finding core architectural issues in this implementation, this integration is fully deprecated, effective October 15,2022. No further changes or updates will be made to this implementation.
+
+A rearchitected solution, which will address the shortcomings of this implementation, is almost complete and will be made available early in Q1 of 2023.
+
+
+
+
 # Prometheus + Grafana Log Metrics for Artifactory 7
-The following describes how to configure Prometheus and Grafana to gather metrics from Artifactory and Xray through the use of FluentD. 
+The following describes how to configure Prometheus and Grafana to gather metrics from Artifactory and Xray through the use of FluentD.
 The setup and configuration of Prometheus and Grafana uses Helm for Kubernetes and makes use of the Prometheus community operator helm chart.
 
 In order to use this with Artifactory 6, please see: [artifactory 6](https://github.com/jfrog/log-analytics-prometheus/tree/artifactory-6).
@@ -19,7 +28,7 @@ In order to use this with Artifactory 6, please see: [artifactory 6](https://git
 | 0.1.1   | 7.6.3       | 3.6.2 | N/A          | N/A             | N/A       |
 
 ## Installing Prometheus and Grafana on Kubernetes
-The Prometheus Community [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart allows the creation of Prometheus instances and includes Grafana. 
+The Prometheus Community [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart allows the creation of Prometheus instances and includes Grafana.
 
 Install via Helm 3:
 
@@ -127,7 +136,7 @@ Example dashboards are included in the [grafana directory](grafana). These inclu
 ![dashboard-2](images/dashboard-2.png)
 
 ## Metrics Collected
-All metrics are collected and can be queried using PromQL. 
+All metrics are collected and can be queried using PromQL.
 
 | Metric                         | Product     | Type    | Labels                                                                                      | Description                                       |
 |--------------------------------|-------------|---------|---------------------------------------------------------------------------------------------|---------------------------------------------------|
@@ -156,7 +165,7 @@ Helm based installs will already have this defined based upon the underlying doc
 For non-k8s based installations below is a reference to the Docker image locations per product. Note these locations may be different based upon the installation location chosen.
 
 ````text
-Artifactory: 
+Artifactory:
 export JF_PRODUCT_DATA_INTERNAL=/var/opt/jfrog/artifactory/
 ````
 
@@ -183,7 +192,7 @@ kubectl apply -f k8s/artifactory-ha-member-metrics-service.yaml
 ```
 5. The /metrics interface is now available at http://<service>:24231/metrics
 ![metrics](images/metrics.png)
-   
+
 _*_ For information on authentication with a bearer token with artifactory, please visit [Bearer Token Authentication](https://www.jfrog.com/confluence/display/JFROG/Access+Tokens#AccessTokens)
 
 
