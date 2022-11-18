@@ -8,7 +8,7 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
 
 ## Pre-Requisites
 1. Working and configured Kubernetes Cluster - Amazon EKS / Google GKE / Azure AKS / Docker Desktop / Minikube
-   1. Recommended Kubernetes Version 1.20 and Above
+   1. Recommended Kubernetes Version 1.25.2 and above
    2. For Google GKE, refer [GKE Guide](https://cloud.google.com/kubernetes-engine/docs/how-to)
    3. For Amazon EKS, refer [EKS Guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
    4. For Azure AKS, refer [AKS Guide](https://docs.microsoft.com/en-us/azure/aks/)
@@ -17,12 +17,26 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
    1. For Installation and usage refer [KUBECTL Guide](https://kubernetes.io/docs/tasks/tools/)
 3. HELM v3 Installed
    1. For Installation and usage refer [HELM Guide](https://helm.sh/docs/intro/install/)
+4. Versions supported and Tested:
+
+   Jfrog Platform: 10.9.2
+
+   Artifactory : 7.46.10
+
+   Xray : 3.59.4
+
+   Prometheus:2.39.1
+
+   Grafana:9.2.3
+
+   Loki: 2.6.1
+
 
 ## Read me before installing
-### Important Note: This is not an upgrade to the existing solution from JFrog, there is no migration feasible.
+### Important Note: This version replaces all previous implementations. This version is not an in-place upgrade to the existing solution from JFrog, but is full reinstall and hence there is no migration feasible. However the new example dashboards are a superset of previous dashboards providing more functionality. If there were customizations done previously they need to be incorporated into the new dashboard.
 ```html
-This guide assumes the implementer is performing new setup, 
-    if prometheus is already installed and configured, we recommend to have the existing prometheus release name handy. 
+This guide assumes the implementer is performing new setup, Changes to handle install in an existing setup will be highlighted where applicable.
+    if prometheus is already installed and configured, we recommend to have the existing prometheus release name handy.
     If Loki is already installed and configured, we recommend to have its service URL handy.
 
 If prometheus and loki are already available you can skip the installation section and proceed to configuration section.
@@ -71,15 +85,15 @@ helm repo update
 ```
 Install the chart:
 ```shell
-helm upgrade --install "loki" grafana/loki-stack -n jfrog-plg --version v2.4.1
+helm upgrade --install "loki" grafana/loki-stack -n jfrog-plg
 ```
 ```yaml
 * "loki" will be the service name, the url to access loki as a datasource can be visualised as http://<service_name>.<namespace>:<port>
       ex: http://loki.jfrog-plg:3100 will be the "loki_url" value
 
-* the --version v2.4.1 is the most widely distributed loki version at the time of writing the document
-      if there is a need to deploy the latest version, the command would be without the --version v2.4.1
-       
+* the --version v2.6.1 is the most recent loki version at the time of writing the document
+      if there is a need to deploy this exact version, then add "--version v2.6.1" to the command line.
+
 ```
 
 # Configuration
@@ -102,7 +116,7 @@ global:
 
 ## JFrog Platform + Metrics via Helm ⎈
 
-To configure and install JFrog Platform with Prometheus metrics being exposed use our file `helm/xray-values.yaml` to expose a metrics and new service monitor to Prometheus.
+To configure and install JFrog Platform with Prometheus metrics being exposed use our file `helm/jfrog-platform-values.yaml` to expose a metrics and new service monitor to Prometheus.
 
 JFrog Platform ⎈:
 ```text
@@ -110,6 +124,7 @@ helm upgrade --install jfrog-platform jfrog/jfrog-platform \
        -f helm/jfrog-platform-values.yaml \
        -n jfrog-plg
 ```
+**If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
 
 ## Artifactory / Artifactory HA + Metrics via Helm ⎈
 
@@ -127,6 +142,7 @@ helm upgrade --install artifactory jfrog/artifactory \
        -f helm/artifactory-values.yaml \
        -n jfrog-plg
 ```
+**If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
 
 Artifactory-HA ⎈:
 ```text
@@ -136,7 +152,7 @@ helm upgrade --install artifactory-ha jfrog/artifactory-ha \
        -f helm/artifactory-ha-values.yaml \
        -n jfrog-plg
 ```
-
+**If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
 Note the above examples are only references you will need additional parameters to configure TLS, binary blob storage, or other common Artifactory features.
 
 This will complete the necessary configuration for Artifactory and expose a new service monitor `servicemonitor-artifactory` to expose metrics to Prometheus.
@@ -153,7 +169,7 @@ helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://my-artifactory
        -f helm/xray-values.yaml \
        -n jfrog-plg
 ```
-
+**If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
 ## Grafana Dashboard
 Example dashboards are included in the [grafana directory](grafana). These dashboards needs to be imported to the grafana. These include:
 
@@ -167,14 +183,14 @@ Use 'kubectl port forwards' as mentioned
 1. Go to the web UI of the Prometheus instance "http://localhost:9090" and verify "Status -> Service Discovery", the list shows the new ServiceMonitor for Artifactory or Xray or Both.
 
 ```
-   kubectl port-forward service/prometheus-operated 9090:9090 -n jfrog-plg 
+   kubectl port-forward service/prometheus-operated 9090:9090 -n jfrog-plg
 ```
 
 ![targets](images/ServiceDiscovery.jpeg)
 __
 2. Go to Grafana "http://localhost:3000" to add your Prometheus instance and Loki Instance as a datasource.
 ```
-   kubectl port-forward service/prometheus-grafana 3000:80 -n jfrog-plg 
+   kubectl port-forward service/prometheus-grafana 3000:80 -n jfrog-plg
 ```
 ```
    Default credentials (UNAME / PASSWD) for Prometheus grafana is ->  "admin" / "prom-operator"
