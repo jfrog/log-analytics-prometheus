@@ -39,8 +39,10 @@ This guide assumes the implementer is performing new setup, Changes to handle in
     if prometheus is already installed and configured, we recommend to have the existing prometheus release name handy.
     If Loki is already installed and configured, we recommend to have its service URL handy.
 
-If prometheus and loki are already available you can skip the installation section and proceed to configuration section.
+
 ```
+If prometheus and loki are already available you can skip the installation section and proceed to [Configuration Section](#Configuration).
+
 
 # Installation
 
@@ -80,6 +82,10 @@ kubectl patch ds prometheus-prometheus-node-exporter --type "json" -p '[{"op": "
 
 Add the required Helm Repositories:
 ```
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+```
+```
 helm repo add loki https://grafana.github.io/loki/charts
 helm repo update
 ```
@@ -115,6 +121,13 @@ global:
 
 
 ## JFrog Platform + Metrics via Helm ⎈
+
+Ensure Jfrog repo is added to helm. 
+
+```
+helm repo add jfrog https://charts.jfrog.io
+helm repo update
+```
 
 To configure and install JFrog Platform with Prometheus metrics being exposed use our file `helm/jfrog-platform-values.yaml` to expose a metrics and new service monitor to Prometheus.
 
@@ -178,20 +191,20 @@ Example dashboards are included in the [grafana directory](grafana). These dashb
 
 ## Assess the setup for working
 
-Use 'kubectl port forwards' as mentioned
+Use 'kubectl port forwards' as mentioned in two terminal windows
+```
+   kubectl port-forward service/prometheus-operated 9090:9090 -n jfrog-plg
+   kubectl port-forward service/prometheus-grafana 3000:80 -n jfrog-plg
+```
 
 1. Go to the web UI of the Prometheus instance "http://localhost:9090" and verify "Status -> Service Discovery", the list shows the new ServiceMonitor for Artifactory or Xray or Both.
 
-```
-   kubectl port-forward service/prometheus-operated 9090:9090 -n jfrog-plg
-```
+
 
 ![targets](images/ServiceDiscovery.jpeg)
 __
 2. Go to Grafana "http://localhost:3000" to add your Prometheus instance and Loki Instance as a datasource.
-```
-   kubectl port-forward service/prometheus-grafana 3000:80 -n jfrog-plg
-```
+
 ```
    Default credentials (UNAME / PASSWD) for Prometheus grafana is ->  "admin" / "prom-operator"
 ```
