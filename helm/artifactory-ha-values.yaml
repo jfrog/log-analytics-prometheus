@@ -3,7 +3,7 @@ global:
     observability:
       branch: master
   prometheus: 
-    loki_url: http:\/\/10.96.105.82
+    loki_url: http:\/\/loki.jfrog-plg:3100
 installerInfo: '{ "productId": "Helm_prometheus_artifactory/{{ .Chart.Version }}", "features": [ { "featureId": "ArtifactoryVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}" }, { "featureId": "{{ if .Values.postgresql.enabled }}postgresql{{ else }}{{ .Values.database.type }}{{ end }}/0.0.0" }, { "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}" },  { "featureId": "Channel/Helm_prometheus_artifactory" } ] }'
 artifactory:
   openMetrics:
