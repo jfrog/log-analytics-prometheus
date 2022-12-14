@@ -19,6 +19,7 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
    1. For Installation and usage refer [HELM Guide](https://helm.sh/docs/intro/install/)
 4. Versions supported and Tested:
 
+
    Jfrog Platform: 10.9.2
 
    Artifactory : 7.46.10
@@ -185,6 +186,7 @@ helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://my-artifactory
 **If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
 ## Grafana Dashboard
 Example dashboards are included in the [grafana directory](grafana). These dashboards needs to be imported to the grafana. These include:
+
 
 - Artifactory Metrics and Log Analytics Dashboard [Download Here](grafana/ArtifactoryLogAnalyticsAndSystemMetrics.json)
 - Xray Metrics and Log Analytics Dashboard [Download Here](grafana/XrayLogAnalyticsAndSystemMetrics.json)
