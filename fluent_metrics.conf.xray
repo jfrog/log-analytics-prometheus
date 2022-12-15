@@ -1,0 +1,345 @@
+# METRICS SEGMENT - BEGIN
+<source>
+  @type prometheus
+</source>
+
+<source>
+  @type tail
+  @id artifactory_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log.pos"
+  tag jfrog.metrics.xr
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id observability_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log.pos"
+  tag jfrog.metrics.xr
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
+</source>
+
+<filter jfrog.metrics.xr>
+  @type parser
+  key_name message
+  <parse>
+    @type regexp
+    expression ^(?<key>[\w]+)\ (?<value>[[+-]?\d(\.\d+)?[Ee][+-]?\d+]+)\ (?<timestamp>[\d]+)$
+    time_type string
+    time_key timestamp
+    time_format %s
+  </parse>
+  emit_invalid_record_to_error false
+</filter>
+
+<filter jfrog.metrics.xr>
+  @type record_transformer
+  enable_ruby true
+  renew_record false
+  <record>
+    ${record["key"]} ${if record["value"]["."] then record["value"].to_f else record["value"].to_i end}
+  </record>
+</filter>
+
+<filter jfrog.metrics.xr>
+  @type prometheus
+
+  <metric>
+    name sys_cpu_ratio
+    desc System CPU Ratio
+    type gauge
+    key sys_cpu_ratio
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_used_bytes
+    desc System Memory Used in Bytes
+    type gauge
+    key sys_memory_used_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_free_bytes
+    desc System Memory Free in Bytes
+    type gauge
+    key sys_memory_free_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_free_bytes
+    desc Application Disk Free in Bytes
+    type gauge
+    key app_disk_free_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_used_bytes
+    desc Application Disk Used in Bytes
+    type gauge
+    key app_disk_used_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name go_memstats_heap_objects_total
+    desc GO Memory Statistics Total Heap Objects
+    type gauge
+    key go_memstats_heap_objects_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name go_memstats_heap_allocated_bytes
+    desc GO Memory Statistics Heap Allocated in Bytes
+    type gauge
+    key go_memstats_heap_allocated_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name go_memstats_heap_in_use_bytes
+    desc GO Memory Statistics Heap Used in Bytes
+    type gauge
+    key go_memstats_heap_in_use_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name go_memstats_heap_reserved_bytes
+    desc GO Memory Statistics Heap Reserved in Bytes
+    type gauge
+    key go_memstats_heap_reserved_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name db_connection_pool_in_use_total
+    desc Total DB Connections in Use
+    type gauge
+    key db_connection_pool_in_use_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name db_connection_pool_idle_total
+    desc Total DB Connections Idle
+    type gauge
+    key db_connection_pool_idle_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+  <metric>
+    name db_connection_pool_max_open_total
+    desc Max DB Connections Active
+    type gauge
+    key db_connection_pool_max_open_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service xray
+    </labels>
+  </metric>
+
+</filter>
+
+# METRICS SEGMENT - END
+
+# LOG SEGMENT - BEGIN
+
+<source>
+  @type tail
+  @id xray_server_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-service.log.pos"
+  tag jfrog.xray.server.service
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id xray_persist_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-persist-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-persist-service.log.pos"
+  tag jfrog.xray.persist.service
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id xray_indexer_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-indexer-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-indexer-service.log.pos"
+  tag jfrog.xray.indexer.service
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id xray_analysis_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-analysis-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-analysis-service.log.pos"
+  tag jfrog.xray.analysis.service
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id xray_router_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-service.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-service.log.pos"
+  tag jfrog.xray.router.service
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id xray_router_traefik_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-traefik.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-traefik.log.pos"
+  tag jfrog.xray.router.traefik
+  <parse>
+      @type regexp
+      expression /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] - (?<message>.+)$/
+      time_key timestamp
+      time_format %Y-%m-%dT%H:%M:%S.%LZ
+  </parse>
+</source>
+<source>
+  @type tail
+  @id xray_router_request_tail
+  path  "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-request.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/router-request.log.pos"
+  tag jfrog.xray.router.request
+  <parse>
+    @type json
+    time_key time
+    time_format %Y-%m-%dT%H:%M:%SZ
+  </parse>
+</source>
+<source>
+  @type tail
+  @id xray_request_tail
+  path  "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-request.log"
+  pos_file  "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-request.log.pos"
+  tag jfrog.xray.xray.request
+  <parse>
+    @type regexp
+    expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]++)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.*)$/
+    time_key timestamp
+    time_format %Y-%m-%dT%H:%M:%S.%LZ
+  </parse>
+</source>
+# STRIP COLOR CODES FROM SERVICE LOGS
+<filter jfrog.xray.**.service>
+  @type record_transformer
+  enable_ruby true
+  <record>
+    message ${record["message"].gsub(/\e\[([;\d]+)?m/, '')}
+  </record>
+</filter>
+# FIELD EXTRACT SERVICE LOG
+<filter jfrog.xray.**.service>
+  @type parser
+  key_name message
+  <parse>
+      @type multiline
+      format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+      format1 /^(?<timestamp>[^ ]*) \[(?<service_type>[^\]]*)\] \[(?<log_level>[^\]]*)\] \[(?<trace_id>[^\]]*)\] \[(?<class_line_number>.*)\] \[(?<thread>.*)\] (?<message>.*)$/
+      time_key timestamp
+      time_format %Y-%m-%dT%H:%M:%S.%LZ
+  </parse>
+  emit_invalid_record_to_error false
+</filter>
+<filter jfrog.**>
+  @type record_transformer
+  <record>
+    log_source ${tag}
+  </record>
+</filter>
+
+# LOG SEGMENT - END
+
+<match jfrog.metrics.xr>
+  @type stdout
+</match>
+
+<match jfrog.xray.**>
+  @type loki
+  url LOKI_URL
+  flush_interval 1s
+  flush_at_shutdown true
+  buffer_chunk_limit 1m
+  line_format json
+  extra_labels {"agent":"fluentd", "job":"jfxrlogs", "service":"xray"}
+  <label>
+      filename
+  </label>
+</match>

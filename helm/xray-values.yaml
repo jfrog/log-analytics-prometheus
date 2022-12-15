@@ -1,3 +1,10 @@
+global:
+  jfrog:
+    observability:
+      branch: master
+  prometheus: 
+    loki_url: http:\/\/loki.jfrog-plg:3100
+    release_name: prometheus
 unifiedUpgradeAllowed: true
 databaseUpgradeReady: true
 xray:
@@ -13,23 +20,21 @@ rabbitmq:
     username: guest
     password: guest
 common:
-  customInitContainersBegin: |
-    - name: "prepare-fluentd-conf-on-persistent-volume"
-      image: "{{ .Values.initContainerImage }}"
-      imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+  preStartCommand: "export JF_OBSERVABILITY_METRICS_ENABLED=true"
+  customSidecarContainers: |
+    - name: "xray-fluentd-sidecar"
+      image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"
+      imagePullPolicy: "IfNotPresent"
       command:
         - 'sh'
         - '-c'
         - >
-          mkdir -p {{ .Values.xray.persistence.mountPath }}/etc/fluentd/;
-          curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/master/fluent.conf.xray -o {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
-      volumeMounts:
-        - mountPath: "{{ .Values.xray.persistence.mountPath }}"
-          name: data-volume
-  customSidecarContainers: |
-    - name: "xray-fluentd-sidecar"
-      image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.13.2"
-      imagePullPolicy: "IfNotPresent"
+          gem install fluent-plugin-prometheus --no-doc;
+          curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent.conf.xray -o fluent.conf.xray;
+          cp fluent.conf.xray fluent.tmp.conf;
+          sed -i -e 's/LOKI_URL/{{ .Values.global.prometheus.loki_url }}/g' fluent.tmp.conf;
+          mv fluent.tmp.conf fluentd.conf;
+          fluentd -v -c fluentd.conf;
       volumeMounts:
         - mountPath: "{{ .Values.xray.persistence.mountPath }}"
           name: data-volume
@@ -53,10 +58,10 @@ additionalResources: |
       prometheus.io/scrape: "true"
     labels:
       app: {{ template "xray.name" . }}
+      component: {{ template "xray.name" . }}
       chart: {{ template "xray.chart" . }}
-      component: metrics
       heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
+      release: {{ .Values.global.prometheus.release_name }}
       {{- with .Values.xray.labels }}
   {{ toYaml . | indent 4 }}
       {{- end }}
@@ -68,7 +73,7 @@ additionalResources: |
       protocol: TCP
     selector:
       app: {{ template "xray.name" . }}
-      component: "{{ .Values.xray.name }}"
+      component: {{ template "xray.name" . }}
   ---
   apiVersion: monitoring.coreos.com/v1
   kind: ServiceMonitor
@@ -79,12 +84,12 @@ additionalResources: |
       app: {{ template "xray.name" . }}
       chart: {{ template "xray.chart" . }}
       heritage: {{ .Release.Service }}
-      release: {{ .Release.Name }}
+      release: {{ .Values.global.prometheus.release_name }}
   spec:
     selector:
       matchLabels:
         app: {{ template "xray.name" . }}
-        component: metrics
+        component: {{ template "xray.name" . }}
     endpoints:
       - port: metrics
         interval: 15s

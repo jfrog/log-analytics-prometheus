@@ -1,41 +1,237 @@
-## Prometheus Input Plugin Configuration
-
-# input plugin that exports metrics
+# METRICS SEGMENT - BEGIN
 <source>
   @type prometheus
 </source>
 
 <source>
-  @type monitor_agent
+  @type tail
+  @id artifactory_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/artifactory-metrics.log.pos"
+  tag jfrog.metrics.rt
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
+</source>
+<source>
+  @type tail
+  @id observability_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/observability-metrics.log.pos"
+  tag jfrog.metrics.rt
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
 </source>
 
-<source>
-  @type forward
-</source>
+<filter jfrog.metrics.rt>
+  @type parser
+  key_name message
+  <parse>
+    @type regexp
+    expression ^(?<key>[\w]+)\ (?<value>[[+-]?\d(\.\d+)?[Ee][+-]?\d+]+)\ (?<timestamp>[\d]+)$
+    time_type string
+    time_key timestamp
+    time_format %s
+  </parse>
+  emit_invalid_record_to_error false
+</filter>
 
-# input plugin that collects metrics from MonitorAgent
-<source>
-  @type prometheus_monitor
-  <labels>
-    host ${hostname}
-  </labels>
-</source>
+<filter jfrog.metrics.rt>
+  @type record_transformer
+  enable_ruby true
+  renew_record false
+  <record>
+    ${record["key"]} ${if record["value"]["."] then record["value"].to_f else record["value"].to_i end}
+  </record>
+</filter>
 
-# input plugin that collects metrics for output plugin
-<source>
-  @type prometheus_output_monitor
-  <labels>
-    host ${hostname}
-  </labels>
-</source>
+<filter jfrog.metrics.rt>
+  @type prometheus
 
-# input plugin that collects metrics for in_tail plugin
-<source>
-  @type prometheus_tail_monitor
-  <labels>
-    host ${hostname}
-  </labels>
-</source>
+  <metric>
+    name jfrt_runtime_heap_freememory_bytes
+    desc Heap Free Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_freememory_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_maxmemory_bytes
+    desc Heap Max Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_maxmemory_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_totalmemory_bytes
+    desc Heap Total Memory in Bytes
+    type gauge
+    key jfrt_runtime_heap_totalmemory_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_runtime_heap_processors_total
+    desc Total Heap Processors
+    type gauge
+    key jfrt_runtime_heap_processors_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_active_total
+    desc Active DB Connections
+    type gauge
+    key jfrt_db_connections_active_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_idle_total
+    desc Idle DB Connections
+    type gauge
+    key jfrt_db_connections_idle_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_max_active_total
+    desc Max Active DB Connections
+    type gauge
+    key jfrt_db_connections_max_active_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_db_connections_min_idle_total
+    desc Min Idle DB Connections
+    type gauge
+    key jfrt_db_connections_min_idle_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_storage_current_total_size_bytes
+    desc Artifactory Storage in Bytes
+    type gauge
+    key jfrt_storage_current_total_size_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_used_bytes
+    desc Application Disk Used in Bytes
+    type gauge
+    key app_disk_used_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name app_disk_free_bytes
+    desc Application Disk Free in Bytes
+    type gauge
+    key app_disk_free_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_used_bytes
+    desc System Memory Used in Bytes
+    type gauge
+    key sys_memory_used_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_memory_free_bytes
+    desc System Memory Free in Bytes
+    type gauge
+    key sys_memory_free_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_cpu_ratio
+    desc System CPU Ratio
+    type gauge
+    key sys_cpu_ratio
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service artifactory
+    </labels>
+  </metric>
+
+</filter>
+
+# METRICS SEGMENT - END
+
+# LOG SEGMENT - BEGIN
 
 <source>
   @type tail
@@ -146,17 +342,20 @@
     @type regexp
     expression /^(?<timestamp>[^\|]*)\|(?<trace_id>[^\|]*)\|(?<remote_address>[^\|]*)\|(?<username>[^\|]*)\|(?<request_method>[^\|]*)\|(?<request_url>[^\|]*)\|(?<return_status>[^\|]*)\|(?<request_content_length>[^\|]*)\|(?<response_content_length>[^\|]*)\|(?<request_duration>[^\|]*)\|(?<request_user_agent>.+)$/m
     time_key timestamp
+    time_type mixed
     time_format %Y-%m-%dT%H:%M:%S.%LZ
+    time_format_fallbacks %Y-%m-%dT%H:%M:%SZ
     types response_content_length:integer, request_content_length:integer, return_status_code:integer
   </parse>
+  emit_invalid_record_to_error false
 </source>
 <filter jfrog.rt.artifactory.request>
   @type record_transformer
   enable_ruby true
   <record>
     user ${!record["username"].strip().start_with?("token") ? (record["username"].strip()) : ("")}
-    repo ${record["request_url"].strip().start_with?("/api/download") ? (record["request_url"].strip().split('/')[3]) : ("")}
-    artifact ${record["request_url"].strip().start_with?("/api/download") ? (val = record["request_url"].strip().split('/'); val[val.length()-1]) : ("")}
+    repo ${record["request_url"].include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].split('/')[3]) : ("")}
+    artifact ${record["request_url"].include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].split('/')[5]) : ("")}
     docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
     docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
     data_download ${record["response_content_length"] == -1 ? 0 : record["response_content_length"]}
@@ -242,6 +441,8 @@
   </parse>
 </source>
 
+# LOG SEGMENT - END
+
 # WHAT LOG IT WAS INTO THE JSON
 <filter jfrog.**>
   @type record_transformer
@@ -251,153 +452,19 @@
   </record>
 </filter>
 
-#JFROG CALL HOME
-<source>
-  @type exec
-  tag jfrog.callhome
-  command "curl --request GET 'http://localhost:8081/artifactory/api/system/version' -H 'Authorization: Bearer <TOKEN>'"
-  run_interval 1d
-  <parse>
-    @type json
-  </parse>
-</source>
-<filter jfrog.callhome>
-  @type record_transformer
-  renew_record true
-  keep_keys 'productId,features'
-  enable_ruby true
-  <record>
-    productId 'jfrogLogAnalyticsPrometheus/0.10.0'
-    features ${return([{"featureId" => "ArtifactoryVersion/" + record["version"]}])}
-  </record>
-</filter>
-<match jfrog.callhome>
-  @type http
-  endpoint http://localhost:8081/artifactory/api/system/usage
-  open_timeout 5
-  content_type application/json
-  headers {"Authorization":"Bearer <TOKEN>"}
-  <format>
-    @type json
-  </format>
-  <buffer>
-    flush_interval 5s
-  </buffer>
+<match jfrog.metrics.**>
+  @type stdout
 </match>
-#END CALL HOME
 
-<filter jfrog.rt.artifactory.request>
-  @type prometheus
-
-  <metric>
-    name jfrog_rt_data_download_total
-    type counter
-    desc artifactory data download
-    key data_download
-    <labels>
-      host ${hostname}
-      remote_address ${remote_address}
-      artifact ${artifact}
-      repo ${repo}
-      docker_image ${docker_image}
-      docker_repo ${docker_repo}
-      response_content_length ${response_content_length}
-      data_download ${data_download}
-      method ${request_method}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrog_rt_data_upload_total
-    type counter
-    desc artifactory data upload
-    key data_upload
-    <labels>
-      host ${hostname}
-      remote_address ${remote_address}
-      artifact ${artifact}
-      repo ${repo}
-      docker_image ${docker_image}
-      docker_repo ${docker_repo}
-      request_content_length ${request_content_length}
-      data_upload ${data_upload}
-      method ${request_method}
-    </labels>
-  </metric>
-
-  <metric>
-    name jfrog_rt_req_total
-    type counter
-    desc artifactory requests
-    <labels>
-      user ${user}
-      host ${hostname}
-      request_url ${request_url}
-      repo ${repo}
-      artifact ${artifact}
-      docker_image ${docker_image}
-      docker_repo ${docker_repo}
-      return_status ${return_status}
-      remote_address ${remote_address}
-      method ${request_method}
-    </labels>
-  </metric>
-</filter>
-
-<filter jfrog.rt.artifactory.service>
-@type prometheus
-  <metric>
-    name jfrog_rt_log_level_total
-    type counter
-    desc artifactory log_levels
-    <labels>
-      host ${hostname}
-      log_level ${log_level}
-    </labels>
-  </metric>
-
-  <metric>
-      name jfrog_rt_service_message_total
-      type counter
-      desc artifactory service message
-      <labels>
-        host ${hostname}
-        message ${message}
-      </labels>
-    </metric>
-</filter>
-
-<filter jfrog.rt.artifactory.access>
-@type prometheus
-
-<metric>
-  name jfrog_rt_access_total
-  type counter
-  desc artifactory access
-  <labels>
-    host ${hostname}
-    username ${username}
-    repo_path ${repo_path}
-    action_response ${action_response}
-    ip ${ip}
-  </labels>
-</metric>
-
-</filter>
-
-<filter jfrog.rt.access.audit>
-@type prometheus
-
-<metric>
-  name jfrog_rt_access_audit_total
-  type counter
-  desc artifactory access audit
-  <labels>
-    host ${hostname}
-    user ${user}
-    event_type ${event_type}
-    event ${event}
-  </labels>
-</metric>
-
-</filter>
+<match jfrog.rt.**>
+  @type loki
+  url LOKI_URL
+  flush_interval 1s
+  flush_at_shutdown true
+  buffer_chunk_limit 1m
+  line_format json
+  extra_labels {"agent":"fluentd", "job":"jfrtlogs", "service":"artifactory"}
+  <label>
+      filename
+  </label>
+</match>
