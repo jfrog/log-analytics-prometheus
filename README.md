@@ -34,7 +34,7 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
 
 
 ## Read me before installing
-### Important Note: This version replaces all previous implementations. This version is not an in-place upgrade to the existing solution from JFrog, but is full reinstall and hence there is no migration feasible. However the new example dashboards are a superset of previous dashboards providing more functionality. If there were customizations done previously they need to be incorporated into the new dashboard.
+### Important Note: This version replaces all previous implementations. This version is not an in-place upgrade to the existing solution from JFrog but is a full reinstall. Any dashboard customizations done on previous versions will need to be redone after this install.
 ```html
 This guide assumes the implementer is performing new setup, Changes to handle install in an existing setup will be highlighted where applicable.
     if prometheus is already installed and configured, we recommend to have the existing prometheus release name handy.
