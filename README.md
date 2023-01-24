@@ -58,7 +58,7 @@ Once the Pre-Requisites are met, to install Prometheus Kubernetes stack:
 ```
 kubectl create namespace jfrog-plg
 ```
-
+We will use jfrog-plg as the namespace throughout this document.
 #### Install the Prometheus chart:
 
 Add the required Helm Repositories:
@@ -206,6 +206,13 @@ Use 'kubectl port forwards' as mentioned in two terminal windows
 ![targets](images/ServiceDiscovery.jpeg)
 __
 2. Go to Grafana "http://localhost:3000" to add your Prometheus instance and Loki Instance as a datasource.
+   While specifying datasource url for Loki and Prometheus,please test and confirm that the connection is successful.
+
+For Loki, specify url value as http://loki:3100
+
+For Prometheus specify url value as http://prometheus-kube-prometheus-prometheus.jfrog-plg:9090/
+
+You can get the url content from the command ```kubectl get svc -n jfrog-plg```
 
 ```
    Default credentials (UNAME / PASSWD) for Prometheus grafana is ->  "admin" / "prom-operator"
@@ -215,6 +222,7 @@ __
 ![datasource](images/DataSourceAddition-02.jpeg)
 
 3. Finally in the Grafana, import the Dashboards and select the appropriate sources.
+
 
 ![dashboards](images/DashboardAddition-01.jpeg)
 ![dashboards](images/DashboardAddition-02.jpeg)
