@@ -203,7 +203,7 @@ Use 'kubectl port forwards' as mentioned in two terminal windows
 
 
 
-![targets](images/ServiceDiscovery.jpeg)
+![targets](https://github.com/jfrog/log-analytics-prometheus/blob/master/images/ServiceDiscovery.jpeg)
 __
 2. Go to Grafana "http://localhost:3000" to add your Prometheus instance and Loki Instance as a datasource.
    While specifying datasource url for Loki and Prometheus,please test and confirm that the connection is successful.
@@ -218,15 +218,15 @@ You can get the url content from the command ```kubectl get svc -n jfrog-plg```
    Default credentials (UNAME / PASSWD) for Prometheus grafana is ->  "admin" / "prom-operator"
 ```
 
-![datasource](images/DataSourceAddition-01.jpeg)
-![datasource](images/DataSourceAddition-02.jpeg)
+![datasource](https://github.com/jfrog/log-analytics-prometheus/blob/master/images/DataSourceAddition-01.jpeg)
+![datasource](https://github.com/jfrog/log-analytics-prometheus/blob/master/images/DataSourceAddition-02.jpeg)
 
 3. Finally in the Grafana, import the Dashboards and select the appropriate sources.
 
 
-![dashboards](images/DashboardAddition-01.jpeg)
-![dashboards](images/DashboardAddition-02.jpeg)
-![dashboards](images/DashboardAddition-03.jpeg)
+![dashboards](https://github.com/jfrog/log-analytics-prometheus/blob/master/images/DashboardAddition-01.jpeg)
+![dashboards](https://github.com/jfrog/log-analytics-prometheus/blob/master/images/DashboardAddition-02.jpeg)
+![dashboards](https://github.com/jfrog/log-analytics-prometheus/blob/master/images/DashboardAddition-03.jpeg)
 
 ## References
 * [Grafana Dashboards](https://grafana.com/docs/grafana/latest/features/dashboard/dashboards/)
