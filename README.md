@@ -103,24 +103,6 @@ helm upgrade --install "loki" grafana/loki-stack -n jfrog-plg
 
 ```
 
-# Configuration
-
-The configuration which is needed to be put before the JFrog products installation can take place are listed below,
-
-From any of the value files for applying charts i.e in `helm/jfrog-platform-values.yaml`, `helm/artifactory-values.yaml`, `helm/artifactory-ha-values.yaml` or `helm/xray-values.yaml`
-download and provide the following values for `global.prometheus.loki_url` and `global.prometheus.release_name` as per the installation if prometheus and loki are already installed
-
-```yaml
-global:
-   jfrog:
-      observability:
-         branch: master
-   prometheus:
-      loki_url: http:\/\/loki.jfrog-plg:3100
-      release_name: prometheus
-```
-
-
 ## JFrog Platform + Metrics via Helm ⎈
 
 Ensure Jfrog repo is added to helm. 
@@ -191,15 +173,23 @@ Example dashboards are included in the [grafana directory](grafana). These dashb
 - Artifactory Metrics and Log Analytics Dashboard [Download Here](grafana/ArtifactoryLogAnalyticsAndSystemMetrics.json)
 - Xray Metrics and Log Analytics Dashboard [Download Here](grafana/XrayLogAnalyticsAndSystemMetrics.json)
 
-## Assess the setup for working
+## To Assess the setup for Prometheus
 
-Use 'kubectl port forwards' as mentioned in two terminal windows
+Use 'kubectl port forward' as mentioned below in a separate  terminal window
 ```
    kubectl port-forward service/prometheus-operated 9090:9090 -n jfrog-plg
-   kubectl port-forward service/prometheus-grafana 3000:80 -n jfrog-plg
 ```
 
 1. Go to the web UI of the Prometheus instance "http://localhost:9090" and verify "Status -> Service Discovery", the list shows the new ServiceMonitor for Artifactory or Xray or Both.
+
+## To Assess the setup for Grafana
+
+use 'kubectl port forward' as mentioned below in a separate terminal window
+```
+   kubectl port-forward service/prometheus-grafana 3000:80 -n jfrog-plg
+
+```
+1. Go to Grafana "http://localhost:3000" anf follow directions in Step 2 below.
 
 
 
