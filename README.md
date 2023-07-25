@@ -184,7 +184,7 @@ Use 'kubectl port forward' as mentioned below in a separate  terminal window
 
 ## To Assess the setup for Grafana
 
-use 'kubectl port forward' as mentioned below in a seaparate terminal window
+use 'kubectl port forward' as mentioned below in a separate terminal window
 ```
    kubectl port-forward service/prometheus-grafana 3000:80 -n jfrog-plg
 
