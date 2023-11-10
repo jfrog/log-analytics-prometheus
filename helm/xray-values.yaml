@@ -1,9 +1,9 @@
 global:
   jfrog:
     observability:
-      branch: master
+      branch: Upgrading_fluentd_image
   prometheus: 
-    loki_url: http:\/\/loki.jfrog-plg:3100
+    loki_url: http://loki.jfrog-plg:3100
     release_name: prometheus
 unifiedUpgradeAllowed: true
 databaseUpgradeReady: true
@@ -21,20 +21,23 @@ rabbitmq:
     password: guest
 common:
   preStartCommand: "export JF_OBSERVABILITY_METRICS_ENABLED=true"
-  customSidecarContainers: |
-    - name: "xray-fluentd-sidecar"
-      image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"
-      imagePullPolicy: "IfNotPresent"
+  customInitContainersBegin: |
+    - name: "download-fluentd-conf-on-persistent-volume"
+      image: "{{ .Values.initContainerImage }}"
+      imagePullPolicy: "{{ .Values.imagePullPolicy }}"
       command:
         - 'sh'
         - '-c'
         - >
-          gem install fluent-plugin-prometheus --no-doc;
-          curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent.conf.xray -o fluent.conf.xray;
-          cp fluent.conf.xray fluent.tmp.conf;
-          sed -i -e 's/LOKI_URL/{{ .Values.global.prometheus.loki_url }}/g' fluent.tmp.conf;
-          mv fluent.tmp.conf fluentd.conf;
-          fluentd -v -c fluentd.conf;
+          mkdir -p {{ .Values.xray.persistence.mountPath }}/etc/fluentd/;
+          curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent_metrics.conf.xray -o {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf;
+      volumeMounts:
+        - mountPath: "{{ .Values.xray.persistence.mountPath }}"
+          name: data-volume
+  customSidecarContainers: |
+    - name: "xray-platform-fluentd-sidecar"
+      image: "releases-pts-observability-fluentd.jfrog.io/fluentd:2.1"
+      imagePullPolicy: "IfNotPresent"
       volumeMounts:
         - mountPath: "{{ .Values.xray.persistence.mountPath }}"
           name: data-volume
@@ -43,6 +46,8 @@ common:
           value: {{ .Values.xray.persistence.mountPath }}
         - name: FLUENTD_CONF
           value: ../../../../{{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
+        - name: LOKI_URL
+          value: {{ .Values.global.prometheus.loki_url }}
 ## Allows to add additional kubernetes resources
 ## Use --- as a separator between multiple resources
 ## For an example, refer - https://github.com/jfrog/log-analytics-prometheus
