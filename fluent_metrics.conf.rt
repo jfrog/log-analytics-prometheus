@@ -458,7 +458,7 @@
 
 <match jfrog.rt.**>
   @type loki
-  url LOKI_URL
+  url "#{ENV['LOKI_URL']}"
   flush_interval 1s
   flush_at_shutdown true
   buffer_chunk_limit 1m
