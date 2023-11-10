@@ -1,7 +1,7 @@
 global:
   jfrog:
     observability:
-      branch: Upgrading_fluentd_image
+      branch: master
   prometheus: 
     loki_url: http://loki.jfrog-plg:3100
     release_name: prometheus
