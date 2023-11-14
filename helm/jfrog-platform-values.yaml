@@ -3,7 +3,7 @@ global:
     observability:
       branch: master
   prometheus:
-    loki_url: http:\/\/loki.jfrog-plg:3100
+    loki_url: http://loki.jfrog-plg:3100
     release_name: prometheus
 installerInfo: '{ "productId": "Helm_prometheus_jfrog_platform/{{ .Chart.Version }}", "features": [ { "featureId": "ArtifactoryVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}" }, { "featureId": "{{ if .Values.postgresql.enabled }}postgresql{{ else }}{{ .Values.database.type }}{{ end }}/0.0.0" }, { "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}" },  { "featureId": "Channel/Helm_prometheus_jfrog_platform" } ] }'
 artifactory:
@@ -11,26 +11,33 @@ artifactory:
     openMetrics:
       enabled: true
     replicaCount: 1
+    customInitContainersBegin: |
+      - name: "prepare-fluentd-conf-on-persistent-volume"
+        image: "{{ .Values.initContainerImage }}"
+        imagePullPolicy: "{{ .Values.artifactory.image.pullPolicy }}"
+        command:
+          - 'sh'
+          - '-c'
+          - >
+            mkdir -p {{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/;
+            curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent_metrics.conf.rt -o {{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
+        volumeMounts:
+          - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
+            name: artifactory-volume
     customSidecarContainers: |
-        - name: "artifactory-fluentd-sidecar"
-          image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"
-          imagePullPolicy: "IfNotPresent"
-          command:
-            - 'sh'
-            - '-c'
-            - >
-              gem install fluent-plugin-prometheus --no-doc;
-              curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent_metrics.conf.rt -o fluentd_metrics.conf;
-              cp fluentd_metrics.conf fluent.tmp.conf;
-              sed -i -e 's/LOKI_URL/{{ .Values.global.prometheus.loki_url }}/g' fluent.tmp.conf;
-              mv fluent.tmp.conf fluentd.conf;
-              fluentd -v -c fluentd.conf
-          volumeMounts:
-            - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
-              name: artifactory-volume
-          env:
-            - name: JF_PRODUCT_DATA_INTERNAL
-              value: {{ .Values.artifactory.persistence.mountPath }}
+      - name: "artifactory-fluentd-sidecar"
+        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:2.1"
+        imagePullPolicy: "IfNotPresent"
+        volumeMounts:
+          - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
+            name: artifactory-volume
+        env:
+          - name: JF_PRODUCT_DATA_INTERNAL
+            value: {{ .Values.artifactory.persistence.mountPath }}
+          - name: LOKI_URL
+            value: {{ .Values.global.prometheus.loki_url }}
+          - name: FLUENTD_CONF
+            value: ../../../../{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
   additionalResources: |
     apiVersion: v1
     kind: Service
@@ -85,20 +92,23 @@ xray:
   replicaCount: 1
   common:
     preStartCommand: "export JF_OBSERVABILITY_METRICS_ENABLED=true"
-    customSidecarContainers: |
-      - name: "xray-fluentd-sidecar"
-        image: "partnership-public-images.jfrog.io/fluentd/fluentd:1.18.0"
-        imagePullPolicy: "IfNotPresent"
+    customInitContainersBegin: |
+      - name: "download-fluentd-conf-on-persistent-volume"
+        image: "{{ .Values.initContainerImage }}"
+        imagePullPolicy: "{{ .Values.imagePullPolicy }}"
         command:
           - 'sh'
           - '-c'
           - >
-            gem install fluent-plugin-prometheus --no-doc;
-            curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent_metrics.conf.xray -o fluent.conf.xray;
-            cp fluent.conf.xray fluent.tmp.conf;
-            sed -i -e 's/LOKI_URL/{{ .Values.global.prometheus.loki_url }}/g' fluent.tmp.conf;
-            mv fluent.tmp.conf fluentd.conf;
-            fluentd -v -c fluentd.conf;
+            mkdir -p {{ .Values.xray.persistence.mountPath }}/etc/fluentd/;
+            curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent_metrics.conf.xray -o {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf;
+        volumeMounts:
+          - mountPath: "{{ .Values.xray.persistence.mountPath }}"
+            name: data-volume
+    customSidecarContainers: |
+      - name: "xray-platform-fluentd-sidecar"
+        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:2.1"
+        imagePullPolicy: "IfNotPresent"
         volumeMounts:
           - mountPath: "{{ .Values.xray.persistence.mountPath }}"
             name: data-volume
@@ -107,6 +117,8 @@ xray:
             value: {{ .Values.xray.persistence.mountPath }}
           - name: FLUENTD_CONF
             value: ../../../../{{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
+          - name: LOKI_URL
+            value: {{ .Values.global.prometheus.loki_url }}
   additionalResources: |
     apiVersion: v1
     kind: Service
