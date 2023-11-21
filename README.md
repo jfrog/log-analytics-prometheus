@@ -6,35 +6,29 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
 2. Loki - the component where log data gets ingested
 3. Grafana - the component where data visualization is achieved via prebuilt dashboards
 
-## Pre-Requisites
+## Prerequisites
 1. Working and configured Kubernetes Cluster - Amazon EKS / Google GKE / Azure AKS / Docker Desktop / Minikube
-   1. Recommended Kubernetes Version 1.25.2 and above
-   2. For Google GKE, refer [GKE Guide](https://cloud.google.com/kubernetes-engine/docs/how-to)
-   3. For Amazon EKS, refer [EKS Guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
-   4. For Azure AKS, refer [AKS Guide](https://docs.microsoft.com/en-us/azure/aks/)
-   5. For Docker Desktop and Kubernetes, refer [DOCKER Guide](https://docs.docker.com/desktop/kubernetes/)
+   * Recommended Kubernetes Version 1.25.2 and above
+   * For Google GKE, refer [GKE Guide](https://cloud.google.com/kubernetes-engine/docs/how-to)
+   * For Amazon EKS, refer [EKS Guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
+   * For Azure AKS, refer [AKS Guide](https://docs.microsoft.com/en-us/azure/aks/)
+   * For Docker Desktop and Kubernetes, refer [DOCKER Guide](https://docs.docker.com/desktop/kubernetes/)
 2. 'kubectl' utility on the workstation which is capable of connecting to the Kubernetes cluster
-   1. For Installation and usage refer [KUBECTL Guide](https://kubernetes.io/docs/tasks/tools/)
+   * For Installation and usage refer [KUBECTL Guide](https://kubernetes.io/docs/tasks/tools/)
 3. HELM v3 Installed
-   1. For Installation and usage refer [HELM Guide](https://helm.sh/docs/intro/install/)
+   * For Installation and usage refer [HELM Guide](https://helm.sh/docs/intro/install/)
 4. Versions supported and Tested:
 
-
-   Jfrog Platform: 10.9.2
-
-   Artifactory : 7.46.10
-
-   Xray : 3.59.4
-
-   Prometheus:2.39.1
-
-   Grafana:9.2.3
-
-   Loki: 2.6.1
+   * Jfrog Platform: 10.9.2
+   * Artifactory : 7.46.10
+   * Xray : 3.59.4
+   * Prometheus:2.39.1
+   * Grafana:9.2.3
+   * Loki: 2.6.1
 
 
 ## Read me before installing
-### Important Note: This version replaces all previous implementations. This version is not an in-place upgrade to the existing solution from JFrog but is a full reinstall. Any dashboard customizations done on previous versions will need to be redone after this install.
+** Important Note**: This version replaces all previous implementations. This version is not an in-place upgrade to the existing solution from JFrog but is a full reinstall. Any dashboard customizations done on previous versions will need to be redone after this install.
 ```html
 This guide assumes the implementer is performing new setup, Changes to handle install in an existing setup will be highlighted where applicable.
     if prometheus is already installed and configured, we recommend to have the existing prometheus release name handy.
