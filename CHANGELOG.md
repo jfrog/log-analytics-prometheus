@@ -1,6 +1,13 @@
 # JFrog Log Analytics Changelog
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.2] - Jan 10, 2024
+* Upgrading fluentd image to the latest image from releases.jfrog.io (Fluentd version 1.16.3)
+
+## [1.0.1] - Nov 14, 2023
+* Upgrading fluentd image to the latest image from releases.jfrog.io (Fluentd version 1.15.2)
+* Removing sed substitutions in helm charts to eliminate human errors in loki URL
+
 ## [1.0.0] - Dec 12, 2022
 * Prometheus Solution Redesigned
 * Addition of Loki Component for Log Data Ingestion
