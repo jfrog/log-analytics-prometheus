@@ -3,12 +3,15 @@ global:
     observability:
       branch: master
   prometheus: 
-    loki_url: http://loki.jfrog-plg:3100
     release_name: prometheus
 unifiedUpgradeAllowed: true
 databaseUpgradeReady: true
 xray:
   jfrogUrl: http://artifactory-artifactory.rt:8082
+  metrics:
+    enabled: true
+  openMetrics:
+    enabled: true
 replicaCount: 1
 postgresql:
   postgresqlPassword: xray
@@ -30,13 +33,13 @@ common:
         - '-c'
         - >
           mkdir -p {{ .Values.xray.persistence.mountPath }}/etc/fluentd/;
-          curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/{{ .Values.global.jfrog.observability.branch }}/fluent_metrics.conf.xray -o {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf;
+          curl https://raw.githubusercontent.com/jfrog/log-analytics-prometheus/PTRENG-5914/fluent_metrics.conf.xray -o {{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf;
       volumeMounts:
         - mountPath: "{{ .Values.xray.persistence.mountPath }}"
           name: data-volume
   customSidecarContainers: |
     - name: "xray-platform-fluentd-sidecar"
-      image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.0"
+      image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.1"
       imagePullPolicy: "IfNotPresent"
       volumeMounts:
         - mountPath: "{{ .Values.xray.persistence.mountPath }}"
@@ -47,7 +50,7 @@ common:
         - name: FLUENTD_CONF
           value: ../../../../{{ .Values.xray.persistence.mountPath }}/etc/fluentd/fluentd.conf
         - name: LOKI_URL
-          value: {{ .Values.global.prometheus.loki_url }}
+          value: http://loki.{{ .Release.Namespace }}:3100
 ## Allows to add additional kubernetes resources
 ## Use --- as a separator between multiple resources
 ## For an example, refer - https://github.com/jfrog/log-analytics-prometheus

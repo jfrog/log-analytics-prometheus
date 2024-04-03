@@ -3,7 +3,6 @@ global:
     observability:
       branch: master
   prometheus:
-    loki_url: http://loki.jfrog-plg:3100
     release_name: prometheus
 installerInfo: '{ "productId": "Helm_prometheus_jfrog_platform/{{ .Chart.Version }}", "features": [ { "featureId": "ArtifactoryVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}" }, { "featureId": "{{ if .Values.postgresql.enabled }}postgresql{{ else }}{{ .Values.database.type }}{{ end }}/0.0.0" }, { "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}" },  { "featureId": "Channel/Helm_prometheus_jfrog_platform" } ] }'
 artifactory:
@@ -35,7 +34,7 @@ artifactory:
           - name: JF_PRODUCT_DATA_INTERNAL
             value: {{ .Values.artifactory.persistence.mountPath }}
           - name: LOKI_URL
-            value: {{ .Values.global.prometheus.loki_url }}
+            value: http://loki.{{ .Release.Namespace }}:3100
           - name: FLUENTD_CONF
             value: ../../../../{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
   additionalResources: |

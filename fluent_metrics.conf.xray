@@ -5,7 +5,7 @@
 
 <source>
   @type tail
-  @id artifactory_metrics_tail
+  @id xray_metrics_tail
   path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log"
   pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log.pos"
   tag jfrog.metrics.xr
@@ -63,7 +63,7 @@
     name sys_cpu_ratio
     desc System CPU Ratio
     type gauge
-    key sys_cpu_ratio
+    key _sys_cpu_ratio
     <labels>
       agent fluentd
       host ${hostname}
@@ -75,7 +75,7 @@
     name sys_memory_used_bytes
     desc System Memory Used in Bytes
     type gauge
-    key sys_memory_used_bytes
+    key _sys_memory_used_bytes
     <labels>
       agent fluentd
       host ${hostname}
