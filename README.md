@@ -23,17 +23,17 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
    1. For Installation and usage refer [HELM Guide](https://helm.sh/docs/intro/install/)
 4. Versions supported and Tested:
 
-   Jfrog Platform: 10.9.2
+   Jfrog Platform: 10.17.3
 
-   Artifactory : 7.46.10
+   Artifactory : 7.77.8
 
-   Xray : 3.59.4
+   Xray : 3.92.7
 
-   Prometheus:2.39.1
+   Prometheus 2.51.0
 
-   Grafana:9.2.3
+   Grafana:10.4.0
 
-   Loki: 2.6.1
+   Loki: 2.9.6
 
 ## Read me before installing
 
@@ -159,7 +159,9 @@ Then helm install the Artifactory or Artifactory HA charts:
 
 Artifactory ⎈:
 
-helm install `artifactory` chart (using the above generated join and master keys). Note that you need to be at the root of this repository folder to have the helm values yaml available
+helm install `artifactory` chart (using the above generated join and master keys).
+
+**💡Note: You need to be at the root of this repository folder to have `helm/artifactory-values.yaml` file available for the following command**
 
 ```bash
 helm upgrade --install artifactory jfrog/artifactory \
@@ -173,7 +175,9 @@ helm upgrade --install artifactory jfrog/artifactory \
 
 Artifactory-HA ⎈:
 
-helm install `artifactory-ha` chart (using the above generated join and master keys). Note that you need to be at the root of this repository folder to have the helm values yaml available
+helm install `artifactory-ha` chart (using the above generated join and master keys).
+
+**💡Note: You need to be at the root of this repository folder to have `helm/artifactory-ha-values.yaml` file available for the following command**
 
 ```bash
 helm upgrade --install artifactory-ha jfrog/artifactory-ha \
@@ -183,7 +187,7 @@ helm upgrade --install artifactory-ha jfrog/artifactory-ha \
        -n $INST_NAMESPACE
 ```
 
-**If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
+**💡Note: If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
 Note the above examples are only references you will need additional parameters to configure TLS, binary blob storage, or other common Artifactory features.
 
 This will complete the necessary configuration for Artifactory and expose a new service monitor `servicemonitor-artifactory` to expose metrics to Prometheus.
@@ -200,7 +204,9 @@ Generate master keys for the Xray installation:
 export XRAY_MASTER_KEY=$(openssl rand -hex 32)
 ````
 
-Use the same `JOIN_KEY` from the Artifactory installation, in order to connect Xray to Artifactory. Note, that you need to be at the root of this repository folder to have the `helm/xray-values.yaml` available
+Use the same `JOIN_KEY` from the Artifactory installation, in order to connect Xray to Artifactory.
+
+**💡Note: You need to be at the root of this repository folder to have `helm/xray-values.yaml` file available for the following command**
 
 ```bash
 # getting Artifactory URL
@@ -217,6 +223,8 @@ helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://$RT_SERVICE_IP
 ```
 
 **If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
+
+# Configuration
 
 ## To Assess the setup for Prometheus
 
@@ -270,7 +278,7 @@ After downlowding the dashboards go to "Dashboards" -> "Import":
 
 Pick `Uplaod JSON file` and upload Artifactory and Xray dashboards files that you downloaded in the previous step.
 
-Import the Dashboards and select the appropriate sources
+Import the Dashboards and select the appropriate sources (Loki and Prometheus)
 
 ![dashboards](images/DashboardAddition-02.jpeg)
 
