@@ -5,7 +5,7 @@
 
 <source>
   @type tail
-  @id artifactory_metrics_tail
+  @id xray_metrics_tail
   path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log"
   pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/xray-server-metrics.log.pos"
   tag jfrog.metrics.xr
@@ -63,7 +63,7 @@
     name sys_cpu_ratio
     desc System CPU Ratio
     type gauge
-    key sys_cpu_ratio
+    key _sys_cpu_ratio
     <labels>
       agent fluentd
       host ${hostname}
@@ -75,7 +75,7 @@
     name sys_memory_used_bytes
     desc System Memory Used in Bytes
     type gauge
-    key sys_memory_used_bytes
+    key _sys_memory_used_bytes
     <labels>
       agent fluentd
       host ${hostname}
@@ -87,7 +87,7 @@
     name sys_memory_free_bytes
     desc System Memory Free in Bytes
     type gauge
-    key sys_memory_free_bytes
+    key _sys_memory_free_bytes
     <labels>
       agent fluentd
       host ${hostname}
@@ -99,7 +99,7 @@
     name app_disk_free_bytes
     desc Application Disk Free in Bytes
     type gauge
-    key app_disk_free_bytes
+    key _app_disk_free_bytes
     <labels>
       agent fluentd
       host ${hostname}
@@ -111,7 +111,7 @@
     name app_disk_used_bytes
     desc Application Disk Used in Bytes
     type gauge
-    key app_disk_used_bytes
+    key _app_disk_used_bytes
     <labels>
       agent fluentd
       host ${hostname}
@@ -123,7 +123,7 @@
     name go_memstats_heap_objects_total
     desc GO Memory Statistics Total Heap Objects
     type gauge
-    key go_memstats_heap_objects_total
+    key _go_memstats_heap_objects_total
     <labels>
       agent fluentd
       host ${hostname}
@@ -135,7 +135,7 @@
     name go_memstats_heap_allocated_bytes
     desc GO Memory Statistics Heap Allocated in Bytes
     type gauge
-    key go_memstats_heap_allocated_bytes
+    key _go_memstats_heap_allocated_bytes
     <labels>
       agent fluentd
       host ${hostname}
@@ -147,7 +147,7 @@
     name go_memstats_heap_in_use_bytes
     desc GO Memory Statistics Heap Used in Bytes
     type gauge
-    key go_memstats_heap_in_use_bytes
+    key _go_memstats_heap_in_use_bytes
     <labels>
       agent fluentd
       host ${hostname}
@@ -159,7 +159,7 @@
     name go_memstats_heap_reserved_bytes
     desc GO Memory Statistics Heap Reserved in Bytes
     type gauge
-    key go_memstats_heap_reserved_bytes
+    key _go_memstats_heap_reserved_bytes
     <labels>
       agent fluentd
       host ${hostname}
