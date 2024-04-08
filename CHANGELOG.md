@@ -2,6 +2,10 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.4] - April 09, 2024
+
+* Fix access log regex pattern to match log structure
+
 ## [1.0.3] - April 05, 2024
 
 * Adding multi-arch support (amd64, arm64) for the sidecar docker image to allow also deployment in ARM environments
