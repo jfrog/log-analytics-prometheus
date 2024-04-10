@@ -25,13 +25,13 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
 
    Jfrog Platform: 10.17.3
 
-   Artifactory : 7.77.8
+   Artifactory: 7.77.8
 
-   Xray : 3.92.7
+   Xray: 3.92.7
 
-   Prometheus 2.51.0
+   Prometheus: 2.51.0
 
-   Grafana:10.4.0
+   Grafana: 10.4.0
 
    Loki: 2.9.6
 
@@ -116,7 +116,7 @@ helm upgrade --install "loki" --values helm/loki-values.yaml grafana/loki -n $IN
 * "loki" will be the service name, the url to access loki as a datasource can be visualised as http://<service_name>.<namespace>:<port>
       ex: http://loki.$INST_NAMESPACE:3100 will be the "loki_url" value
 
-* version 2.9.3 is the most recent loki version at the time of writing the document
+* version 2.9.6 is the most recent loki version at the time of writing the document
       if there is a need to deploy this exact version, change the version value in "--set loki.image.tag=my_desired_version" to your desired version.
 
 ```

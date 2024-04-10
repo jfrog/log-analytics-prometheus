@@ -414,6 +414,10 @@
     time_format %Y-%m-%dT%H:%M:%SZ
   </parse>
 </source>
+# example access logs:
+# 2024-04-09T22:47:56.186Z [4147ce79c667c62c ] [ACCEPTED LOGIN]   for client : jfmc@01fdq6vwvc110f0bsyy5cc1xxr / 127.0.0.1 [token]
+# 2024-04-09T22:48:09.057Z [23805d42fe9d707e] [ACCEPTED DOWNLOAD]   for client : jfmc@01fdq6vwvc110f0bsyy5cc1xxr / 127.0.0.1 [apiKey]
+# 2024-04-09T22:48:35.240Z [581d24eaf7913e4b] [DENIED LOGIN]   for client : NA / 198.145.32.100
 <source>
   @type tail
   @id artifactory_access_tail
@@ -422,7 +426,7 @@
   tag jfrog.rt.artifactory.access
   <parse>
     @type regexp
-    expression /^(?<timestamp>[^ ]*) \[(?<trace_id>[^\]]*)\] \[(?<action_response>[^\]]*)\] (?<repo_path>.*) for client : (?<username>.+)/(?<ip>.+)\.$/m
+    expression /^(?<timestamp>[^\s]*) \[(?<trace_id>[^\s\]]*)\s*\] \[(?<action_response>[^\]\r\n]*)\] (?<repo_path>[^\s]*)? *for client : *(?<username>[^\s]*) *\/ *(?<ip>[^\s]*)? ?(\[(?<token>[^\s]*)\])?$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>
