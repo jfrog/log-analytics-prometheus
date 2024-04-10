@@ -116,7 +116,7 @@ helm upgrade --install "loki" --values helm/loki-values.yaml grafana/loki -n $IN
 * "loki" will be the service name, the url to access loki as a datasource can be visualised as http://<service_name>.<namespace>:<port>
       ex: http://loki.$INST_NAMESPACE:3100 will be the "loki_url" value
 
-* version 2.9.3 is the most recent loki version at the time of writing the document
+* This instaation uses the most recent loki version at the time of writing the document (exact version mentioned at the Pre-Requisites section)
       if there is a need to deploy this exact version, change the version value in "--set loki.image.tag=my_desired_version" to your desired version.
 
 ```

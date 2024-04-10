@@ -422,7 +422,7 @@
   tag jfrog.rt.artifactory.access
   <parse>
     @type regexp
-    expression /^(?<timestamp>[^\s]*) \[(?<trace_id>[^\]\s]*)\] \[(?<action_response>[^\]\r\n]*)\] (?<repo_path>[^\s]*)? *for client : *(?<username>[^\s]*) *\/ *(?<ip>[^\s]*)?[\.\s]?(\[(?<token>[^\s]*)\])?$/m
+    expression /^(?<timestamp>[^\s]*) \[(?<trace_id>[^\s\]]*)\s*\] \[(?<action_response>[^\]\r\n]*)\] (?<repo_path>[^\s]*)? *for client : *(?<username>[^\s]*) *\/ *(?<ip>[^\s]*)? ?(\[(?<token>[^\s]*)\])?$/m
     time_key timestamp
     time_format %Y-%m-%dT%H:%M:%S.%LZ
   </parse>

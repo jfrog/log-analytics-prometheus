@@ -1,7 +1,7 @@
 global:
   jfrog:
     observability:
-      branch: master
+      branch: testcontext
   prometheus: 
     release_name: prometheus
 installerInfo: '{ "productId": "Helm_prometheus_artifactory/{{ .Chart.Version }}", "features": [ { "featureId": "ArtifactoryVersion/{{ default .Chart.AppVersion .Values.artifactory.image.version }}" }, { "featureId": "{{ if .Values.postgresql.enabled }}postgresql{{ else }}{{ .Values.database.type }}{{ end }}/0.0.0" }, { "featureId": "Platform/{{ default "kubernetes" .Values.installer.platform }}" },  { "featureId": "Channel/Helm_prometheus_artifactory" } ] }'
