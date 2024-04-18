@@ -2,6 +2,10 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.5] - April 18, 2024
+
+* Fix fluentd regex to fetch correctly docker image and repo names
+
 ## [1.0.4] - April 09, 2024
 
 * Fix access log regex pattern to match log structure
