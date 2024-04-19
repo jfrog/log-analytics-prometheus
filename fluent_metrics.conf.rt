@@ -354,10 +354,10 @@
   enable_ruby true
   <record>
     user ${!record["username"].strip().start_with?("token") ? (record["username"].strip()) : ("")}
-    repo ${record["request_url"].include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].split('/')[3]) : ("")}
-    artifact ${record["request_url"].include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].split('/')[5]) : ("")}
-    docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") ? (record["request_url"].strip().split('/')[3]) : ("")}
-    docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2")  ? (record["request_url"].strip().split('/')[5]) : ("")}
+    repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") && !record["request_url"].include?("v2/token") ? (record["request_url"].strip())[/api\/docker\/(.+)\/(?:v2)/, 1] : ("")}
+    artifact ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") && !record["request_url"].include?("v2/token") ? (record["request_url"].strip())[/v2\/(.+)\/(?:manifests|blobs)/, 1] : ("")}
+    docker_repo ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") && !record["request_url"].include?("v2/token") ? (record["request_url"].strip())[/api\/docker\/(.+)\/(?:v2)/, 1] : ("")}
+    docker_image ${record["request_url"].strip().include?("/api/docker") && !record["request_url"].include?("/api/docker/null") && !record["request_url"].include?("/api/docker/v2") && !record["request_url"].include?("v2/token") ? (record["request_url"].strip())[/v2\/(.+)\/(?:manifests|blobs)/, 1] : ("")}
     data_download ${record["response_content_length"] == -1 ? 0 : record["response_content_length"]}
     data_upload ${record["request_content_length"] == -1 ? 0 : record["request_content_length"]}
   </record>
