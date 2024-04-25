@@ -2,6 +2,10 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.6] - April 25, 2024
+
+* Fix Artifactory Grafana dashbaord to count correctly number of accessed docker images and repos
+
 ## [1.0.5] - April 18, 2024
 
 * Fix fluentd regex to fetch correctly docker image and repo names
