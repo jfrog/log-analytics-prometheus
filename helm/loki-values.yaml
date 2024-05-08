@@ -1,3 +1,6 @@
+# This loki-values is only compatible with loki 2.x.
+# For loki 3.x helm values please visit https://grafana.com/docs/loki/latest/setup/install/helm/
+deploymentMode: SingleBinary
 loki:
   commonConfig:
     replication_factor: 1
