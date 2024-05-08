@@ -109,8 +109,10 @@ helm repo update
 Install the chart:
 
 ```bash
-helm upgrade --install "loki" --values helm/loki-values.yaml grafana/loki -n $INST_NAMESPACE
+helm upgrade --install "loki" --values helm/loki-values.yaml grafana/loki --version 5.48.0 -n $INST_NAMESPACE
 ```
+
+:bulb: The above helm command is hard-coding the `loki` chart version to 5.48.0, since we only tested it with `loki` 2.9.6. `loki` 3.x charts (v6.0.x and up) have a breaking change, so if you would like to install `loki` 3.x please visit the [loki's official docs](https://grafana.com/docs/loki/latest/setup/install/helm/) and provide your own `loki-values.yaml`
 
 ```yaml
 * "loki" will be the service name, the url to access loki as a datasource can be visualised as http://<service_name>.<namespace>:<port>

@@ -2,6 +2,10 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.7] - May 8, 2024
+
+* Fix issue where loki helm values file not compatible with loki 3.x
+
 ## [1.0.6] - April 25, 2024
 
 * Fix Artifactory Grafana dashbaord to count correctly number of accessed docker images and repos
