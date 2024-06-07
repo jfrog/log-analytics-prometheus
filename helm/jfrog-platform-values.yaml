@@ -12,7 +12,7 @@ artifactory:
     replicaCount: 1
     customInitContainersBegin: |
       - name: "prepare-fluentd-conf-on-persistent-volume"
-        image: "{{ .Values.initContainerImage }}"
+        image: {{ include "artifactory.getImageInfoByValue" (list . "initContainers") }}
         imagePullPolicy: "{{ .Values.artifactory.image.pullPolicy }}"
         command:
           - 'sh'
@@ -25,7 +25,7 @@ artifactory:
             name: artifactory-volume
     customSidecarContainers: |
       - name: "artifactory-fluentd-sidecar"
-        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.2"
+        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.3"
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
           - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
