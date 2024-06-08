@@ -26,7 +26,7 @@ common:
   preStartCommand: "export JF_OBSERVABILITY_METRICS_ENABLED=true"
   customInitContainersBegin: |
     - name: "download-fluentd-conf-on-persistent-volume"
-      image: "{{ .Values.initContainerImage }}"
+      image: {{ include "xray.getImageInfoByValue" (list . "initContainers") }}
       imagePullPolicy: "{{ .Values.imagePullPolicy }}"
       command:
         - 'sh'
@@ -39,7 +39,7 @@ common:
           name: data-volume
   customSidecarContainers: |
     - name: "xray-platform-fluentd-sidecar"
-      image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.2"
+      image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.3"
       imagePullPolicy: "IfNotPresent"
       volumeMounts:
         - mountPath: "{{ .Values.xray.persistence.mountPath }}"

@@ -2,6 +2,12 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.8] - June 7, 2024
+
+* [BREAKING] Adding deprecation notice for partnership-pts-observability.jfrog.io docker registry
+* FluentD sidecar version bumped to 4.3, to upgrade base image to bitnami/fluentd 1.16.5
+* Update helm charts for FluentD sidecar to match recent init containers charts changes in JFrog's official charts
+
 ## [1.0.7] - May 8, 2024
 
 * Fix issue where loki helm values file not compatible with loki 3.x

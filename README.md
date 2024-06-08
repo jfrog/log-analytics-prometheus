@@ -47,6 +47,10 @@ This guide assumes the implementer is performing new setup, Changes to handle in
 
 If Prometheus and Loki are already available you can skip the installation section and proceed to [Configuration Section](#Configuration).
 
+> [!WARNING]
+>
+> The old docker registry `partnership-pts-observability.jfrog.io`, which contains older versions of this integration is now deprecated. We'll keep the existing docker images on this old registry until August 1st, 2024. After that date, this registry will no longer be available. Please `helm upgrade` your JFrog kubernetes deployment in order to pull images as specified on the above helm value files, from the new `releases-pts-observability-fluentd.jfrog.io` registry. Please do so in order to avoid `ImagePullBackOff` errors in your deployment once this registry is gone.
+
 # Installation
 
 ## Installing Prometheus, Loki and Grafana on Kubernetes
