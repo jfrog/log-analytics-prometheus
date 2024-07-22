@@ -222,8 +222,6 @@ export RT_SERVICE_IP=$(kubectl get svc -n $INST_NAMESPACE artifactory-artifactor
 helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://$RT_SERVICE_IP \
        --set xray.masterKey=$XRAY_MASTER_KEY \
        --set xray.joinKey=$JOIN_KEY \
-       --set xray.openMetrics.enabled=true \
-       --set xray.metrics.enabled=true \
        -f helm/xray-values.yaml \
        -n $INST_NAMESPACE
 ```
