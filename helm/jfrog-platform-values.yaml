@@ -25,7 +25,7 @@ artifactory:
             name: artifactory-volume
     customSidecarContainers: |
       - name: "artifactory-fluentd-sidecar"
-        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.3"
+        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.5"
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
           - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
@@ -36,7 +36,7 @@ artifactory:
           - name: LOKI_URL
             value: http://loki.{{ .Release.Namespace }}:3100
           - name: FLUENTD_CONF
-            value: ../../../../{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
+            value: ../../../..{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
   additionalResources: |
     apiVersion: v1
     kind: Service
@@ -106,7 +106,7 @@ xray:
             name: data-volume
     customSidecarContainers: |
       - name: "xray-platform-fluentd-sidecar"
-        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:2.1"
+        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.5"
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
           - mountPath: "{{ .Values.xray.persistence.mountPath }}"

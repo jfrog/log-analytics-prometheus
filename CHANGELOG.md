@@ -2,6 +2,11 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.9] - July 22, 2024
+
+* FluentD sidecar version bumped to 4.5, to upgrade base image to bitnami/fluentd 1.17.0
+* Fixing metrics documentation  
+
 ## [1.0.8] - June 7, 2024
 
 * [BREAKING] Adding deprecation notice for partnership-pts-observability.jfrog.io docker registry

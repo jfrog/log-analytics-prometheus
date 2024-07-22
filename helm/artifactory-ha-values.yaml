@@ -23,7 +23,7 @@ artifactory:
           name: volume
   customSidecarContainers: |
     - name: "artifactory-fluentd-sidecar"
-      image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.3"
+      image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.5"
       imagePullPolicy: "IfNotPresent"
       volumeMounts:
         - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
@@ -34,7 +34,7 @@ artifactory:
         - name: LOKI_URL
           value: http://loki.{{ .Release.Namespace }}:3100
         - name: FLUENTD_CONF
-          value: ../../../../{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
+          value: ../../../..{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
 
 ## Allows to add additional kubernetes resources
 ## Use --- as a separator between multiple resources
