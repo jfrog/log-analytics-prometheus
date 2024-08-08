@@ -2,10 +2,14 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.10] - August 8, 2024
+
+* Fix metrics configuration due to deprication of `artifactory.openMetrics` as part of Artifactory 7.87.x charts and renaming it to `artifactory.metrics`
+
 ## [1.0.9] - July 22, 2024
 
 * FluentD sidecar version bumped to 4.5, to upgrade base image to bitnami/fluentd 1.17.0
-* Fixing metrics documentation  
+* Fixing metrics documentation
 
 ## [1.0.8] - June 7, 2024
 
