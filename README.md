@@ -177,7 +177,9 @@ helm upgrade --install artifactory jfrog/artifactory \
        -n $INST_NAMESPACE
 ```
 
-**If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
+**If you are installing in the same cluster with the deprecated solution, use the same namespace as the previous one instead of jfrog-plg above.**
+
+:bulb: Metrics collection is disabled by default in Artifactory. Please make sure that you are enabling them in Artifactory by setting `artifactory.metrics.enabled` to `true` in your [helm values file](helm/artifactory-values.yaml). For Artifactory versions <=7.86.x, please instead set the flag `artifactory.openMetrics.enabled` to `true`
 
 Artifactory-HA ⎈:
 
@@ -194,6 +196,9 @@ helm upgrade --install artifactory-ha jfrog/artifactory-ha \
 ```
 
 **💡Note: If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
+
+:bulb: Metrics collection is disabled by default in Artifactory-HA. Please make sure that you are enabling them in Artifactory by setting `artifactory.metrics.enabled` to `true` in your [helm values file](helm/artifactory-ha-values.yaml). For Artifactory versions <=7.86.x, please instead set the flag `artifactory.openMetrics.enabled` to `true`
+
 Note the above examples are only references you will need additional parameters to configure TLS, binary blob storage, or other common Artifactory features.
 
 This will complete the necessary configuration for Artifactory and expose a new service monitor `servicemonitor-artifactory` to expose metrics to Prometheus.
