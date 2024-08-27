@@ -23,11 +23,9 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
    1. For Installation and usage refer [HELM Guide](https://helm.sh/docs/intro/install/)
 4. Versions supported and Tested:
 
-   Jfrog Platform: 10.17.3
+   Artifactory: 7.90.8
 
-   Artifactory: 7.77.8
-
-   Xray: 3.92.7
+   Xray: 3.103.6
 
    Prometheus: 2.51.0
 
@@ -60,7 +58,7 @@ The Grafana Community [grafana](https://github.com/prometheus-community/helm-cha
 
 Once the Pre-Requisites are met, to install Prometheus Kubernetes stack:
 
-#### Create the Namespace required for Prometheus Stack deployment
+#### Create the namespace required for the kubernetes deployment
 
 ```bash
 export INST_NAMESPACE=jfrog-plg
@@ -127,32 +125,7 @@ helm upgrade --install "loki" --values helm/loki-values.yaml grafana/loki --vers
 
 ```
 
-## JFrog Platform + Metrics via Helm ⎈
-
-Ensure Jfrog repo is added to helm.
-
-```bash
-helm repo add jfrog https://charts.jfrog.io
-helm repo update
-```
-
-To configure and install JFrog Platform with Prometheus metrics being exposed use our file `helm/jfrog-platform-values.yaml` to expose a metrics and new service monitor to Prometheus.
-
-JFrog Platform ⎈:
-
-```bash
-helm upgrade --install jfrog-platform jfrog/jfrog-platform \
-       -f helm/jfrog-platform-values.yaml \
-       -n $INST_NAMESPACE
-```
-
-**If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
-
 ## Artifactory / Artifactory HA + Metrics via Helm ⎈
-
-For configuring and installing Artifactory Pro/Pro-x use the `artifactory-values.yaml` file.
-
-For configuring and installing Enterprise/Ent+ use the `artifactory-ha-values.yaml` file.
 
 Before starting Artifactory or Artifactory HA installtion generate join and master keys for the installation:
 
@@ -165,43 +138,113 @@ Then helm install the Artifactory or Artifactory HA charts:
 
 Artifactory ⎈:
 
-helm install `artifactory` chart (using the above generated join and master keys).
-
-**💡Note: You need to be at the root of this repository folder to have `helm/artifactory-values.yaml` file available for the following command**
+1. helm install `artifactory` chart (using the above generated join and master keys).
 
 ```bash
 helm upgrade --install artifactory jfrog/artifactory \
        --set artifactory.masterKey=$MASTER_KEY \
        --set artifactory.joinKey=$JOIN_KEY \
-       -f helm/artifactory-values.yaml \
        -n $INST_NAMESPACE
 ```
 
 **If you are installing in the same cluster with the deprecated solution, use the same namespace as the previous one instead of jfrog-plg above.**
 
-:bulb: Metrics collection is disabled by default in Artifactory. Please make sure that you are enabling them in Artifactory by setting `artifactory.metrics.enabled` to `true` in your [helm values file](helm/artifactory-values.yaml). For Artifactory versions <=7.86.x, please instead set the flag `artifactory.openMetrics.enabled` to `true`
+:bulb: Metrics collection is disabled by default in Artifactory. Please make sure that you are enabling them in Artifactory by setting `artifactory.metrics.enabled` to `true` in your [helm values file](helm/artifactory-values.yaml). For Artifactory versions <=7.86.x, please instead set the flag `artifactory.openMetrics.enabled` to `true
+
+2. Follow the instructions how to get your new Artifactory URL from the helm install output
+
+```bash
+export SERVICE_IP=$(kubectl get svc --namespace $INST_NAMESPACE artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo http://$SERVICE_IP/
+```
+
+3. Using the Artifactory UI generate JFrog's admin [Access Token](https://jfrog.com/help/r/how-to-generate-an-access-token-video/artifactory-creating-access-tokens-in-artifactory). Using that fetched token, create a kubernetes generic secret for JFrog's admin token - using any of the following methods
+
+```bash
+kubectl create secret generic jfrog-admin-token --from-file=token=<path_to_token_file>
+```
+
+OR
+
+```bash
+kubectl create secret generic jfrog-admin-token --from-literal=token=<JFROG_ADMN_TOKEN>
+
+```
+
+4. Postgres password is required to upgrade Artifactory. Run the following command to get the current Postgres password
+
+   ```bash
+   POSTGRES_PASSWORD=$(kubectl get secret artifactory-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+   ```
+5. Upgrade Artifactory and apply Helm chart to create additional kubernetes resources, which are required for Prometheus service discovery process:
+
+   ```bash
+   helm upgrade --install artifactory jfrog/artifactory \
+       --set artifactory.joinKey=$JOIN_KEY \
+       --set databaseUpgradeReady=true --set postgresql.postgresqlPassword=$POSTGRES_PASSWORD \
+       -f helm/artifactory-values.yaml \
+       -n $INST_NAMESPACE
+   ```
+
+**💡Note: You need to be at the root of this repository folder to have `helm/artifactory-values.yaml` file available for the following command**
+
+This will complete the necessary configuration for Artifactory and expose new service monitors `servicemonitor-artifactory` and `servicemonitor-observability` to expose metrics to Prometheus
 
 Artifactory-HA ⎈:
 
-helm install `artifactory-ha` chart (using the above generated join and master keys).
-
-**💡Note: You need to be at the root of this repository folder to have `helm/artifactory-ha-values.yaml` file available for the following command**
+1. helm install `artifactory-ha` chart (using the above generated join and master keys).
 
 ```bash
-helm upgrade --install artifactory-ha jfrog/artifactory-ha \
+helm upgrade --install artifactory jfrog/artifactory-ha \
        --set artifactory.masterKey=$MASTER_KEY \
        --set artifactory.joinKey=$JOIN_KEY \
-       -f helm/artifactory-ha-values.yaml \
        -n $INST_NAMESPACE
 ```
 
-**💡Note: If you are installing in the same cluster with the deprecated solution, Use the same namespace as the previous one instead of jfrog-plg above.**
+**If you are installing in the same cluster with the deprecated solution, use the same namespace as the previous one instead of jfrog-plg above.**
 
-:bulb: Metrics collection is disabled by default in Artifactory-HA. Please make sure that you are enabling them in Artifactory by setting `artifactory.metrics.enabled` to `true` in your [helm values file](helm/artifactory-ha-values.yaml). For Artifactory versions <=7.86.x, please instead set the flag `artifactory.openMetrics.enabled` to `true`
+:bulb: Metrics collection is disabled by default in Artifactory-HA. Please make sure that you are enabling them in Artifactory-HA by setting `artifactory.metrics.enabled` to `true` in your [helm values file](helm/artifactory-ha-values.yaml). For Artifactory versions <=7.86.x, please instead set the flag `artifactory.openMetrics.enabled` to `true
 
-Note the above examples are only references you will need additional parameters to configure TLS, binary blob storage, or other common Artifactory features.
+2. Follow the instructions how to get your new Artifactory URL from the helm install output
 
-This will complete the necessary configuration for Artifactory and expose a new service monitor `servicemonitor-artifactory` to expose metrics to Prometheus.
+```bash
+export SERVICE_IP=$(kubectl get svc --namespace $INST_NAMESPACE artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo http://$SERVICE_IP/
+```
+
+3. Using the Artifactory UI generate JFrog's admin [Access Token](https://jfrog.com/help/r/how-to-generate-an-access-token-video/artifactory-creating-access-tokens-in-artifactory). Using that fetched token, create a kubernetes generic secret for JFrog's admin token - using any of the following methods
+
+```bash
+kubectl create secret generic jfrog-admin-token --from-file=token=<path_to_token_file>
+```
+
+OR
+
+```bash
+kubectl create secret generic jfrog-admin-token --from-literal=token=<JFROG_ADMN_TOKEN>
+
+```
+
+4. Postgres password is required to upgrade Artifactory. Run the following command to get the current Postgres password
+
+   ```bash
+   POSTGRES_PASSWORD=$(kubectl get secret artifactory-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+   ```
+5. Upgrade Artifactory and helm upgrade the `artifactory-ha` chart to create additional kubernetes resources, which are required for Prometheus service discovery process:
+
+   You need to be at the root of this repository folder to have `helm/artifactory-ha-values.yaml` file available for the following command:
+
+   ```bash
+   helm upgrade --install artifactory jfrog/artifactory-ha \
+       --set artifactory.joinKey=$JOIN_KEY \
+       --set databaseUpgradeReady=true --set postgresql.postgresqlPassword=$POSTGRES_PASSWORD \
+       -f helm/artifactory-ha-values.yaml \
+       -n $INST_NAMESPACE
+   ```
+
+**💡Note: The above examples are only references you will need additional parameters to configure TLS, binary blob storage, or other common Artifactory features.**
+
+This will complete the necessary configuration for Artifactory-HA and expose new service monitors `servicemonitor-artifactory-ha` and `servicemonitor-observability` to expose metrics to Prometheus
 
 ## Xray + Metrics via Helm ⎈
 
@@ -215,16 +258,16 @@ Generate master keys for the Xray installation:
 export XRAY_MASTER_KEY=$(openssl rand -hex 32)
 ````
 
-Use the same `JOIN_KEY` from the Artifactory installation, in order to connect Xray to Artifactory.
+Use the same `JOIN_KEY` from the Artifactory installation, in order to connect Xray to Artifactory. You'll also be using the `jfrog-admin-token` kubernetes secret, that was created early as part of Artifactory/Artifactory-HA installation
 
 **💡Note: You need to be at the root of this repository folder to have `helm/xray-values.yaml` file available for the following command**
 
 ```bash
 # getting Artifactory URL
-export RT_SERVICE_IP=$(kubectl get svc -n $INST_NAMESPACE artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export JFROG_JPD=$(kubectl get svc -n $INST_NAMESPACE artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 # helm install xray
-helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://$RT_SERVICE_IP \
+helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://$JFROG_JPD \
        --set xray.masterKey=$XRAY_MASTER_KEY \
        --set xray.joinKey=$JOIN_KEY \
        -f helm/xray-values.yaml \
@@ -295,4 +338,4 @@ Import the Dashboards and select the appropriate sources (Loki and Prometheus)
 
 * [Grafana Dashboards](https://grafana.com/docs/grafana/latest/features/dashboard/dashboards/)
 * [Grafana Queries](https://prometheus.io/docs/prometheus/latest/querying/basics/)
-* [Loki Queries](https://grafana.com/docs/loki/latest/logql/)
+* [Loki Queries](https://grafana.com/docs/loki/latest/query/)
