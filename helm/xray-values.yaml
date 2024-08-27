@@ -99,3 +99,56 @@ additionalResources: |
     endpoints:
       - port: metrics
         interval: 15s
+  ---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: {{ template "xray.fullname" . }}-auth-metrics
+    annotations:
+      prometheus.io/path: "/xray/api/v1/metrics"
+      prometheus.io/scheme: "http"
+      prometheus.io/port: "24231"
+      prometheus.io/scrape: "true"
+    labels:
+      app: {{ template "xray.name" . }}-auth
+      component: {{ template "xray.name" . }}-auth
+      chart: {{ template "xray.chart" . }}
+      heritage: {{ .Release.Service }}
+      release: {{ .Values.global.prometheus.release_name }}
+      {{- with .Values.xray.labels }}
+  {{ toYaml . | indent 4 }}
+      {{- end }}
+  spec:
+    type: ClusterIP
+    ports:
+    - name: metrics
+      port: 24231
+      targetPort: 8082
+      protocol: TCP
+    selector:
+      app: {{ template "xray.name" . }}
+      component: {{ template "xray.name" . }}
+  ---
+  apiVersion: monitoring.coreos.com/v1
+  kind: ServiceMonitor
+  metadata:
+    name: servicemonitor-{{ template "xray.name" . }}-auth
+    labels:
+      metrics: jfrog
+      app: {{ template "xray.name" . }}
+      chart: {{ template "xray.chart" . }}
+      heritage: {{ .Release.Service }}
+      release: {{ .Values.global.prometheus.release_name }}
+  spec:
+    selector:
+      matchLabels:
+        app: {{ template "xray.name" . }}-auth
+        component: {{ template "xray.name" . }}-auth
+    endpoints:
+    - port: metrics
+      scheme: http
+      path: /xray/api/v1/metrics
+      interval: 15s
+      bearerTokenSecret:
+        key: token
+        name: jfrog-admin-token

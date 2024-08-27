@@ -38,14 +38,13 @@ artifactory:
           value: ../../../..{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
 ## Allows to add additional kubernetes resources
 ## Use --- as a separator between multiple resources
-## For an example, refer - https://github.com/jfrog/log-analytics-prometheus
 additionalResources: |
   apiVersion: v1
   kind: Service
   metadata:
     name: {{ template "artifactory.fullname" . }}-metrics
     annotations:
-      prometheus.io/path: "/metrics"
+      prometheus.io/path: "/artifactory/api/v1/metrics"
       prometheus.io/scheme: "http"
       prometheus.io/port: "24231"
       prometheus.io/scrape: "true"
@@ -63,6 +62,7 @@ additionalResources: |
     ports:
     - name: metrics
       port: 24231
+      targetPort: 8082
       protocol: TCP
     selector:
       app: {{ template "artifactory.name" . }}
@@ -84,5 +84,60 @@ additionalResources: |
         app: {{ template "artifactory.name" . }}
         component: {{ template "artifactory.name" . }}
     endpoints:
-        - port: metrics
-          interval: 15s
+    - port: metrics
+      scheme: http
+      path: /artifactory/api/v1/metrics
+      interval: 15s
+      bearerTokenSecret:
+        key: token
+        name: jfrog-admin-token
+  ---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: {{ .Values.observability.name }}-metrics
+    annotations:
+      prometheus.io/path: "/observability/api/v1/metrics"
+      prometheus.io/scheme: "http"
+      prometheus.io/port: "24232"
+      prometheus.io/scrape: "true"
+    labels:
+      app: {{ .Values.observability.name }}
+      component: {{ .Values.observability.name }}
+      chart: {{ template "artifactory.chart" . }}
+      heritage: {{ .Release.Service }}
+      release: {{ .Values.global.prometheus.release_name }}
+  spec:
+    type: ClusterIP
+    ports:
+    - name: metricsob
+      port: 24232
+      targetPort: 8082
+      protocol: TCP
+    selector:
+      app: artifactory
+      component: artifactory
+  ---
+  apiVersion: monitoring.coreos.com/v1
+  kind: ServiceMonitor
+  metadata:
+    name: servicemonitor-{{ .Values.observability.name }}
+    labels:
+      metrics: jfrog
+      app: {{ .Values.observability.name }}
+      chart: {{ template "artifactory.chart" . }}
+      heritage: {{ .Release.Service }}
+      release: {{ .Values.global.prometheus.release_name }}
+  spec:
+    selector:
+      matchLabels:
+        app: {{ .Values.observability.name }}
+        component: {{ .Values.observability.name }}
+    endpoints:
+    - port: metricsob
+      scheme: http
+      path: /observability/api/v1/metrics
+      interval: 15s
+      bearerTokenSecret:
+        key: token
+        name: jfrog-admin-token

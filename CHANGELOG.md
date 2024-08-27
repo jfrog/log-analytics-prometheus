@@ -2,6 +2,13 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.11] - August 27, 2024
+
+* Update kubernetes services and service moniotors definitions to align with new metrics API changes in Artifactory and Xray
+* Update Grafana dashboards to reflect the above changes
+* Update Reamde with 2-phased Helm deployments - first to deploy product and generate kubernetes secret; second to deploy additional kubernetes resources with the generated secret
+* Remove JFrog platform charts (alignment with the other observability integrations)
+
 ## [1.0.10] - August 8, 2024
 
 * Fix metrics configuration due to deprication of `artifactory.openMetrics` as part of Artifactory 7.87.x charts and renaming it to `artifactory.metrics`
