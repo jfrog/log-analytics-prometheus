@@ -2,6 +2,12 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.0.12] - March 18, 2025
+
+* FluentD sidecar image version bumped to 4.15, to upgrade base image to bitnami/fluentd 1.18
+* Update artifactory-ha helm values file
+* Readme minor updates
+
 ## [1.0.11] - August 27, 2024
 
 * Update kubernetes services and service moniotors definitions to align with new metrics API changes in Artifactory and Xray

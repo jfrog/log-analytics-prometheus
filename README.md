@@ -23,7 +23,7 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
    1. For Installation and usage refer [HELM Guide](https://helm.sh/docs/intro/install/)
 4. Versions supported and Tested:
 
-   Artifactory: 7.90.8
+   Artifactory: 7.104.7 
 
    Xray: 3.103.6
 
