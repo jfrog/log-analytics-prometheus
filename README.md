@@ -314,11 +314,12 @@ kubectl port-forward service/prometheus-grafana 3000:80 -n ${INST_NAMESPACE}
    After adding both `Loki` and `Prometheus` Data Sources your "Configuration" -> "Data Sources" page should look like the following:
    ![datasource](images/DataSourceAddition-02.jpeg)
 
-## Grafana Dashboard
+## Artifactory and Xray Grafana Dashboards
 
-Example dashboards are included in the [grafana directory](grafana). These dashboards needs to be imported to the grafana. These include:
+Example dashboards are included in the [grafana](grafana) directory. These dashboards need to be imported to Grafana. These include:
 
 - Artifactory Metrics and Log Analytics Dashboard [Download Here](grafana/ArtifactoryLogAnalyticsAndSystemMetrics.json)
+- Artifactory Application Metrics (Open Metrics) Dashboard [Download Here](grafana/ArtifactoryMetrics.json)
 - Xray Metrics and Log Analytics Dashboard [Download Here](grafana/XrayLogAnalyticsAndSystemMetrics.json)
 
 After downloading the dashboards go to "Dashboards" -> "Import":
