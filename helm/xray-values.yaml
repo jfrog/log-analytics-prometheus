@@ -12,7 +12,8 @@ xray:
     enabled: true
 replicaCount: 1
 postgresql:
-  postgresqlPassword: xray
+  auth:
+    password: xray
 rabbitmq-ha:
   enabled: false
 rabbitmq:
