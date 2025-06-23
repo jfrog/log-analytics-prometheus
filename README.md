@@ -60,9 +60,6 @@ Once the Pre-Requisites are met, to install Prometheus Kubernetes stack:
 
 ```shell
 export INST_NAMESPACE=jfrog-plg
-```
-
-```shell
 kubectl create namespace ${INST_NAMESPACE}
 ```
 
@@ -80,7 +77,7 @@ helm upgrade --install prometheus prometheus-community/kube-prometheus-stack -n 
 
 # "prometheus" here is the value that needs to be used against the value for "release_name" in the configuration section
 
-# Needed to add --set prometheus.prometheusSpec.maximumStartupDurationSeconds=600 to avoid an error (bug?)
+# Might need to add --set prometheus.prometheusSpec.maximumStartupDurationSeconds=600 to avoid an error (bug?)
 ```
 
 4. For Docker Desktop
@@ -161,10 +158,10 @@ kubectl create secret generic jfrog-admin-token --from-literal=token=<JFROG_ADMI
 
 5. The PostgreSQL password is required to upgrade Artifactory. Run the following command to get the current PostgreSQL password
 ```shell
-POSTGRES_PASSWORD=$(kubectl get secret -n ${INST_NAMESPACE} artifactory-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode)
+export POSTGRES_PASSWORD=$(kubectl get secret -n ${INST_NAMESPACE} artifactory-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode)
 ```
 
-6. Upgrade Artifactory with the custom values in [helm/artifactory-values.yaml](helm/artifactory-values.yaml) to create additional kubernetes resources, which are required for Prometheus service discovery process.
+6. Upgrade Artifactory with the custom values in [helm/artifactory-values.yaml](helm/artifactory-values.yaml) to create additional Kubernetes resources, which are required for the Prometheus service discovery process.
 
 **💡Note: You need to be at the root of this repository folder to have `helm/artifactory-values.yaml` file available for the following command**
 
