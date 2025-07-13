@@ -43,7 +43,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 39,
+  "id": 29,
   "links": [
     {
       "asDropdown": false,
@@ -874,7 +874,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "description": "",
+          "description": "Artifactory container CPU usage",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -913,66 +913,18 @@
                   "mode": "dashed+area"
                 }
               },
-              "links": [
-                {
-                  "targetBlank": true,
-                  "title": "View more application metrics for this pod",
-                  "url": "/d/spring-service-per-pod/spring-service-per-pod?var-datasource=GlobalView-Prometheus&var-service=Artifactory&var-deployment=${namespace}&${pod:queryparam}&${__url_time_range}"
-                }
-              ],
+              "links": [],
               "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "transparent"
-                  },
-                  {
-                    "color": "#EAB839",
-                    "value": 0.85
-                  },
-                  {
-                    "color": "red",
-                    "value": 0.95
-                  }
-                ]
-              },
-              "unit": "percentunit"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byFrameRefID",
-                  "options": "system_cpu_usage"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "purple",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byFrameRefID",
-                  "options": "process_cpu_usage"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
-                    }
                   }
                 ]
               }
-            ]
+            },
+            "overrides": []
           },
           "gridPos": {
             "h": 9,
@@ -1006,27 +958,14 @@
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "sum(system_cpu_usage{application=\"Artifactory\", namespace=\"$namespace\", pod=~\"$pod\", container=\"artifactory\"}) by (pod)",
+              "expr": "sum(system_cpu_usage{application=\"Artifactory\", namespace=\"$namespace\", pod=~\"$pod\", container=\"artifactory\"}) by (pod) + sum(process_cpu_usage{application=\"Artifactory\", namespace=\"$namespace\", pod=~\"$pod\", container=\"artifactory\"}) by (pod)",
               "interval": "$min_step",
-              "legendFormat": "System - {{pod}}",
+              "legendFormat": "{{pod}} - artifactory",
               "range": true,
               "refId": "system_cpu_usage"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "sum(process_cpu_usage{application=\"Artifactory\", namespace=\"$namespace\", pod=~\"$pod\", container=\"artifactory\"}) by (pod)",
-              "hide": false,
-              "interval": "$min_step",
-              "legendFormat": "Process - {{pod}}",
-              "range": true,
-              "refId": "process_cpu_usage"
             }
           ],
-          "title": "JVM CPU Usage",
+          "title": "Artifactory CPU Usage",
           "type": "timeseries"
         },
         {
@@ -1251,7 +1190,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 101
+            "y": 17
           },
           "id": 101,
           "interval": "$min_step",
@@ -1404,7 +1343,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 101
+            "y": 17
           },
           "id": 103,
           "options": {
@@ -1467,7 +1406,7 @@
           "type": "timeseries"
         }
       ],
-      "title": "JVM - Memory and CPU Usage",
+      "title": "CPU and JVM Memory Usage",
       "type": "row"
     },
     {
@@ -1598,7 +1537,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 9
+            "y": 27
           },
           "id": 123,
           "interval": "$min_step",
@@ -1765,7 +1704,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 9
+            "y": 27
           },
           "id": 124,
           "interval": "$min_step",
@@ -1924,7 +1863,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 10
+            "y": 152
           },
           "id": 119,
           "options": {
@@ -2064,7 +2003,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 53
+            "y": 160
           },
           "id": 89,
           "interval": "$min_step",
@@ -2187,7 +2126,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 53
+            "y": 160
           },
           "id": 97,
           "interval": "$min_step",
@@ -2316,7 +2255,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 61
+            "y": 168
           },
           "id": 180,
           "interval": "$min_step",
@@ -2439,7 +2378,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 61
+            "y": 168
           },
           "id": 165,
           "interval": "$min_step",
@@ -2551,7 +2490,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 69
+            "y": 176
           },
           "id": 95,
           "interval": "$min_step",
@@ -2662,7 +2601,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 69
+            "y": 176
           },
           "id": 90,
           "interval": "$min_step",
@@ -2774,7 +2713,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 77
+            "y": 184
           },
           "id": 112,
           "interval": "$min_step",
@@ -2910,7 +2849,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 11
+            "y": 382
           },
           "id": 110,
           "interval": "$min_step",
@@ -3016,7 +2955,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 11
+            "y": 382
           },
           "id": 111,
           "interval": "$min_step",
@@ -3138,7 +3077,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 12
+            "y": 110
           },
           "id": 128,
           "interval": "$min_step",
@@ -3243,7 +3182,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 12
+            "y": 110
           },
           "id": 130,
           "interval": "$min_step",
@@ -3348,7 +3287,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 12
+            "y": 110
           },
           "id": 132,
           "interval": "$min_step",
@@ -3453,7 +3392,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 28
+            "y": 118
           },
           "id": 134,
           "options": {
@@ -3557,7 +3496,7 @@
             "h": 10,
             "w": 16,
             "x": 8,
-            "y": 28
+            "y": 118
           },
           "id": 138,
           "interval": "$min_step",
@@ -3676,7 +3615,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 33
+            "y": 123
           },
           "id": 136,
           "options": {
@@ -3814,7 +3753,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 13
+            "y": 129
           },
           "id": 150,
           "interval": "$min_step",
@@ -4022,7 +3961,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
