@@ -3884,8 +3884,8 @@
       },
       {
         "current": {
-          "text": "jfrog-plg",
-          "value": "jfrog-plg"
+          "text": "jfrog",
+          "value": "jfrog"
         },
         "datasource": {
           "type": "prometheus",
