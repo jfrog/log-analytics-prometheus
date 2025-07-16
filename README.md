@@ -8,23 +8,22 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
 
 ## Pre-Requisites
 
-1. Working and configured Kubernetes Cluster - Amazon EKS / Google GKE / Azure AKS / Docker Desktop / Minikube
+1. A Kubernetes Cluster - Amazon EKS / Google GKE / Azure AKS / Docker Desktop / Minikube
    1. Recommended Kubernetes Version 1.25.2 and above
    2. For Google GKE, refer [GKE Guide](https://cloud.google.com/kubernetes-engine/docs/how-to)
    3. For Amazon EKS, refer [EKS Guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
    4. For Azure AKS, refer [AKS Guide](https://docs.microsoft.com/en-us/azure/aks/)
    5. For Docker Desktop and Kubernetes, refer [Docker Guide](https://docs.docker.com/desktop/kubernetes/)
 
-2. `kubectl` utility on the workstation which is capable of connecting to the Kubernetes cluster
+2. `kubectl` configured to the Kubernetes cluster
    1. For Installation and usage refer [kubectl setup](https://kubernetes.io/docs/tasks/tools/#kubectl)
 
-3. `helm` v3 Installed
+3. `helm` v3
    1. For Installation and usage refer [helm setup](https://helm.sh/docs/intro/install/)
 
 4. Versions supported and Tested:
-
-   1. Artifactory: 7.111.10
-   2. Xray: 3.118.20
+   1. Artifactory: 7.111.12
+   2. Xray: 3.118.23
    3. Prometheus: 3.4.2
    4. Grafana: 12.0.2
    5. Loki: 3.5.0
@@ -63,22 +62,22 @@ export INST_NAMESPACE=jfrog
 kubectl create namespace ${INST_NAMESPACE}
 ```
 
-2. Add the required Helm Repositories
+2. Install Prometheus and Grafana
 
 ```shell
+# Add the required Helm repository
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 ```
 
-3. Install Prometheus and Grafana
-
 ```shell
+# Install the kube-prometheus-stack chart
 helm upgrade --install prometheus --values helm/prometheus-grafana-values.yaml prometheus-community/kube-prometheus-stack -n ${INST_NAMESPACE}
 
 # Might need to add --set prometheus.prometheusSpec.maximumStartupDurationSeconds=600 to avoid an error (bug?)
 ```
 
-4. For Docker Desktop
+3. For Docker Desktop
 
    Run this additional command to correct the mount path propagation for prometheus node-exporter component.
 
@@ -88,15 +87,13 @@ helm upgrade --install prometheus --values helm/prometheus-grafana-values.yaml p
 kubectl patch ds prometheus-prometheus-node-exporter --type json -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]' -n ${INST_NAMESPACE}
 ```
 
-5. Install Loki
-
+4. Install Loki
 
 ```shell
-# Add the required Helm Repositories
+# Add the required Helm repository
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 ```
-
 
 ```shell
 # Install the Loki chart
@@ -112,14 +109,14 @@ helm upgrade --install loki --values helm/loki-values.yaml grafana/loki --versio
 ### Artifactory
 Installing Artifactory using the official [Helm Chart](https://github.com/jfrog/charts/tree/master/stable/artifactory)
 
-1. Before starting Artifactory or Artifactory HA installation generate join and master keys for the installation:
+1. Before starting the Artifactory installation generate a join and master keys
 
 ```shell
 export JOIN_KEY=$(openssl rand -hex 32)
 export MASTER_KEY=$(openssl rand -hex 32)
 ```
 
-2. helm installation command (using the above generated join and master keys)
+2. Install Artifactory (using the generated join and master keys)
 
 ```shell
 # Install Artifactory
@@ -130,16 +127,26 @@ helm upgrade --install artifactory jfrog/artifactory \
      -n ${INST_NAMESPACE}
 ```
 
-:bulb: Metrics collection is disabled by default in Artifactory. Please make sure that you are enabling them in Artifactory by setting `artifactory.metrics.enabled` to `true` in your [helm values file](helm/artifactory-values.yaml). For Artifactory versions <=7.86.x, please instead set the flag `artifactory.openMetrics.enabled` to `true
+:bulb: Open Metrics is disabled by default in Artifactory. You enable it by setting `artifactory.metrics.enabled=true`.
 
 3. Follow the instructions how to get your new Artifactory URL from the helm install output
 
 ```shell
 export SERVICE_IP=$(kubectl get svc --namespace ${INST_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo http://$SERVICE_IP/
+
+echo ${SERVICE_IP}
+
+# If SERVICE_IP is empty, try the following (replace .ip with .hostname)
+export SERVICE_IP=$(kubectl get svc --namespace ${INST_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+echo ${SERVICE_IP}
+
+# URL to access Artifactory
+echo "http://${SERVICE_IP}/"
+
 ```
 
-4. Using the Artifactory UI, generate an [admin access token](https://jfrog.com/help/r/how-to-generate-an-access-token-video/artifactory-creating-access-tokens-in-artifactory). Using the generated token, create a kubernetes generic secret for the token - using one of the following methods
+4. Using the Artifactory UI, generate an [admin access token](https://jfrog.com/help/r/how-to-generate-an-access-token-video/artifactory-creating-access-tokens-in-artifactory). Using the generated token, create a Kubernetes generic secret for the token - using one of the following methods
 
 ```shell
 kubectl create secret generic jfrog-admin-token --from-file=token=<path_to_token_file> -n ${INST_NAMESPACE}
@@ -149,14 +156,13 @@ OR
 kubectl create secret generic jfrog-admin-token --from-literal=token=<JFROG_ADMIN_TOKEN> -n ${INST_NAMESPACE}
 ```
 
-5. The PostgreSQL password is required to upgrade Artifactory. Run the following command to get the current PostgreSQL password
+5. The PostgreSQL password is required for Artifactory upgrade. Run the following command to get the current PostgreSQL password
 ```shell
 export POSTGRES_PASSWORD=$(kubectl get secret -n ${INST_NAMESPACE} artifactory-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode)
+echo ${POSTGRES_PASSWORD}
 ```
 
 6. Upgrade Artifactory with the custom values in [helm/artifactory-values.yaml](helm/artifactory-values.yaml) to create additional Kubernetes resources, which are required for the Prometheus service discovery process.
-
-**💡Note: You need to be at the root of this repository folder to have `helm/artifactory-values.yaml` file available for the following command**
 
 ```shell
 # Upgrade Artifactory
@@ -167,9 +173,7 @@ helm upgrade --install artifactory jfrog/artifactory \
      -n ${INST_NAMESPACE}
 ```
 
-
 This will complete the necessary configuration for Artifactory and expose new service monitors `servicemonitor-artifactory` and `servicemonitor-observability` to expose metrics to Prometheus
-
 
 ## Install Xray with Open Metrics
 
@@ -185,15 +189,13 @@ export XRAY_MASTER_KEY=$(openssl rand -hex 32)
 
 2. Use the same `JOIN_KEY` from the Artifactory installation, in order to connect Xray to Artifactory. You'll also be using the `jfrog-admin-token` kubernetes secret, that was created earlier as part of Artifactory installation
 
-**💡Note: You need to be at the root of this repository folder to have `helm/xray-values.yaml` file available for the following command**
-
 ```shell
 # Getting the Artifactory URL
 export JFROG_URL=$(kubectl get svc -n ${INST_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 # OR
 export JFROG_URL=$(kubectl get svc -n ${INST_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 
-echo ${JFROG_URL}
+echo "http://${JFROG_URL}"
 
 # Install xray
 helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://${JFROG_URL} \
@@ -207,17 +209,19 @@ helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://${JFROG_URL} \
 
 ## Access the Prometheus UI
 
-Use 'kubectl port forward' as mentioned below in a separate terminal window
+Use `kubectl port-forward` as mentioned below in a separate terminal window
 
 ```shell
 kubectl port-forward service/prometheus-operated 9090:9090 -n ${INST_NAMESPACE}
 ```
 
-Go to the web UI of the Prometheus instance http://localhost:9090 and verify "Status -> Service Discovery", the list shows the new ServiceMonitor for Artifactory or Xray or both, as shown here:![targets](images/ServiceDiscovery.jpeg)
+Go to the web UI of the Prometheus instance http://localhost:9090 and verify "Status -> Service Discovery", the list shows all the `serviceMonitor`s.
+
+Search for `servicemonitor-artifactory` and `servicemonitor-xray` to confirm they are successfully picked up by Prometheus.
 
 ## To Assess the setup for Grafana
 
-Use 'kubectl port forward' as mentioned below in a separate terminal window
+Use `kubectl port-forward` as mentioned below in a separate terminal window
 
 ```shell
 kubectl port-forward service/prometheus-grafana 3000:80 -n ${INST_NAMESPACE}
