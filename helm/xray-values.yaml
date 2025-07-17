@@ -19,11 +19,11 @@ postgresql:
   # primary:
   #   resources:
   #     requests:
-  #       memory: 1Gi
+  #       memory: 2Gi
   #       cpu: 1
   #     limits:
   #       memory: 16Gi
-  #       cpu: 3
+  #       cpu: 6
   #   extendedConfiguration: |
   #     max_connections = 500
   #     listen_addresses = '*'
