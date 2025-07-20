@@ -241,8 +241,11 @@ kubectl port-forward service/prometheus-grafana 3000:80 -n ${INST_NAMESPACE}
 
 Example dashboards are included in the [grafana](grafana) directory. These dashboards need to be imported to Grafana. These include:
 
-- Artifactory Metrics and Log Analytics Dashboard [Download Here](grafana/ArtifactoryLogAnalyticsAndSystemMetrics.json)
 - Artifactory Application Metrics (Open Metrics) Dashboard [Download Here](grafana/ArtifactoryMetrics.json)
+- Xray Application Metrics (Open Metrics) Dashboard [Download Here](grafana/XrayMetrics.json)
+
+Older broken dashboards
+- Artifactory Metrics and Log Analytics Dashboard [Download Here](grafana/ArtifactoryLogAnalyticsAndSystemMetrics.json)
 - Xray Metrics and Log Analytics Dashboard [Download Here](grafana/XrayLogAnalyticsAndSystemMetrics.json)
 
 1. After downloading the dashboards go to "Dashboards" -> "New" -> "Import"

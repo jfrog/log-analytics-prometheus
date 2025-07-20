@@ -1,0 +1,911 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "$$hashKey": "object:525",
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 113,
+    "links": [],
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 80,
+        "panels": [],
+        "title": "General Information",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 1
+        },
+        "id": 81,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "percentChangeColorMode": "standard",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "textMode": "name",
+          "wideLayout": true
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "topk(1,label_replace(kube_pod_container_info{namespace=\"$namespace\",container=\"xray-server\"}, \"version\", \"$1\", \"image\", \".+:(.+)\"))",
+            "instant": true,
+            "legendFormat": "{{version}}",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "Xray Version",
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 5
+        },
+        "id": 68,
+        "panels": [],
+        "title": "CPU and Memory Usage",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "fieldMinMax": false,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 6
+        },
+        "id": 78,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", pod=\"$pod\", pod=~\".*xray.*\", container!=\"\", container!=\"POD\"}[$__rate_interval])) by (container)",
+            "legendFormat": "{{container}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "CPU Usage per Container",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            },
+            "unit": "decbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 6
+        },
+        "id": 72,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\",pod=\"$pod\", pod=~\".*xray.*\", container!=\"\", container!=\"POD\"}) by (container)",
+            "legendFormat": "{{container}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Memory Usage per Container",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "left",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 14
+        },
+        "id": 79,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "avg(server_go_memstats_heap_objects_total{service=\"xray-auth-metrics\"})",
+            "legendFormat": "Total Heap Objects",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Heap Objects",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "left",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green"
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 14
+        },
+        "id": 76,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "avg(server_go_memstats_heap_in_use_bytes{service=\"xray-auth-metrics\"}) / (1024 * 1024)",
+            "hide": false,
+            "legendFormat": "Heap Used MBytes",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "avg(server_go_memstats_heap_reserved_bytes{service=\"xray-auth-metrics\"}) / (1024 * 1024)",
+            "hide": false,
+            "legendFormat": "Heap Reserved MBytes",
+            "range": true,
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "avg(server_go_memstats_heap_allocated_bytes{service=\"xray-auth-metrics\"}) / (1024 * 1024)",
+            "hide": false,
+            "legendFormat": "Heap Allocated MBytes",
+            "range": true,
+            "refId": "D"
+          }
+        ],
+        "title": "Heap Usage MBytes",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 22
+        },
+        "id": 83,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "description": "% of Xray DB connection used",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 39
+            },
+            "id": 84,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.0.2",
+            "targets": [
+              {
+                "editorMode": "code",
+                "expr": "avg(db_connection_pool_in_use_total{service=\"xray-auth-metrics\"})",
+                "legendFormat": "Active",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "avg(db_connection_pool_idle_total{service=\"xray-auth-metrics\"})",
+                "hide": false,
+                "legendFormat": "Idle",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "Database Connections Usage",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "description": "% of Xray DB connection used",
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 39
+            },
+            "id": 85,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.0.2",
+            "targets": [
+              {
+                "editorMode": "code",
+                "expr": "max(db_connection_pool_in_use_total{service=\"xray-auth-metrics\"} / db_connection_pool_max_open_total{service=\"xray-auth-metrics\"}*100)",
+                "legendFormat": "Percent",
+                "range": true,
+                "refId": "A"
+              }
+            ],
+            "title": "Database Connections Usage %",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Database",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 23
+        },
+        "id": 82,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisBorderShow": false,
+                  "axisCenteredZero": false,
+                  "axisColorMode": "text",
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "barWidthFactor": 0.6,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "insertNulls": false,
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "percentage",
+                  "steps": [
+                    {
+                      "color": "green"
+                    }
+                  ]
+                },
+                "unit": "decbytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 40
+            },
+            "id": 74,
+            "options": {
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": true
+              },
+              "tooltip": {
+                "hideZeros": false,
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "pluginVersion": "12.0.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "avg(server_app_disk_free_bytes{service=\"xray-auth-metrics\"})",
+                "legendFormat": "Free Disk Space",
+                "range": true,
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "editorMode": "code",
+                "expr": "avg(server_app_disk_used_bytes{service=\"xray-auth-metrics\"})",
+                "hide": false,
+                "legendFormat": "Used Disk Space",
+                "range": true,
+                "refId": "B"
+              }
+            ],
+            "title": "Xray Services Disk Usage",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Pod Disk Usage",
+        "type": "row"
+      }
+    ],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 41,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "text": "jfrog",
+            "value": "jfrog"
+          },
+          "definition": "label_values(kube_namespace_status_phase,namespace)",
+          "description": "List of namespaces",
+          "label": "namespace",
+          "name": "namespace",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_namespace_status_phase,namespace)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        },
+        {
+          "current": {
+            "text": "xray-0",
+            "value": "xray-0"
+          },
+          "definition": "label_values(kube_pod_info{namespace=\"$namespace\"},pod)",
+          "description": "The Xray pod",
+          "label": "pod",
+          "name": "pod",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(kube_pod_info{namespace=\"$namespace\"},pod)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-12h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Xray Metrics",
+    "uid": "siDGzFmMkx1",
+    "version": 7
+  }
