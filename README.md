@@ -229,20 +229,13 @@ kubectl port-forward service/prometheus-grafana 3000:80 -n ${INST_NAMESPACE}
 
 1. Open your Grafana on a browser at http://localhost:3000. Grafana default credentials are `admin/prom-operator` (set in [prometheus-grafana-values.yaml](helm/prometheus-grafana-values.yaml)).
 
-2. Go to "Configuration" -> "Data Sources" on the left menu:
-   ![datasource](images/DataSourceAddition-01.jpeg)
+2. Go to "Data Sources" on the left menu
 
-3. Add your Prometheus instance and Loki Instance as datasources:
-   * Loki data source: Specify url value as `http://loki:3100`
-   * Prometheus data source might be added from config automatically. If not, add Prometheus data source and specify url value as `http://prometheus-kube-prometheus-prometheus:9090/`
-   ![datasource](images/DataSourceAddition-04.jpeg)
+3. Click `Add new data source`
+   1. Add your Prometheus as datasources (if not already configured): Set "Prometheus server URL" to `http://prometheus-kube-prometheus-prometheus:9090/`
+   2. Add your Loki as datasources: Set "URL" to `http://loki:3100`
 
-4. While specifying datasource url for `Loki` and `Prometheus`, please test and confirm that the connection is successful by using the `Save & Test` button at the bottom of the adding data source page:
-
-   ![datasource](images/DataSourceAddition-03.jpeg)
-
-   After adding both `Loki` and `Prometheus` Data Sources your "Configuration" -> "Data Sources" page should look like the following:
-   ![datasource](images/DataSourceAddition-02.jpeg)
+4. When adding the `Loki` and `Prometheus` datasources, click `Save & Test` button at the bottom to validate connection to services is successful
 
 ## Artifactory and Xray Grafana Dashboards
 
@@ -252,15 +245,9 @@ Example dashboards are included in the [grafana](grafana) directory. These dashb
 - Artifactory Application Metrics (Open Metrics) Dashboard [Download Here](grafana/ArtifactoryMetrics.json)
 - Xray Metrics and Log Analytics Dashboard [Download Here](grafana/XrayLogAnalyticsAndSystemMetrics.json)
 
-After downloading the dashboards go to "Dashboards" -> "Import":
+1. After downloading the dashboards go to "Dashboards" -> "New" -> "Import"
 
-![dashboards](images/DashboardAddition-01.jpeg)
-
-Pick `Upload JSON file` and upload Artifactory and Xray dashboards files that you downloaded in the previous step.
-
-Import the Dashboards and select the appropriate sources (Loki and Prometheus)
-
-![dashboards](images/DashboardAddition-02.jpeg)
+2. Pick `Upload dashboard JSON file` and upload Artifactory and Xray dashboards files that you downloaded in the previous step
 
 ## References
 
