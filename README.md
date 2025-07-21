@@ -22,8 +22,8 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
    1. For Installation and usage refer [helm setup](https://helm.sh/docs/intro/install/)
 
 4. Versions supported and Tested:
-   1. Artifactory: 7.111.12
-   2. Xray: 3.118.23
+   1. Artifactory: 7.111.x
+   2. Xray: 3.118.x
    3. Prometheus: 3.4.2
    4. Grafana: 12.0.2
    5. Loki: 3.5.0
@@ -121,8 +121,8 @@ export MASTER_KEY=$(openssl rand -hex 32)
 ```shell
 # Install Artifactory
 helm upgrade --install artifactory jfrog/artifactory \
-     --set artifactory.masterKey=$MASTER_KEY \
-     --set artifactory.joinKey=$JOIN_KEY \
+     --set artifactory.masterKey=${MASTER_KEY} \
+     --set artifactory.joinKey=${JOIN_KEY} \
      --set artifactory.metrics.enabled=true \
      -n ${INST_NAMESPACE}
 ```
@@ -167,7 +167,7 @@ echo ${POSTGRES_PASSWORD}
 ```shell
 # Upgrade Artifactory
 helm upgrade --install artifactory jfrog/artifactory \
-     --set artifactory.joinKey=$JOIN_KEY \
+     --set artifactory.joinKey=${JOIN_KEY} \
      --set databaseUpgradeReady=true --set postgresql.auth.password=${POSTGRES_PASSWORD} \
      -f helm/artifactory-values.yaml \
      -n ${INST_NAMESPACE}
@@ -199,8 +199,8 @@ echo "http://${JFROG_URL}"
 
 # Install xray
 helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://${JFROG_URL} \
-     --set xray.masterKey=$XRAY_MASTER_KEY \
-     --set xray.joinKey=$JOIN_KEY \
+     --set xray.masterKey=${XRAY_MASTER_KEY} \
+     --set xray.joinKey=${JOIN_KEY} \
      -f helm/xray-values.yaml \
      -n ${INST_NAMESPACE}
 ```
