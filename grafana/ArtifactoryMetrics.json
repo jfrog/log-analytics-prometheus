@@ -3816,6 +3816,7 @@
   "refresh": false,
   "schemaVersion": 41,
   "tags": [
+    "jfrog",
     "artifactory"
   ],
   "templating": {
@@ -3961,12 +3962,12 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Artifactory Overview",
-  "uid": "hS4TyNIzx1",
-  "version": 2
+  "uid": "h_S4TyNIz",
+  "version": 3
 }
