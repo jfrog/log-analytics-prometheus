@@ -1,4 +1,4 @@
-# Prometheus + Loki + Grafana based Log Analytics and Metrics for JFrog Artifactory, Xray
+# Prometheus, Loki and Grafana Log Collection and Metrics for JFrog Artifactory and Xray
 
 The JFrog Log Analytics and Metrics solution using Prometheus consists of three segments,
 
