@@ -219,7 +219,7 @@ Go to the web UI of the Prometheus instance http://localhost:9090 and verify "St
 
 Search for `servicemonitor-artifactory` and `servicemonitor-xray` to confirm they are successfully picked up by Prometheus.
 
-## To Assess the setup for Grafana
+## Complete the Grafana Setup
 
 Use `kubectl port-forward` as mentioned below in a separate terminal window
 
@@ -229,7 +229,7 @@ kubectl port-forward service/prometheus-grafana 3000:80 -n ${INST_NAMESPACE}
 
 1. Open your Grafana on a browser at http://localhost:3000. Grafana default credentials are `admin/prom-operator` (set in [prometheus-grafana-values.yaml](helm/prometheus-grafana-values.yaml)).
 
-2. Go to "Data Sources" on the left menu
+2. Go to "Data sources" on the sidebar menu
 
 3. Click `Add new data source`
    1. Add your Prometheus as datasources (if not already configured): Set "Prometheus server URL" to `http://prometheus-kube-prometheus-prometheus:9090/`
@@ -244,13 +244,19 @@ Example dashboards are included in the [grafana](grafana) directory. These dashb
 - Artifactory Application Metrics (Open Metrics) Dashboard [Download Here](grafana/ArtifactoryMetrics.json)
 - Xray Application Metrics (Open Metrics) Dashboard [Download Here](grafana/XrayMetrics.json)
 
-Older broken dashboards
+Older (broken) dashboards
 - Artifactory Metrics and Log Analytics Dashboard [Download Here](grafana/ArtifactoryLogAnalyticsAndSystemMetrics.json)
 - Xray Metrics and Log Analytics Dashboard [Download Here](grafana/XrayLogAnalyticsAndSystemMetrics.json)
 
 1. After downloading the dashboards go to "Dashboards" -> "New" -> "Import"
 
 2. Pick `Upload dashboard JSON file` and upload Artifactory and Xray dashboards files that you downloaded in the previous step
+
+## Artifactory and Xray Logs in Grafana
+
+If you have Loki configured as a Grafana datasource, you will see a `Logs` link on the sidebar menu. Click it and you should see the Artifactory and Xray services with a snippet of their logs.
+
+Click the `Show logs` on any of these services, and you can now see all the service (Artifactory or Xray) logs in Grafana and start searching and filtering through them.
 
 ## References
 
