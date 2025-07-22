@@ -143,10 +143,13 @@ echo ${SERVICE_IP}
 
 # URL to access Artifactory
 echo "http://${SERVICE_IP}/"
-
 ```
 
-4. Using the Artifactory UI, generate an [admin access token](https://jfrog.com/help/r/how-to-generate-an-access-token-video/artifactory-creating-access-tokens-in-artifactory). Using the generated token, create a Kubernetes generic secret for the token - using one of the following methods
+4. Browse to the URL above and login to Artifactory with the default credentials: `admin`/`password`
+   1. Follow initial setup wizard
+   2. You will need to enter a valid Artifactory license. If needed, get a free trial license from [here](https://jfrog.com/start-free/)
+
+5. In the Artifactory UI, go to "Administration" -> "User Management" -> "Access Tokens" and generate an [admin access token](https://jfrog.com/help/r/how-to-generate-an-access-token-video/artifactory-creating-access-tokens-in-artifactory). Using the generated token, create a Kubernetes generic secret for the token - using one of the following methods
 
 ```shell
 kubectl create secret generic jfrog-admin-token --from-file=token=<path_to_token_file> -n ${INST_NAMESPACE}
@@ -156,13 +159,13 @@ OR
 kubectl create secret generic jfrog-admin-token --from-literal=token=<JFROG_ADMIN_TOKEN> -n ${INST_NAMESPACE}
 ```
 
-5. The PostgreSQL password is required for Artifactory upgrade. Run the following command to get the current PostgreSQL password
+6. The PostgreSQL password is required for Artifactory upgrade. Run the following command to get the current PostgreSQL password
 ```shell
 export POSTGRES_PASSWORD=$(kubectl get secret -n ${INST_NAMESPACE} artifactory-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode)
 echo ${POSTGRES_PASSWORD}
 ```
 
-6. Upgrade Artifactory with the custom values in [helm/artifactory-values.yaml](helm/artifactory-values.yaml) to create additional Kubernetes resources, which are required for the Prometheus service discovery process.
+7. Upgrade Artifactory with the custom values in [helm/artifactory-values.yaml](helm/artifactory-values.yaml) to create additional Kubernetes resources, which are required for the Prometheus service discovery process.
 
 ```shell
 # Upgrade Artifactory
