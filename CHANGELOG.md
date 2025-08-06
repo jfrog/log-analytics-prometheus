@@ -2,6 +2,14 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.1.0] - August 2025
+
+* Upgrade application versions
+* Create new dashboards for Artifactory and Xray
+* Remove Artifactory HA example. It's not the recommended chart to install Artifactory
+* Fix breaking configurations in Artifactory and Xray Helm installations
+* Improve instructions
+
 ## [1.0.12] - March 18, 2025
 
 * FluentD sidecar image version bumped to 4.15, to upgrade base image to bitnami/fluentd 1.18

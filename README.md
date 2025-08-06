@@ -134,12 +134,15 @@ helm upgrade --install artifactory jfrog/artifactory \
 
 ```shell
 export SERVICE_IP=$(kubectl get svc --namespace ${JFROG_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-# OR
+
+echo ${SERVICE_IP}
+echo "http://${SERVICE_IP}/"
+```
+   OR
+```shell
 export SERVICE_IP=$(kubectl get svc --namespace ${JFROG_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 
 echo ${SERVICE_IP}
-
-# URL to access Artifactory
 echo "http://${SERVICE_IP}/"
 ```
 
@@ -190,15 +193,23 @@ export XRAY_MASTER_KEY=$(openssl rand -hex 32)
 
 2. Use the same `JOIN_KEY` from the Artifactory installation, in order to connect Xray to Artifactory. You'll also be using the `jfrog-admin-token` kubernetes secret, that was created earlier as part of Artifactory installation
 
+   Getting the Artifactory URL:
+
 ```shell
-# Getting the Artifactory URL
 export JFROG_URL=$(kubectl get svc -n ${JFROG_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-# OR
+
+echo "http://${JFROG_URL}"
+```
+
+   OR
+```shell
 export JFROG_URL=$(kubectl get svc -n ${JFROG_NAMESPACE} artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 
 echo "http://${JFROG_URL}"
+```
 
-# Install xray
+   Install Xray
+```shell
 helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://${JFROG_URL} \
      --set xray.masterKey=${XRAY_MASTER_KEY} \
      --set xray.joinKey=${JOIN_KEY} \
