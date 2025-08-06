@@ -23,7 +23,7 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
 
 4. Versions supported and Tested:
    1. Artifactory: 7.117.x
-   2. Xray: 3.118.x
+   2. Xray: 3.124.x
    3. Prometheus: 3.5.x
    4. Grafana: 12.0.x
    5. Loki: 3.5.x
