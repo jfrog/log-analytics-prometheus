@@ -213,7 +213,7 @@ helm upgrade --install xray jfrog/xray --set xray.jfrogUrl=http://${JFROG_URL} \
 Use `kubectl port-forward` as mentioned below in a separate terminal window
 
 ```shell
-kubectl port-forward service/prometheus-operated 9090:9090 -n ${JFROG_NAMESPACE}
+kubectl port-forward service/prometheus-operated 9090:9090 -n ${OBS_NAMESPACE}
 ```
 
 Go to the web UI of the Prometheus instance http://localhost:9090 and verify "Status -> Service Discovery", the list shows all the `serviceMonitor`s.
@@ -225,7 +225,7 @@ Search for `servicemonitor-artifactory` and `servicemonitor-xray` to confirm the
 Use `kubectl port-forward` as mentioned below in a separate terminal window
 
 ```shell
-kubectl port-forward service/prometheus-grafana 3000:80 -n ${JFROG_NAMESPACE}
+kubectl port-forward service/prometheus-grafana 3000:80 -n ${OBS_NAMESPACE}
 ```
 
 1. Open your Grafana on a browser at http://localhost:3000. Grafana default credentials are `admin/prom-operator` (set in [prometheus-grafana-values.yaml](helm/prometheus-grafana-values.yaml)).
@@ -262,5 +262,5 @@ Click the `Show logs` on any of these services, and you can now see all the serv
 ## References
 
 * [Grafana Dashboards](https://grafana.com/docs/grafana/latest/features/dashboard/dashboards/)
-* [Grafana Queries](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+* [Prometheus Queries](https://prometheus.io/docs/prometheus/latest/querying/basics/)
 * [Loki Queries](https://grafana.com/docs/loki/latest/query/)
