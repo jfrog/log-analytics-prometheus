@@ -128,7 +128,7 @@ helm upgrade --install artifactory jfrog/artifactory \
      -n ${JFROG_NAMESPACE}
 ```
 
-:bulb: Open Metrics is disabled by default in Artifactory. You enable it by setting `artifactory.metrics.enabled=true`.
+:bulb: Open Metrics is disabled by default in Artifactory. It's enabled by setting `artifactory.metrics.enabled=true`.
 
 3. Follow the instructions how to get your new Artifactory URL from the helm install output
 
