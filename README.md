@@ -65,7 +65,7 @@ export OBS_NAMESPACE=monitoring
 kubectl create namespace ${OBS_NAMESPACE}
 ```
 
-Note: The `monitoring` namespace is also used in the Loki configuration in [artifactory-valies.yaml](helm/artifactory-values.yaml) and [xray-values.yaml](helm/xray-values.yaml). If you decide to change it, make sure to update these files (the `LOKI_URL` variable).
+Note: The `monitoring` namespace is also used in the Loki configuration in [artifactory-values.yaml](helm/artifactory-values.yaml) and [xray-values.yaml](helm/xray-values.yaml). If you decide to change it, make sure to update these files (the `LOKI_URL` variable).
 
 2. Install Prometheus and Grafana
 
@@ -255,10 +255,6 @@ Example dashboards are included in the [grafana](grafana) directory. These dashb
 
 - Artifactory Application Metrics (Open Metrics) Dashboard [Download Here](grafana/ArtifactoryMetrics.json)
 - Xray Application Metrics (Open Metrics) Dashboard [Download Here](grafana/XrayMetrics.json)
-
-Older (broken) dashboards
-- Artifactory Metrics and Log Analytics Dashboard [Download Here](grafana/ArtifactoryLogAnalyticsAndSystemMetrics.json)
-- Xray Metrics and Log Analytics Dashboard [Download Here](grafana/XrayLogAnalyticsAndSystemMetrics.json)
 
 1. After downloading the dashboards go to "Dashboards" -> "New" -> "Import"
 
