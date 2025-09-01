@@ -28,6 +28,11 @@ The JFrog Log Analytics and Metrics solution using Prometheus consists of three 
    4. Grafana: 12.0.x
    5. Loki: 3.5.x
 
+## Known Limitations
+
+Some known limitations we are aware of
+- The stack does not install well on a [GKE Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview) due to permissions needed
+
 ## Read This Before Installing
 
 ### Important Note: This version replaces all previous implementations. This version is not an in-place upgrade to the existing solution from JFrog but is a full reinstall. Any dashboard customizations done on previous versions will need to be redone.
