@@ -33,7 +33,7 @@ artifactory:
         - name: JF_PRODUCT_DATA_INTERNAL
           value: {{ .Values.artifactory.persistence.mountPath }}
         - name: LOKI_URL
-          value: http://loki.{{ .Release.Namespace }}:3100
+          value: http://loki.{{ .Release.Namespace }}.svc.cluster.local:3100
         - name: FLUENTD_CONF
           value: ../../../..{{ .Values.artifactory.persistence.mountPath }}/etc/fluentd/fluentd.conf
 ## Allows to add additional kubernetes resources

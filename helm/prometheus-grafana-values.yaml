@@ -1,0 +1,29 @@
+# kube-prometheus-stack Configuration with Grafana and Prometheus Persistence
+prometheus:
+  prometheusSpec:
+    # Enable persistent storage for Prometheus
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          # storageClassName: "gp2"  # Uncomment and set your storage class if needed
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+    
+    # Optional: Set retention period
+    retention: 30d
+    retentionSize: 45GB
+
+grafana:
+  # Enable persistent storage for Grafana
+  persistence:
+    enabled: true
+    size: 10Gi
+    # storageClassName: "gp2"  # Uncomment and set your storage class if needed
+    accessModes:
+      - ReadWriteOnce
+  
+  # Admin credentials
+  adminUser: admin
+  adminPassword: prom-operator  # Change this to a secure password
