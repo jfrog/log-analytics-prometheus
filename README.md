@@ -135,6 +135,8 @@ helm upgrade --install artifactory jfrog/artifactory \
 
 :bulb: Open Metrics is disabled by default in Artifactory. It's enabled by setting `artifactory.metrics.enabled=true`.
 
+:bulb: **RTFS Metrics**: If your Artifactory deployment includes RTFS (Real-Time File Store), RTFS metrics are automatically collected from the `rtfs-metrics.log` file and exposed as Prometheus gauge metrics. The fluentd config already includes an RTFS metrics tail source and corresponding Prometheus filter that runs alongside the standard Artifactory metrics collection. RTFS metrics are labeled with `service: rtfs` to distinguish them from standard Artifactory metrics.
+
 3. Follow the instructions how to get your new Artifactory URL from the helm install output
 
 ```shell
@@ -260,6 +262,8 @@ Example dashboards are included in the [grafana](grafana) directory. These dashb
 
 - Artifactory Application Metrics (Open Metrics) Dashboard [Download Here](grafana/ArtifactoryMetrics.json)
 - Xray Application Metrics (Open Metrics) Dashboard [Download Here](grafana/XrayMetrics.json)
+
+When RTFS is deployed as part of Artifactory, RTFS metrics are collected from the `rtfs-metrics.log` file and exposed as Prometheus gauge metrics with the `service: rtfs` label. These metrics can be visualized in Grafana alongside standard Artifactory metrics.
 
 1. After downloading the dashboards go to "Dashboards" -> "New" -> "Import"
 

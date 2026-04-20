@@ -2,6 +2,11 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.2.0] - April 2026
+
+* Added RTFS (Real-Time File Store) metrics collection support via tail source and Prometheus filter (JOBS-1897)
+* RTFS metrics are exposed as Prometheus gauge metrics with `service: rtfs` label
+
 ## [1.1.0] - August 2025
 
 * Upgrade application versions
