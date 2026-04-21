@@ -135,7 +135,7 @@ helm upgrade --install artifactory jfrog/artifactory \
 
 :bulb: Open Metrics is disabled by default in Artifactory. It's enabled by setting `artifactory.metrics.enabled=true`.
 
-:bulb: **RTFS Metrics**: If your Artifactory deployment includes RTFS (Real-Time File Store), RTFS metrics are automatically collected from the `rtfs-metrics.log` file and exposed as Prometheus gauge metrics. The fluentd config already includes an RTFS metrics tail source and corresponding Prometheus filter that runs alongside the standard Artifactory metrics collection. RTFS metrics are labeled with `service: rtfs` to distinguish them from standard Artifactory metrics.
+:bulb: **RTFS Metrics**: If your Artifactory deployment includes RTFS (JFrog Artifactory Federation Service), RTFS metrics are automatically collected from the `rtfs-metrics.log` file and exposed as Prometheus gauge metrics. The fluentd config already includes an RTFS metrics tail source and corresponding Prometheus filter that runs alongside the standard Artifactory metrics collection. RTFS metrics are labeled with `service: rtfs` to distinguish them from standard Artifactory metrics.
 
 3. Follow the instructions how to get your new Artifactory URL from the helm install output
 
