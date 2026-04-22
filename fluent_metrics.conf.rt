@@ -33,6 +33,180 @@
     @type none
   </parse>
 </source>
+<source>
+  @type tail
+  @id rtfs_metrics_tail
+  path "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/rtfs-metrics.log"
+  pos_file "#{ENV['JF_PRODUCT_DATA_INTERNAL']}/log/rtfs-metrics.log.pos"
+  tag jfrog.metrics.rtfs
+  read_from_head true
+  refresh_interval 10
+  follow_inodes true
+  skip_refresh_on_startup true
+  read_bytes_limit_per_second 104857600
+  <parse>
+    @type none
+  </parse>
+</source>
+
+<filter jfrog.metrics.rtfs>
+  @type parser
+  key_name message
+  <parse>
+    @type regexp
+    expression ^(?<key>[\w]+)\ (?<value>[[+-]?\d(\.\d+)?[Ee][+-]?\d+]+)\ (?<timestamp>[\d]+)$
+    time_type string
+    time_key timestamp
+    time_format %s
+  </parse>
+  emit_invalid_record_to_error false
+</filter>
+
+<filter jfrog.metrics.rtfs>
+  @type record_transformer
+  enable_ruby true
+  renew_record false
+  <record>
+    ${record["key"]} ${if record["value"]["."] then record["value"].to_f else record["value"].to_i end}
+  </record>
+</filter>
+
+<filter jfrog.metrics.rtfs>
+  @type prometheus
+
+  <metric>
+    name jfrt_rtfs_runtime_heap_freememory_bytes
+    desc RTFS Heap Free Memory in Bytes
+    type gauge
+    key jfrt_rtfs_runtime_heap_freememory_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_rtfs_runtime_heap_maxmemory_bytes
+    desc RTFS Heap Max Memory in Bytes
+    type gauge
+    key jfrt_rtfs_runtime_heap_maxmemory_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_rtfs_runtime_heap_totalmemory_bytes
+    desc RTFS Heap Total Memory in Bytes
+    type gauge
+    key jfrt_rtfs_runtime_heap_totalmemory_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_rtfs_db_connections_active_total
+    desc RTFS Active DB Connections
+    type gauge
+    key jfrt_rtfs_db_connections_active_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_rtfs_db_connections_idle_total
+    desc RTFS Idle DB Connections
+    type gauge
+    key jfrt_rtfs_db_connections_idle_total
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name jfrt_rtfs_storage_current_total_size_bytes
+    desc RTFS Storage in Bytes
+    type gauge
+    key jfrt_rtfs_storage_current_total_size_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name app_rtfs_disk_used_bytes
+    desc RTFS Application Disk Used in Bytes
+    type gauge
+    key app_rtfs_disk_used_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name app_rtfs_disk_free_bytes
+    desc RTFS Application Disk Free in Bytes
+    type gauge
+    key app_rtfs_disk_free_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_rtfs_memory_used_bytes
+    desc RTFS System Memory Used in Bytes
+    type gauge
+    key sys_rtfs_memory_used_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_rtfs_memory_free_bytes
+    desc RTFS System Memory Free in Bytes
+    type gauge
+    key sys_rtfs_memory_free_bytes
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+  <metric>
+    name sys_rtfs_cpu_ratio
+    desc RTFS System CPU Ratio
+    type gauge
+    key sys_rtfs_cpu_ratio
+    <labels>
+      agent fluentd
+      host ${hostname}
+      service rtfs
+    </labels>
+  </metric>
+
+</filter>
 
 <filter jfrog.metrics.rt>
   @type parser
