@@ -25,7 +25,7 @@ artifactory:
             name: artifactory-volume
     customSidecarContainers: |
       - name: "artifactory-fluentd-sidecar"
-        image: "releases-docker.jfrog.io/fluentd:4.15"
+        image: "releases-docker.jfrog.io/fluentd:4.19"
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
           - mountPath: "{{ .Values.artifactory.persistence.mountPath }}"
@@ -162,7 +162,7 @@ xray:
             name: data-volume
     customSidecarContainers: |
       - name: "xray-platform-fluentd-sidecar"
-        image: "releases-pts-observability-fluentd.jfrog.io/fluentd:4.5"
+        image: "releases-docker.jfrog.io/fluentd:4.19"
         imagePullPolicy: "IfNotPresent"
         volumeMounts:
           - mountPath: "{{ .Values.xray.persistence.mountPath }}"
