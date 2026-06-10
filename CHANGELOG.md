@@ -2,6 +2,10 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.2.2] - June 2026
+
+* Fluentd sidecar image bumped to 4.20: migrated to Echo secure base (fluentd 1.19.2, Debian 13), remediating Critical/High CVEs in 4.19 (JOBS-2475)
+
 ## [1.2.1] - April 2026
 
 * Fix incorrect field name in access-security-audit log parsing: renamed `token_id` capture group to `trace_id` to match the actual log format documented at https://docs.jfrog.com/administration/docs/audit-trail-log (JOBS-2031)
