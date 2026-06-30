@@ -2,6 +2,10 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.2.3] - June 2026
+
+* Fluentd sidecar image bumped to 4.22 in the Helm values: now pulls the released image `releases-docker.jfrog.io/fluentd:4.22` directly (fluentd 1.19.3 on the refreshed hardened Echo base), remediating the critical OS-package vulnerability CVE-2026-55200 in libssh2 (1.11.1-1+e1 -> 1.11.1-1+e2) carried by the 4.21 base image (JOBS-2583)
+
 ## [1.2.2] - June 2026
 
 * Fluentd sidecar image bumped to 4.21 in the Helm values: now pulls the released image `releases-docker.jfrog.io/fluentd:4.21` directly (fluentd 1.19.2 on a hardened, CVE-refreshed base), remediating Critical/High CVEs in 4.19 (JOBS-2475)
