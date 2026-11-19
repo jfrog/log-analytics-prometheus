@@ -2,6 +2,14 @@
 
 All changes to the log analytics integration will be documented in this file.
 
+## [1.2.5] - November 2026
+
+* Fluentd sidecar image bumped to 4.24 in the Helm values: now pulls the released image `releases-docker.jfrog.io/fluentd:4.24` directly (fluentd 1.19.4 on the hardened Echo base rebuilt with Ruby 3.4.13). This fixes the Ruby2Shell vulnerability in Ruby 3.4.12, which the 4.23 image carries (JOBS-4074)
+
+## [1.2.4] - November 2026
+
+* Fluentd sidecar image bumped to 4.23 in the Helm values: now pulls the released image `releases-docker.jfrog.io/fluentd:4.23` directly (fluentd 1.19.4 on the refreshed hardened Echo base). The image drops the stale gem copies that carried Critical/High CVEs (fluentd 1.19.0, concurrent-ruby 1.3.5, oj 3.16.11, msgpack 1.8.0, rexml, json), pins fluent-plugin-prometheus to 2.2.2 so its metrics endpoint keeps listening on all interfaces, and fixes fluent-plugin-detect-exceptions failing to load as the fluent user (JOBS-3435)
+
 ## [1.2.3] - June 2026
 
 * Fluentd sidecar image bumped to 4.22 in the Helm values: now pulls the released image `releases-docker.jfrog.io/fluentd:4.22` directly (fluentd 1.19.3 on the refreshed hardened Echo base), remediating the critical OS-package vulnerability CVE-2026-55200 in libssh2 (1.11.1-1+e1 -> 1.11.1-1+e2) carried by the 4.21 base image (JOBS-2583)
